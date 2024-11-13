@@ -1,6 +1,5 @@
+import React from "react";
 
-function selectmovies () {
-
+export default function Select() {
+  return <div>Select</div>;
 }
-
-export default selectmovies;
