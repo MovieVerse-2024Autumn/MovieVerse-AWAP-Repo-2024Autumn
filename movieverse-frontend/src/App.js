@@ -3,6 +3,8 @@ import Home from "./pages/Home";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ShowTime from "./pages/ShowTime";
 import MoreReviews from "./pages/MoreReviews";
+import Select from "./pages/Select";
+
 
 function App() {
   return (
@@ -14,6 +16,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/show-time" element={<ShowTime />} />
           <Route path="/more-reviews" element={<MoreReviews />} />
+          <Route path="/select-movies" element={<Select />}  />
         </Routes>
       </div>
     </BrowserRouter>
