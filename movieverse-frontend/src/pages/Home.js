@@ -32,7 +32,7 @@ export default function Home() {
   return (
     <div>
       <SectionTitle title="MOVIES" linkPath="/more-movies" />
-      <div className="grid">
+      <div>
         <MovieList movies={movies} />
       </div>
       <SectionTitle title="REVIEWS" linkPath="/more-reviews" />
