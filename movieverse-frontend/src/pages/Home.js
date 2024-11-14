@@ -31,7 +31,7 @@ export default function Home() {
 
   return (
     <div>
-      <SectionTitle title="MOVIES" linkPath="/more-movies" />
+      <SectionTitle title="MOVIES" linkPath="/select-movies" />
       <div>
         <MovieList movies={movies} />
       </div>
