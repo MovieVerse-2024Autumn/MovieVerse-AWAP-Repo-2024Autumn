@@ -7,6 +7,7 @@ const url = "http://localhost:3001/api";
 
 export default function Home() {
   const [movies, setMovies] = useState([]);
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     fetch(`${url}/movies-homepage`)
@@ -18,16 +19,15 @@ export default function Home() {
       .catch((error) => console.error("Error fetching movies:", error));
   }, []);
 
-  const reviewArray = [
-    {
-      title: "The Dark Knight",
-      content: "This is a review of the movie The Dark Knight.",
-    },
-    {
-      title: "The Dark Knight",
-      content: "This is a review of the movie The Dark Knight.",
-    },
-  ];
+  useEffect(() => {
+    fetch(`${url}/reviews`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("data", data);
+        setReviews(data);
+      })
+      .catch((error) => console.error("Error fetching reviews:", error));
+  }, []);
 
   return (
     <div>
@@ -36,7 +36,7 @@ export default function Home() {
         <MovieList movies={movies} />
       </div>
       <SectionTitle title="REVIEWS" linkPath="/more-reviews" />
-      <ReviewList reviews={reviewArray} />
+      <ReviewList reviews={reviews} movies={movies} />
       <Link to={"/show-time"}>
         <h3>ShowTime</h3>
       </Link>

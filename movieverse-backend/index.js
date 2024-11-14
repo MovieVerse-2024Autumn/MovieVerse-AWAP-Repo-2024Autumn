@@ -1,14 +1,18 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 
 import movieRouter from "./routers/movieRouter.js";
+import reviewRouter from "./routers/reviewRouter.js";
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT;
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use("/api", movieRouter);
+app.use("/api", movieRouter, reviewRouter);
 
 app.use((err, req, res, next) => {
   //console.error("Error:", err.message);

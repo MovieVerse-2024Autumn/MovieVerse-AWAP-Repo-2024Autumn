@@ -48,10 +48,10 @@ const movielinkStyle = {
 };
 
 const imageContainerStyle = {
+  flexShrink: 0,
   width: "100%",
   height: "70%",
-  padding: "5px",
-  boxSizing: "border-box",
+  padding: "5px 5px 0 5px",
 };
 
 const movieimageStyle = {
