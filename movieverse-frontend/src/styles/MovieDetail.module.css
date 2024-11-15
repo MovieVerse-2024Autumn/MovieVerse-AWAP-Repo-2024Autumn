@@ -1,0 +1,148 @@
+.movie-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f3f3f3;
+    color: #333;
+}
+
+.movie-header {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    max-width: 1000px; 
+    width: 100%;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.movie-poster {
+    width: 300px;
+    height: auto;
+    border-radius: 8px;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.movie-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: calc(100% - 320px);
+}
+
+.movie-info h1 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.movie-genres {
+    color: #666;
+    margin: 8px 0;
+}
+
+.movie-actions {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.movie-rating {
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+.favorite-button {
+    background-color: transparent;
+    border: 1px solid #d9534f;
+    color: #d9534f;
+    font-size: 16px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.favorite-button:hover {
+    color: #fff;
+    background-color: #d9534f;
+}
+
+.movie-overview {
+    margin-top: 15px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+.movie-reviews {
+    max-width: 1000px; 
+    width: 100%; 
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.add-review {
+    max-width: 1000px;
+    width: 100%;
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-review h2 {
+    margin-bottom: 10px;
+}
+
+.add-review form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.add-review label {
+    font-size: 14px;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.add-review input,
+.add-review textarea {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.submit-button {
+    padding: 10px;
+    background-color: #d9534f;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+    background-color: #c9302c;
+}
+
+.review {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+}
