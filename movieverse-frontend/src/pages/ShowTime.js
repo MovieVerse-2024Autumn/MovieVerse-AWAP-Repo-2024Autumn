@@ -1,119 +1,177 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-function ShowTime() {
-  const [theatreID, setTheatreID] = useState("");
-  const [date, setDate] = useState("");
-  const [theatres, setTheatres] = useState([]);
-  const [schedules, setSchedules] = useState({});
-  const [error, setError] = useState(null);
+export default function ShowTime1() {
+  const [areas, setAreas] = useState([]);
+  const [selectedArea, setSelectedArea] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchTheatres = async () => {
-      try {
-        const response = await fetch(
-          "https://www.finnkino.fi/xml/TheatreAreas/"
-        );
-        const data = await response.text();
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(data, "text/xml");
-        const theatreElements = xml.getElementsByTagName("TheatreArea");
-        const theatreList = Array.from(theatreElements).map((theatre) => ({
-          id: theatre.getElementsByTagName("ID")[0].textContent,
-          name: theatre.getElementsByTagName("Name")[0].textContent,
-        }));
-        setTheatres(theatreList);
-      } catch (err) {
-        setError("Error fetching theatre data");
-        console.error("Error fetching theatre data:", err);
+  // Function to convert XML nodes to JSON format
+  const xmlToJson = useCallback((node) => {
+    const json = {};
+
+    // Handle text nodes
+    if (node.nodeType === 3) {
+      return node.nodeValue.trim();
+    }
+
+    let children = [...node.children];
+
+    if (!children.length) {
+      return node.innerHTML;
+    }
+
+    // process child nodes
+    for (let child of children) {
+      const hasSiblings =
+        children.filter((each) => each.nodeName === child.nodeName).length > 1;
+
+      // Handle array-like elements
+      if (hasSiblings) {
+        if (json[child.nodeName] === undefined) {
+          json[child.nodeName] = [xmlToJson(child)];
+        } else {
+          json[child.nodeName].push(xmlToJson(child));
+        }
+      } else {
+        json[child.nodeName] = xmlToJson(child); //return the value of the child
       }
-    };
-    fetchTheatres();
+    }
+    return json;
   }, []);
 
+  // Function to parse XML string into JSON
+  const parseXML = useCallback(
+    (xml) => {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xml, "application/xml");
+      return xmlToJson(xmlDoc);
+    },
+    [xmlToJson]
+  );
+
+  // Fetch theater areas on component mount
   useEffect(() => {
-    if (!theatreID || !date) return;
+    fetch("https://www.finnkino.fi/xml/TheatreAreas/")
+      .then((response) => response.text())
+      .then((xml) => {
+        const json = parseXML(xml);
+        //.log("json", json.Schedule.Shows.Show);
+        // to make sure we have an array of theatre areas
+        const theatreAreas = json.TheatreAreas.TheatreArea;
+        setAreas(Array.isArray(theatreAreas) ? theatreAreas : [theatreAreas]);
+      })
+      .catch((err) => {
+        console.error("Error fetching theatre areas:", err);
+      });
+  }, [parseXML]);
 
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `https://www.finnkino.fi/xml/Schedule/?area=${theatreID}&dt=${date}`
-        );
-        const data = await response.text();
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(data, "text/xml");
-        const showElements = xml.getElementsByTagName("Show");
+  const fetchSchedule = useCallback(async () => {
+    //If no theater/date is selected, exit the function
+    if (!selectedArea || !selectedDate) return;
 
-        // Group schedules by movie title
-        const scheduleList = Array.from(showElements).reduce((acc, show) => {
-          const title = show.getElementsByTagName("Title")[0].textContent;
-          const startTime =
-            show.getElementsByTagName("dttmShowStart")[0].textContent;
+    setLoading(true); //to show loading spinner
 
-          if (!acc[title]) {
-            acc[title] = [];
-          }
-          acc[title].push(new Date(startTime).toLocaleString());
+    try {
+      const response = await fetch(
+        // api call to fetch schedule data
+        `https://www.finnkino.fi/xml/Schedule/?area=${selectedArea}&dt=${selectedDate}`
+      );
+      const xml = await response.text();
+      const json = parseXML(xml);
+      const showData = json.Schedule.Shows.Show;
+      console.log("showData", showData);
+      setMovies(Array.isArray(showData) ? showData : [showData]);
+    } catch (err) {
+      console.error("Error fetching schedule:", err);
+      setMovies([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [selectedArea, selectedDate, parseXML]);
+  // Function recreates when dependencies change
 
-          return acc;
-        }, {});
+  useEffect(() => {
+    fetchSchedule();
+  }, [selectedArea, selectedDate, fetchSchedule]);
 
-        setSchedules(scheduleList);
-      } catch (err) {
-        setError("Error fetching schedule data");
-        console.error("Error fetching schedule data:", err);
-      }
-    };
-
-    fetchData();
-  }, [theatreID, date]);
-
-  const handleDateChange = (e) => {
-    const selectedDate = new Date(e.target.value);
-    const formattedDate = selectedDate.toLocaleDateString("fi-FI");
-    setDate(formattedDate);
+  // Convert minutes to hours and minutes format
+  const formatDuration = (minutes) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours}h ${mins}min`;
   };
 
   return (
-    <div className="container">
+    <div>
       <h2>Select Theatre and Date</h2>
 
-      {/* Choose theatre */}
-      <select onChange={(e) => setTheatreID(e.target.value)} value={theatreID}>
-        <option value="">Select Theatre</option>
-        {theatres.map((theatre) => (
-          <option key={theatre.id} value={theatre.id}>
-            {theatre.name}
-          </option>
-        ))}
-      </select>
+      {/* Theater Selection Dropdown */}
+      <div>
+        <select
+          value={selectedArea}
+          onChange={(e) => setSelectedArea(e.target.value)}
+        >
+          <option value="">Select Theatre</option>
+          {areas.map((area) => (
+            <option key={area.ID} value={area.ID}>
+              {area.Name}
+            </option>
+          ))}
+        </select>
 
-      {/* Choose date */}
-      <input type="date" onChange={handleDateChange} />
+        {/* Date Selection */}
+        <input
+          type="date"
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+        />
+      </div>
+
+      {/* Loading Indicator */}
+      {loading && <div>Loading...</div>}
 
       <h2>Schedule</h2>
-      {error && <p>{error}</p>}
-      {Object.keys(schedules).length > 0 ? (
-        <ul>
-          {Object.entries(schedules).map(([title, times], index) => (
-            <li key={index}>
-              <p>
-                <strong>Movie:</strong> {title}
-              </p>
-              <ul>
-                {times.map((time, idx) => (
-                  <li key={idx}>
-                    <strong>Start Time:</strong> {time}
-                  </li>
-                ))}
-              </ul>
-            </li>
+      {selectedArea && selectedDate && (
+        <div>
+          {/* Movie shows list */}
+          {movies.map((movie, index) => (
+            <div key={index}>
+              {/* Movie information card */}
+              <div>
+                <h3>{movie.Title}</h3>
+                <div>
+                  <img
+                    src={movie.Images.EventSmallImagePortrait}
+                    alt="Movie poster"
+                  />
+                  <p>Duration: {formatDuration(movie.LengthInMinutes)}</p>
+                  <p>Language: {movie.SpokenLanguage?.Name || "N/A"}</p>
+                  <p>
+                    Subtitles:
+                    {movie.SubtitleLanguage1?.Name || "N/A"}
+                  </p>
+                  <p>Theatre: {movie.Theatre}</p>
+                  <p>Auditorium: {movie.TheatreAuditorium}</p>
+                </div>
+              </div>
+              <div>
+                <p>
+                  Starts: {new Date(movie.dttmShowStart).toLocaleTimeString()}
+                </p>
+                <p>Ends: {new Date(movie.dttmShowEnd).toLocaleTimeString()}</p>
+                {movie.PresentationMethod && (
+                  <span>{movie.PresentationMethod}</span>
+                )}
+              </div>
+            </div>
           ))}
-        </ul>
-      ) : (
-        <p>No schedules available for the selected theatre and date.</p>
+        </div>
+      )}
+      {!loading && movies.length === 0 && selectedArea && selectedDate && (
+        <div>No showings found for selected date and theatre</div>
       )}
     </div>
   );
 }
-
-export default ShowTime;

@@ -1,11 +1,11 @@
 import React from "react";
 import Home from "./pages/Home";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ShowTime from "./pages/ShowTime";
+
 import MoreReviews from "./pages/MoreReviews";
 import Select from "./pages/Select";
 import MovieDetail from "./pages/MovieDetail"; // Import the MovieDetail component
-
+import ShowTime from "./pages/ShowTime";
 
 function App() {
   return (
@@ -17,9 +17,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/show-time" element={<ShowTime />} />
           <Route path="/more-reviews" element={<MoreReviews />} />
-          <Route path="/select-movies" element={<Select />}  />
-          <Route path="/movies/:id" element={<MovieDetail />} /> {/* New MovieDetail route */}
-          
+          <Route path="/select-movies" element={<Select />} />
+          <Route path="/movies/:id" element={<MovieDetail />} />{" "}
+          {/* New MovieDetail route */}
         </Routes>
       </div>
     </BrowserRouter>
