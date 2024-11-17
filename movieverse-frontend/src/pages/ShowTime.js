@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
+import styles from "../styles/ShowTime.module.css";
 
-export default function ShowTime1() {
+export default function ShowTime() {
   const [areas, setAreas] = useState([]);
   const [selectedArea, setSelectedArea] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
@@ -103,74 +104,142 @@ export default function ShowTime1() {
     return `${hours}h ${mins}min`;
   };
 
-  return (
-    <div>
-      <h2>Select Theatre and Date</h2>
+  // Group movies by title
+  const groupedMovies = movies.reduce((acc, movie) => {
+    const title = movie.Title;
+    if (!acc[title]) {
+      acc[title] = [];
+    }
+    acc[title].push(movie);
+    return acc;
+  }, {});
 
-      {/* Theater Selection Dropdown */}
-      <div>
-        <select
-          value={selectedArea}
-          onChange={(e) => setSelectedArea(e.target.value)}
-        >
-          <option value="">Select Theatre</option>
-          {areas.map((area) => (
-            <option key={area.ID} value={area.ID}>
-              {area.Name}
-            </option>
-          ))}
-        </select>
+  // Function to handle language conversion
+  const getFormattedLanguage = (language) => {
+    switch (language) {
+      case "dubattu suomeksi":
+        return "Dubbed in Finnish";
+      case "suomi":
+        return "Finnish";
+      case "ruotsi":
+        return "Swedish";
+      case "englanti":
+        return "English";
+      default:
+        return language || "N/A";
+    }
+  };
+
+  // Function to capitalize subtitle language
+  const capitalizeSubtitle = (subtitle) => {
+    return subtitle
+      ? subtitle.charAt(0).toUpperCase() + subtitle.slice(1).toLowerCase()
+      : "No Subtitles";
+  };
+
+  return (
+    <div className={styles["showtime-page"]}>
+      <h2 className={styles.heading}>Movies on Show</h2>
+      <div className={styles.selectionContainer}>
+        {/* Theater Selection Dropdown */}
+        <div className={styles.selectRow}>
+          <label>Theatre</label>
+          <select
+            value={selectedArea}
+            onChange={(e) => setSelectedArea(e.target.value)}
+            aria-label="Select theatre"
+          >
+            <option value="">Select Theatre</option>
+            {areas.map((area) => (
+              <option key={area.ID} value={area.ID}>
+                {area.Name}
+              </option>
+            ))}
+          </select>
+          <div className={styles["selection-underline"]}></div>
+        </div>
 
         {/* Date Selection */}
-        <input
-          type="date"
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-        />
+        <div className={styles.selectRow}>
+          <label>Date</label>
+          <input
+            type="date"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            aria-label="Select date"
+          />
+          <div className={styles["selection-underline"]}></div>
+        </div>
       </div>
 
       {/* Loading Indicator */}
-      {loading && <div>Loading...</div>}
+      {loading && <div className={styles.loading}>Loading...</div>}
 
-      <h2>Schedule</h2>
-      {selectedArea && selectedDate && (
-        <div>
-          {/* Movie shows list */}
-          {movies.map((movie, index) => (
-            <div key={index}>
-              {/* Movie information card */}
-              <div>
-                <h3>{movie.Title}</h3>
-                <div>
-                  <img
-                    src={movie.Images.EventSmallImagePortrait}
-                    alt="Movie poster"
-                  />
-                  <p>Duration: {formatDuration(movie.LengthInMinutes)}</p>
-                  <p>Language: {movie.SpokenLanguage?.Name || "N/A"}</p>
-                  <p>
-                    Subtitles:
-                    {movie.SubtitleLanguage1?.Name || "N/A"}
-                  </p>
-                  <p>Theatre: {movie.Theatre}</p>
-                  <p>Auditorium: {movie.TheatreAuditorium}</p>
+      <h2 className={styles.heading}>
+        {selectedArea && selectedDate
+          ? "Schedule"
+          : "Welcome! Please select theatre and date."}
+      </h2>
+      {selectedArea &&
+        selectedDate &&
+        Object.entries(groupedMovies).map(([title, shows]) => (
+          <div className={styles.movieCard} key={title}>
+            {/* Movie information card */}
+            <div className={styles.movieDetails}>
+              <div className={styles.posterContainer}>
+                <img
+                  className={styles.moviePoster}
+                  src={shows[0].Images.EventSmallImagePortrait}
+                  alt="Movie poster"
+                />
+              </div>
+              <div className={styles.movieInfo}>
+                <div className={styles.movieTitle}>{title}</div>
+                <div className={styles.detailsColumn}>
+                  <div className={styles.movieLanguage}>
+                    <p>
+                      Language:{" "}
+                      {getFormattedLanguage(shows[0].SpokenLanguage?.Name)} |{" "}
+                      Subtitles:{" "}
+                      {capitalizeSubtitle(shows[0].SubtitleLanguage1?.Name)}
+                    </p>
+                  </div>
+                  <div className={styles.durationMethod}>
+                    <p>
+                      <span>{formatDuration(shows[0].LengthInMinutes)}</span>
+
+                      <span className={styles.movieMethod}>
+                        {shows[0].PresentationMethod}
+                      </span>
+                    </p>
+                  </div>
+
+                  <div className={styles.showTimings}>
+                    {shows.map((show, index) => (
+                      <p key={index}>
+                        {new Date(show.dttmShowStart).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                        -
+                        {new Date(show.dttmShowEnd).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                        {" | "} {show.Theatre}, {show.TheatreAuditorium}
+                      </p>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div>
-                <p>
-                  Starts: {new Date(movie.dttmShowStart).toLocaleTimeString()}
-                </p>
-                <p>Ends: {new Date(movie.dttmShowEnd).toLocaleTimeString()}</p>
-                {movie.PresentationMethod && (
-                  <span>{movie.PresentationMethod}</span>
-                )}
-              </div>
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        ))}
+
       {!loading && movies.length === 0 && selectedArea && selectedDate && (
-        <div>No showings found for selected date and theatre</div>
+        <div className={styles.noShowings}>
+          No showings found for selected date and theatre.
+        </div>
       )}
     </div>
   );

@@ -40,6 +40,9 @@ export default function Home() {
       <Link to={"/show-time"}>
         <h3>ShowTime</h3>
       </Link>
+      <Link to={"/favorites"}>
+        <h3>Favorites</h3>
+      </Link>
     </div>
   );
 }
