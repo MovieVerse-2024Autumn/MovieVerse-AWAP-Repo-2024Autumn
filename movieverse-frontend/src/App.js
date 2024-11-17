@@ -9,7 +9,6 @@ import ShowTime from "./pages/ShowTime";
 import Search from "./pages/Search";
 import Favorites from "./pages/Favorites";
 
-
 function App() {
   return (
     <BrowserRouter
@@ -20,6 +19,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/show-time" element={<ShowTime />} />
           <Route path="/more-reviews" element={<MoreReviews />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/select-movies" element={<Select />} />
           <Route path="/movies/:id" element={<MovieDetail />} />{" "}
           <Route path="/favorites" element={<Favorites />} />

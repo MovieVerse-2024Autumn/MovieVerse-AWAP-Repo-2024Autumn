@@ -1,0 +1,22 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination li {
+  list-style-type: none;
+  margin: 0 5px;
+}
+
+.pagination .active {
+  color: blue;
+}
+
+.pagination li a {
+  cursor: pointer; /*the cursor a pointer when hovering over the page numbers or arrows */
+}
+
+.pagination li a:hover {
+  color: #007bff; /* Optional: Change color when hovering over a page number or arrow */
+}
