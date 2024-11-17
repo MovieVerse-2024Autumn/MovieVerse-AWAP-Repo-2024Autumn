@@ -1,0 +1,25 @@
+.favorites-page {
+    text-align: center;
+    padding: 20px;
+}
+
+.favorites-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.favorite-item {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    width: 200px;
+    text-align: center;
+}
+
+.favorite-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}

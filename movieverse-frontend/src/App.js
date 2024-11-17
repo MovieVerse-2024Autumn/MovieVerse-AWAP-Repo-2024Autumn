@@ -7,6 +7,8 @@ import Select from "./pages/Select";
 import MovieDetail from "./pages/MovieDetail"; // Import the MovieDetail component
 import ShowTime from "./pages/ShowTime";
 import Search from "./pages/Search";
+import Favorites from "./pages/Favorites";
+
 
 function App() {
   return (
@@ -20,6 +22,7 @@ function App() {
           <Route path="/more-reviews" element={<MoreReviews />} />
           <Route path="/select-movies" element={<Select />} />
           <Route path="/movies/:id" element={<MovieDetail />} />{" "}
+          <Route path="/favorites" element={<Favorites />} />
           {/* New MovieDetail route */}
           <Route path="/search-results" element={<Search />} />
         </Routes>
