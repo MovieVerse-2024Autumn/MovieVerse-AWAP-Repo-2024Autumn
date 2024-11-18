@@ -13,20 +13,20 @@ const getReviews = async (req, res, next) => {
 
 // New addReview function
 const addReview = async (req, res, next) => {
-  const { movie_id, user_id, title, content, rating } = req.body;
+  const { movie_id, account_id, title, description, rating } = req.body;
 
-  if (!movie_id || !user_id || !title || !content || !rating) {
+  if (!movie_id || !account_id || !title || !description || !rating) {
     return res.status(400).json({ error: "All fields are required" });
   }
 
   try {
     const query = `
-      INSERT INTO reviews (movie_id, user_id, title, content, rating, review_date)
+      INSERT INTO review (movie_id, account_id, title, description, rating, review_date)
       VALUES ($1, $2, $3, $4, $5, NOW())
       RETURNING *;
     `;
 
-    const values = [movie_id, user_id, title, content, rating];
+    const values = [movie_id, account_id, title, description, rating];
 
     const result = await pool.query(query, values);
     res.status(201).json(result.rows[0]); // Return the newly created review
@@ -37,4 +37,3 @@ const addReview = async (req, res, next) => {
 };
 
 export { getReviews, addReview };
-

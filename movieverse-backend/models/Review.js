@@ -2,7 +2,7 @@ import { pool } from "../middleware/db.js";
 
 const selectAllReviews = async () => {
   return await pool.query(
-    "SELECT reviews.id, reviews.movie_id, reviews.title, reviews.content, reviews.review_date, account.user_name AS author FROM reviews JOIN account ON reviews.user_id = account.id"
+    "SELECT review.id, review.movie_id, review.title, review.description, review.rating, review.review_date FROM review JOIN account ON review.account_id = account.id"
   );
 };
 

@@ -2,10 +2,9 @@ import React from "react";
 const API_IMG = "https://image.tmdb.org/t/p/w500";
 
 export default function ReviewCardForHomePage({ review, movie }) {
-  const { title, author, review_date, content } = review;
+  const { title, review_date, description, rating } = review;
   const movie_link = movie ? `/movies/${movie.id}` : "#";
   const poster_path = movie ? movie.poster_path : "";
-  const vote_average = movie ? movie.vote_average : "N/A";
 
   return (
     <div style={reviewcardStyle}>
@@ -16,12 +15,13 @@ export default function ReviewCardForHomePage({ review, movie }) {
       <div style={reviewtextStyle}>
         <h4 style={reviewtitleStyle}>{title}</h4>
         <div style={reviewinfoStyle}>
-          <span>{author}</span>
           <span>{new Date(review_date).toLocaleDateString()}</span>
-          <span>{vote_average}</span>
+          <span>{rating}</span>
         </div>
-        <p style={reviewcontentStyle}>
-          {content.length > 100 ? `${content.substring(0, 100)}...` : content}
+        <p style={reviewdescriptionStyle}>
+          {description.length > 100
+            ? `${description.substring(0, 100)}...`
+            : description}
         </p>
         <a href={movie_link} style={reviewlinkStyle}>
           View Movie Details
@@ -61,7 +61,7 @@ const reviewinfoStyle = {
   color: "#666",
 };
 
-const reviewcontentStyle = {
+const reviewdescriptionStyle = {
   marginTop: "10px",
   fontSize: "14px",
   lineHeight: "1.5em",

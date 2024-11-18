@@ -17,7 +17,6 @@ function App() {
       future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
     >
       <div className="App">
-       
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -30,8 +29,7 @@ function App() {
           {/* New MovieDetail route */}
           <Route path="/search-results" element={<Search />} />
         </Routes>
-
-       <Footer />  {/* Add Footer to the bottom of the page */}
+        <Footer /> {/* Add Footer to the bottom of the page */}
       </div>
     </BrowserRouter>
   );
