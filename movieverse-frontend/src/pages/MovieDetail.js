@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import styles from '../styles/MovieDetail.module.css'; // Importing CSS Module
+import styles from '../styles/MovieDetail.module.css';
 
 const MovieDetail = () => {
     const { id } = useParams(); // Get movie ID from the URL
     const [movie, setMovie] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [reviews, setReviews] = useState([]); // State to hold movie reviews
+    const [reviews, setReviews] = useState([]); 
     const [newReview, setNewReview] = useState({
-        title: '', // New field for review title
+        title: '', 
         rating: '',
         text: ''
     }); // State to hold the new review data
@@ -46,7 +46,7 @@ const MovieDetail = () => {
             alert("Please provide a title, rating, and review text.");
             return;
         }
-
+    
         try {
             const response = await fetch(`http://localhost:3001/api/movies/${id}/reviews`, {
                 method: 'POST',
@@ -54,22 +54,27 @@ const MovieDetail = () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
+                    user_id: 1, // Use dynamic user_id from login in real implementation
+                    movie_id: id,
                     title: newReview.title,
                     rating: Number(newReview.rating),
-                    text: newReview.text
+                    content: newReview.text
                 })
             });
-
+    
             if (!response.ok) throw new Error("Failed to submit review");
-
+    
             const savedReview = await response.json();
             setReviews((prevReviews) => [savedReview, ...prevReviews]);
-            setNewReview({ title: '', rating: '', text: '' }); // Clear form fields
+            setNewReview({ title: '', rating: '', text: '' }); 
         } catch (error) {
             console.error("Error submitting review:", error);
             alert("Failed to submit review.");
         }
     };
+    
+     
+
 
     if (loading) return <p>Loading...</p>;
     if (!movie) return <p>Error loading movie details</p>;
@@ -98,45 +103,53 @@ const MovieDetail = () => {
             </div>
 
             {/* Add Review Section */}
-            <div className={styles["add-review"]}>
-                <h2>Add Your Review</h2>
-
-                <label>
-                        Rating:
-                        <input 
-                            type="number" 
-                            name="rating" 
-                            value={newReview.rating} 
+<div className={styles["add-review"]}>
+    <h2>Add Your Review</h2>
+    <form onSubmit={handleSubmitReview}>
+        <label>
+            Rating:
+            <div className={styles["star-rating"]}>
+                {[5, 4, 3, 2, 1].map((star) => (
+                    <React.Fragment key={star}>
+                        <input
+                            type="radio"
+                            id={`star${star}`}
+                            name="rating"
+                            value={star}
+                            checked={Number(newReview.rating) === star}
                             onChange={handleInputChange}
-                            min="1" 
-                            max="5" 
-                            required 
+                            required
                         />
-                    </label>
-                <form onSubmit={handleSubmitReview}>
-                    <label>
-                        Title:
-                        <input 
-                            type="text" 
-                            name="title" 
-                            value={newReview.title} 
-                            onChange={handleInputChange}
-                            required 
-                        />
-                    </label>
-                    
-                    <label>
-                        Review:
-                        <textarea 
-                            name="text" 
-                            value={newReview.text} 
-                            onChange={handleInputChange}
-                            required 
-                        />
-                    </label>
-                    <button type="submit" className={styles["submit-button"]}>Submit Review</button>
-                </form>
+                        <label htmlFor={`star${star}`}>&#9733;</label> {/* Unicode star character */}
+                    </React.Fragment>
+                ))}
             </div>
+        </label>
+
+        <label>
+            Title:
+            <input 
+                type="text" 
+                name="title" 
+                value={newReview.title} 
+                onChange={handleInputChange}
+                required 
+            />
+        </label>
+
+        <label>
+            Review:
+            <textarea 
+                name="text" 
+                value={newReview.text} 
+                onChange={handleInputChange}
+                required 
+            />
+        </label>
+        <button type="submit" className={styles["submit-button"]}>Submit Review</button>
+    </form>
+</div>
+
 
             {/* User Reviews Section */}
             <h2>User Reviews</h2>
