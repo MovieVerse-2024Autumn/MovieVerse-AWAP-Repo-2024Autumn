@@ -1,0 +1,155 @@
+/* Navbar Styles */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(90deg, #d2cbcb, #111);
+    padding: 15px 20px;
+    box-shadow: 0px 4px 6px rgba(213, 13, 13, 0.3);
+    position: relative;
+  }
+  
+  .navbar-logo .logo-image {
+    margin-left: 10px;
+    width: 15vw;
+  }
+  
+  .navbar-links {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .navbar-center, .navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-left: 15px;
+  }
+  
+  .nav-link {
+    color: #f0f0f0;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 8px 12px;
+    transition: color 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .nav-link:hover {
+    color: #e50914;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+  
+  /* Search Bar Styles */
+  .search-container {
+    display: flex;
+    align-items: center;
+    border-radius: 12px;
+    border: 1px solid #444;
+    background-color: #222;
+  }
+  
+  .search-bar {
+    padding: 10px 15px;
+    width: 200px;
+    border: none;
+    border-radius: 12px 0 0 12px;
+    background-color: #222;
+    color: #f0f0f0;
+    font-size: 16px;
+    outline: none;
+  }
+  
+  .search-bar::placeholder {
+    color: #888;
+  }
+  
+  .search-button {
+    padding: 10px 15px;
+    background-color: #5e5556;
+    color: #f0f0f0;
+    border: none;
+    border-radius: 0 12px 12px 0;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .search-button:hover {
+    background-color: #b20810;
+  }
+  
+  /* Account Icon */
+  .account-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background-color: #444;
+    color: #f0f0f0;
+    font-weight: bold;
+    font-size: 22px;
+    border-radius: 50%;
+  }
+  
+  .account-icon:hover {
+    background-color: #b20810;
+    color: #f0f0f0;
+  }
+  
+  /* Hamburger Menu */
+  .hamburger-icon {
+    display: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: #f0f0f0;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 912px) {
+    .navbar-links {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: #111;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px;
+      gap: 15px;
+      display: none;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    }
+  
+    .navbar-links.open {
+      display: flex;
+    }
+  
+    .hamburger-icon {
+      display: block;
+    }
+  
+    .search-container {
+      width: 100%;
+    }
+  
+    .search-bar {
+      width: 100%;
+    }
+  
+    .navbar-center, .navbar-right {
+      flex-direction: column;
+      width: 100%;
+      padding-left: 15px;
+    }
+  
+    .nav-link {
+      width: 100%;
+      text-align: left;
+    }
+  }
+  
