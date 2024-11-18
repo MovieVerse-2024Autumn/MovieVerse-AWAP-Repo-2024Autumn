@@ -1,6 +1,6 @@
 /* Footer Styles */
 .footer {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: #666 !important;
     padding: 20px 0;
     margin-top: 40px;
   }
@@ -65,7 +65,7 @@
   
   .footer-link {
     display: block;
-    color: #bbb;
+    color: white;
     font-size: 13px;
     text-decoration: none;
     margin-bottom: 6px;
@@ -80,7 +80,7 @@
   .footer-bottom {
     text-align: center;
     font-size: 11px;
-    color: #bbb;
+    color: white;
     margin-top: 10px;
     padding-top: 10px;
     border-top: 1px solid #444;

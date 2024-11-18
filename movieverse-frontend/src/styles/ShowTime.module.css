@@ -1,0 +1,153 @@
+/* Container for the entire component */
+.showtime-page {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+/* Section heading */
+.heading {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.selectionContainer {
+  display: flex; /* Use flexbox to align items in a row */
+  justify-content: center; /* Center the elements horizontally */
+  gap: 20px; /* Add space between the two elements */
+  align-items: center; /* Vertically center the elements */
+}
+
+/* Dropdown and date picker */
+.selectRow {
+  display: flex;
+  align-items: center;
+  width: 200px;
+}
+
+.selectRow label {
+  font-size: 1em;
+  font-weight: bold;
+  color: #555;
+}
+
+select,
+input[type="date"] {
+  width: 100%;
+  padding: 8px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-left: 10px;
+}
+
+/* Loading spinner text */
+.loading {
+  text-align: center;
+  font-size: 1.2em;
+  color: #007bff;
+}
+
+/* No showings message */
+.noShowings {
+  text-align: center;
+  font-size: 1.2em;
+  color: #666;
+  margin-top: 20px;
+}
+
+/* Movie card container */
+.movieCard {
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+
+  padding: 15px;
+}
+
+.movieDetails {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.posterContainer {
+  margin-right: 15px;
+}
+
+.moviePoster {
+  max-width: 120px;
+  max-height: 180px;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.movieInfo {
+  flex-grow: 1;
+}
+
+.movieInfo p {
+  margin: 5px 0;
+  color: #555;
+  font-size: 0.9em;
+}
+
+.movieTitle {
+  font-size: 1.4em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.detailsColumn {
+  margin-left: 20px;
+}
+
+.movieLanguage {
+  display: flex;
+  justify-content: space-between;
+  color: #555;
+}
+
+.durationMethod {
+  display: flex;
+
+  align-items: center;
+  color: #555;
+}
+
+.movieMethod {
+  background-color: #d3d3d3;
+  padding: 3px;
+  margin-left: 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #333;
+}
+
+.showTimings {
+  margin-top: 15px;
+  color: #555;
+}
+
+.showTimings p {
+  margin: 5px 0;
+  font-size: 0.9em;
+}
+
+/* Accessibility styles */
+button:focus,
+select:focus,
+input:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
