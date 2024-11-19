@@ -7,12 +7,14 @@ const MovieDetail = () => {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false); // Favorite status
   const [newReview, setNewReview] = useState({
     title: "",
     rating: "",
     text: "",
-  }); // State to hold the new review data
+  });
 
+  // Fetch movie details and favorite status
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
@@ -30,9 +32,60 @@ const MovieDetail = () => {
       }
     };
 
+    const checkFavoriteStatus = async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/api/favorites/1`); // Replace `1` with dynamic account_id
+        const data = await response.json();
+        const isFav = data.some((fav) => fav.movie_id === parseInt(id));
+        setIsFavorite(isFav);
+      } catch (error) {
+        console.error("Error checking favorite status:", error);
+      }
+    };
+
     fetchMovieDetails();
+    checkFavoriteStatus();
   }, [id]);
 
+  // Toggle favorite status
+  const toggleFavorite = async () => {
+    try {
+        if (isFavorite) {
+            // Remove from favorites
+            await fetch(`http://localhost:3001/api/favorites`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    account_id: 1, // Replace with dynamic account_id
+                    movie_id: id,
+                }),
+            });
+            setIsFavorite(false); // Update the button state
+        } else {
+            // Add to favorites
+            await fetch(`http://localhost:3001/api/favorites`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    account_id: 1, // Replace with dynamic account_id
+                    movie_id: id,
+                }),
+            });
+            setIsFavorite(true); // Update the button state
+        }
+    } catch (error) {
+        console.error("Error toggling favorite:", error);
+    }
+};
+
+     
+ 
+
+  // Handle new review input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewReview((prevReview) => ({
@@ -41,6 +94,7 @@ const MovieDetail = () => {
     }));
   };
 
+  // Submit a new review
   const handleSubmitReview = async (e) => {
     e.preventDefault();
 
@@ -58,7 +112,7 @@ const MovieDetail = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            account_id: 1, // Use dynamic user_id from login in real implementation
+            account_id: 1, // Replace with dynamic account_id
             movie_id: id,
             title: newReview.title,
             rating: Number(newReview.rating),
@@ -98,14 +152,16 @@ const MovieDetail = () => {
             {movie.genres.map((genre) => genre.name).join(", ")}
           </p>
           <div className={styles["movie-actions"]}>
-            <p className={styles["movie-rating"]}>
-              {movie.vote_average.toFixed(1)}/10
-            </p>
-            <button className={styles["favorite-button"]}>
+            <button
+              className={`${styles["favorite-button"]} ${
+                isFavorite ? styles["favorite-active"] : ""
+              }`}
+              onClick={toggleFavorite}
+            >
               <span role="img" aria-label="heart">
                 ❤️
               </span>{" "}
-              Add to Favourite
+              {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
             </button>
           </div>
           <p className={styles["movie-overview"]}>{movie.overview}</p>
@@ -130,8 +186,7 @@ const MovieDetail = () => {
                     onChange={handleInputChange}
                     required
                   />
-                  <label htmlFor={`star${star}`}>&#9733;</label>{" "}
-                  {/* Unicode star character */}
+                  <label htmlFor={`star${star}`}>&#9733;</label>
                 </React.Fragment>
               ))}
             </div>

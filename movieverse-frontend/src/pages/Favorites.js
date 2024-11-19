@@ -1,35 +1,53 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const Favorites = () => {
-    // Mock favorite movies list for testing
-    const [favorites, setFavorites] = useState([
-        { id: 558449, title: "Inception", poster: "https://image.tmdb.org/t/p/w500/path_to_image" },
-        { id: 2, title: "Breaking Bad", poster: "https://image.tmdb.org/t/p/w500/path_to_image" },
-        { id: 3, title: "The Dark Knight", poster: "https://image.tmdb.org/t/p/w500/path_to_image" },
-    ]);
+const Favorites = ({ accountId }) => {
+    const [favorites, setFavorites] = useState([]);
 
-    // Function to handle sharing the favorites list
-    const handleShare = () => {
-        alert("Share URL copied to clipboard!");
-        // Placeholder for functionality to generate a sharable URL
+    const fetchFavorites = async () => {
+        try {
+            const response = await fetch(`http://localhost:3001/api/favorites/${accountId}`);
+            const data = await response.json();
+            setFavorites(data);
+        } catch (error) {
+            console.error("Error fetching favorites:", error);
+        }
     };
 
+    const removeFavorite = async (movieId) => {
+        try {
+            const response = await fetch(`http://localhost:3001/api/favorites`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ account_id: accountId, movie_id: movieId }),
+            });
+
+            if (response.ok) {
+                setFavorites((prev) => prev.filter((fav) => fav.movie_id !== movieId));
+            } else {
+                console.error("Failed to remove favorite:", await response.text());
+            }
+        } catch (error) {
+            console.error("Error removing favorite:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchFavorites();
+    }, []);
+
     return (
-        <div className="favorites-page">
+        <div>
             <h1>Your Favorites</h1>
-            {favorites.length > 0 ? (
-                <div className="favorites-list">
-                    {favorites.map((movie) => (
-                        <div key={movie.id} className="favorite-item">
-                            <img src={movie.poster} alt={movie.title} />
-                            <p>{movie.title}</p>
-                        </div>
-                    ))}
-                </div>
-            ) : (
-                <p>You have no favorites yet!</p>
-            )}
-            <button onClick={handleShare}>Share Favorites</button>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+                {favorites.map((fav) => (
+                    <div key={fav.movie_id} style={{ textAlign: "center", width: "150px" }}>
+                        <h3 style={{ fontSize: "16px" }}>{fav.title}</h3>
+                        <button onClick={() => removeFavorite(fav.movie_id)}>Remove</button>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

@@ -25,8 +25,7 @@ function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/select-movies" element={<Select />} />
           <Route path="/movies/:id" element={<MovieDetail />} />
-          <Route path="/favorites" element={<Favorites />} />
-          {/* New MovieDetail route */}
+          <Route path="/favorites" element={<Favorites accountId={1} />} />
           <Route path="/search-results" element={<Search />} />
         </Routes>
         <Footer /> {/* Add Footer to the bottom of the page */}
