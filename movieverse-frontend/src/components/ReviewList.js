@@ -6,6 +6,8 @@ export default function ReviewList({ reviews, movies }) {
     <div style={reviewlistStyle}>
       {reviews.map((review) => {
         const movie = movies.find((movie) => movie.id === review.movie_id);
+        //console.log("Review:", review.movie_id);
+        //console.log("Movies:", movie.id);
 
         return (
           <ReviewCardForHomePage

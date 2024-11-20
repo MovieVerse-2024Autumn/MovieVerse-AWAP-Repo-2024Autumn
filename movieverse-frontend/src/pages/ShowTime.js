@@ -127,6 +127,8 @@ export default function ShowTime() {
         return "Swedish";
       case "englanti":
         return "English";
+      case "suomi/englanti":
+        return "Finnish/English";
       default:
         return language || "N/A";
     }
@@ -134,9 +136,20 @@ export default function ShowTime() {
 
   // Function to capitalize subtitle language
   const capitalizeSubtitle = (subtitle) => {
-    return subtitle
-      ? subtitle.charAt(0).toUpperCase() + subtitle.slice(1).toLowerCase()
-      : "No Subtitles";
+    switch (subtitle) {
+      case "suomi":
+        return "Finnish";
+      case "Kuvaileva suomenkiel. tekstitys kuulovammaisille":
+        return "Descriptive Finnish";
+      case "":
+      case null:
+      case undefined:
+        return "No Subtitles";
+      default:
+        return (
+          subtitle.charAt(0).toUpperCase() + subtitle.slice(1).toLowerCase()
+        );
+    }
   };
 
   return (

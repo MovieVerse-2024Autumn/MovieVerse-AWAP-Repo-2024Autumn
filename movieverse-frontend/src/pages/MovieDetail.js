@@ -50,40 +50,37 @@ const MovieDetail = () => {
   // Toggle favorite status
   const toggleFavorite = async () => {
     try {
-        if (isFavorite) {
-            // Remove from favorites
-            await fetch(`http://localhost:3001/api/favorites`, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    account_id: 1, // Replace with dynamic account_id
-                    movie_id: id,
-                }),
-            });
-            setIsFavorite(false); // Update the button state
-        } else {
-            // Add to favorites
-            await fetch(`http://localhost:3001/api/favorites`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    account_id: 1, // Replace with dynamic account_id
-                    movie_id: id,
-                }),
-            });
-            setIsFavorite(true); // Update the button state
-        }
+      if (isFavorite) {
+        // Remove from favorites
+        await fetch(`http://localhost:3001/api/favorites`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            account_id: 1, // Replace with dynamic account_id
+            movie_id: id,
+          }),
+        });
+        setIsFavorite(false); // Update the button state
+      } else {
+        // Add to favorites
+        await fetch(`http://localhost:3001/api/favorites`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            account_id: 1, // Replace with dynamic account_id
+            movie_id: id,
+          }),
+        });
+        setIsFavorite(true); // Update the button state
+      }
     } catch (error) {
-        console.error("Error toggling favorite:", error);
+      console.error("Error toggling favorite:", error);
     }
-};
-
-     
- 
+  };
 
   // Handle new review input changes
   const handleInputChange = (e) => {

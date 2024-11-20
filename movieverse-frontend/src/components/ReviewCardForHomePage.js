@@ -1,20 +1,25 @@
 import React from "react";
+import { Link } from "react-router-dom";
 const API_IMG = "https://image.tmdb.org/t/p/w500";
 
 export default function ReviewCardForHomePage({ review, movie }) {
-  const { title, review_date, description, rating } = review;
-  const movie_link = movie ? `/movies/${movie.id}` : "#";
+  const { movie_id, title, review_date, description, rating, author } = review;
+  const movie_link = `/movies/${movie_id}`;
+  const review_link = `/reviews/${review.id}`;
   const poster_path = movie ? movie.poster_path : "";
 
   return (
     <div style={reviewcardStyle}>
-      <div style={reviewimagecontainerStyle}>
-        <img src={API_IMG + poster_path} alt="" style={reviewimageStyle} />
-      </div>
+      <Link to={movie_link}>
+        <div style={reviewimagecontainerStyle}>
+          <img src={API_IMG + poster_path} alt="" style={reviewimageStyle} />
+        </div>
+      </Link>
 
       <div style={reviewtextStyle}>
         <h4 style={reviewtitleStyle}>{title}</h4>
         <div style={reviewinfoStyle}>
+          <span>{author}</span>
           <span>{new Date(review_date).toLocaleDateString()}</span>
           <span>{rating}</span>
         </div>
@@ -23,9 +28,9 @@ export default function ReviewCardForHomePage({ review, movie }) {
             ? `${description.substring(0, 100)}...`
             : description}
         </p>
-        <a href={movie_link} style={reviewlinkStyle}>
-          View Movie Details
-        </a>
+        <Link to={review_link} style={reviewlinkStyle}>
+          View More
+        </Link>
       </div>
     </div>
   );

@@ -1,10 +1,20 @@
 import { emptyOrRows } from "../../middleware/util.js";
 import { pool } from "../../middleware/db.js";
-import { selectAllReviews } from "../../models/Review.js";
+import { selectAllReviews, selectOneReview } from "../../models/Review.js";
 
 const getReviews = async (req, res, next) => {
   try {
     const result = await selectAllReviews();
+    return res.status(200).json(emptyOrRows(result));
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const getOneReview = async (req, res, next) => {
+  const reviewId = req.params.id;
+  try {
+    const result = await selectOneReview(reviewId);
     return res.status(200).json(emptyOrRows(result));
   } catch (error) {
     return next(error);
@@ -36,4 +46,4 @@ const addReview = async (req, res, next) => {
   }
 };
 
-export { getReviews, addReview };
+export { getReviews, addReview, getOneReview };
