@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styles from "../styles/ShowTime.module.css";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 export default function ShowTime() {
   const [areas, setAreas] = useState([]);
@@ -139,6 +141,7 @@ export default function ShowTime() {
 
   return (
     <div className={styles["showtime-page"]}>
+      <Navbar />
       <h2 className={styles.heading}>Movies on Show</h2>
       <div className={styles.selectionContainer}>
         {/* Theater Selection Dropdown */}
@@ -241,6 +244,7 @@ export default function ShowTime() {
           No showings found for selected date and theatre.
         </div>
       )}
+      <Footer />
     </div>
   );
 }

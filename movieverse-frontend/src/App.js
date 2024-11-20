@@ -1,8 +1,6 @@
 import React from "react";
 import Home from "./pages/Home";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 
 import MoreReviews from "./pages/MoreReviews";
 import Select from "./pages/Select";
@@ -17,7 +15,6 @@ function App() {
       future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
     >
       <div className="App">
-        <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/show-time" element={<ShowTime />} />
@@ -28,7 +25,6 @@ function App() {
           <Route path="/favorites" element={<Favorites accountId={1} />} />
           <Route path="/search-results" element={<Search />} />
         </Routes>
-        <Footer /> {/* Add Footer to the bottom of the page */}
       </div>
     </BrowserRouter>
   );

@@ -5,6 +5,8 @@ import SectionTitle from "../components/SectionTitle";
 import MovieList from "../components/MovieList";
 import ReviewList from "../components/ReviewList";
 import styles from "../styles/Home.module.css";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const url = "http://localhost:3001/api";
 
@@ -47,6 +49,7 @@ export default function Home() {
 
   return (
     <div>
+      <Navbar />
       <SectionTitle title="MOVIES" linkPath="/select-movies" />
       <div>
         <MovieList movies={currentMovies} />
@@ -60,18 +63,12 @@ export default function Home() {
         containerClassName={styles.pagination}
         activeClassName={styles.active}
       />
-
       <SectionTitle title="REVIEWS" linkPath="/more-reviews" />
       <ReviewList reviews={reviews} movies={movies} />
       <Link to={"/search"}>
         <h3>Search</h3>
       </Link>
-      <Link to={"/show-time"}>
-        <h3>ShowTime</h3>
-      </Link>
-      <Link to={"/favorites"}>
-        <h3>Favorites</h3>
-      </Link>
+      <Footer /> {/* Add Footer to the bottom of the page */}
     </div>
   );
 }
