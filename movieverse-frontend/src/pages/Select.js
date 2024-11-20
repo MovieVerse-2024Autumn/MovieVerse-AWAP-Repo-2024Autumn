@@ -1,46 +1,78 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MovieList from "../components/MovieList";
 
+const API_KEY = "159c3b0b72b70b61f703169a3153283a";
+
 export default function MoviePage() {
-  const exampleMovies = [
-    {
-      id: 1,
-      title: "Inception",
-      poster_path: "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-      vote_average: 8.8,
-    },
-    {
-      id: 2,
-      title: "Interstellar",
-      poster_path: "/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
-      vote_average: 8.6,
-    },
-    {
-      id: 3,
-      title: "The Dark Knight",
-      poster_path: "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-      vote_average: 9.0,
-    },
-    {
-      id: 1,
-      title: "Inception",
-      poster_path: "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-      vote_average: 8.8,
-    },
-    {
-      id: 2,
-      title: "Interstellar",
-      poster_path: "/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
-      vote_average: 8.6,
-    },
-    {
-      id: 3,
-      title: "The Dark Knight",
-      poster_path: "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-      vote_average: 9.0,
-    },
-    // Add more example movies as needed
-  ];
+  const [genres, setGenres] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Filters State
+  const [selectedGenre, setSelectedGenre] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedRating, setSelectedRating] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch genres
+        const genresResponse = await fetch(
+          `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US`
+        );
+        const genresData = await genresResponse.json();
+        setGenres(genresData.genres || []);
+
+        // Fetch countries
+        const countriesResponse = await fetch(
+          `https://api.themoviedb.org/3/configuration/countries?api_key=${API_KEY}`
+        );
+        const countriesData = await countriesResponse.json();
+        setCountries(countriesData || []);
+
+        // Fetch initial movies
+        const moviesResponse = await fetch(
+          `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en-US&page=1`
+        );
+        const moviesData = await moviesResponse.json();
+        setMovies(moviesData.results || []);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleSearch = async () => {
+    setLoading(true);
+    try {
+      const queryParams = new URLSearchParams({
+        api_key: API_KEY,
+        language: "en-US",
+        with_genres: selectedGenre,
+        region: selectedCountry,
+        sort_by: selectedRating || "popularity.desc", // Default sorting if none selected
+      });
+
+      const response = await fetch(
+        `https://api.themoviedb.org/3/discover/movie?${queryParams.toString()}`
+      );
+      const data = await response.json();
+      setMovies(data.results || []);
+    } catch (error) {
+      console.error("Error fetching filtered movies:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <div style={{ textAlign: "center", padding: "50px" }}>Loading...</div>;
+  }
 
   return (
     <div style={{ padding: "20px" }}>
@@ -60,54 +92,55 @@ export default function MoviePage() {
           justifyContent: "space-between",
         }}
       >
-        <select style={dropdownStyle}>
+        {/* Genre Dropdown */}
+        <select
+          style={dropdownStyle}
+          value={selectedGenre}
+          onChange={(e) => setSelectedGenre(e.target.value)}
+        >
           <option value="">Genre</option>
-          <option value="action">Action</option>
-          <option value="adventure">Adventure</option>
-          <option value="animation">Animation</option>
-          <option value="comedy">Comedy</option>
-          <option value="crime">Crime</option>
-          <option value="documentary">Documentary</option>
-          <option value="drama">Drama</option>
-          <option value="fantasy">Fantasy</option>
-          <option value="horror">Horror</option>
-          <option value="mystery">Mystery</option>
-          <option value="romance">Romance</option>
-          <option value="sci-fi">Sci-Fi</option>
-          <option value="thriller">Thriller</option>
-          <option value="western">Western</option>
+          {genres.map((genre) => (
+            <option key={genre.id} value={genre.id}>
+              {genre.name}
+            </option>
+          ))}
         </select>
 
-        <select style={dropdownStyle}>
+        {/* Country Dropdown */}
+        <select
+          style={dropdownStyle}
+          value={selectedCountry}
+          onChange={(e) => setSelectedCountry(e.target.value)}
+        >
           <option value="">Country</option>
-          <option value="fi">Finland</option>
-          <option value="us">United States</option>
-          <option value="uk">United Kingdom</option>
-          <option value="fr">France</option>
-          <option value="de">Germany</option>
-          <option value="in">India</option>
-          <option value="jp">Japan</option>
-          <option value="kr">South Korea</option>
-          <option value="it">Italy</option>
-          <option value="es">Spain</option>
-          <option value="cn">China</option>
-          <option value="ru">Russia</option>
-          <option value="au">Australia</option>
-          <option value="ca">Canada</option>
-          <option value="mx">Mexico</option>
+          {countries.map((country, index) => (
+            <option key={index} value={country.iso_3166_1}>
+              {country.english_name}
+            </option>
+          ))}
         </select>
 
-        <select style={dropdownStyle}>
-          <option value="top_rated">Top Rated</option>
-          <option value="latest">Latest</option>
-          <option value="popular">Popular</option>
-          <option value="most view">Most View</option>
+        {/* Top Rated Dropdown */}
+        <select
+          style={dropdownStyle}
+          value={selectedRating}
+          onChange={(e) => setSelectedRating(e.target.value)}
+        >
+          <option value="">Rating</option>
+          <option value="popularity.desc">Popular</option>
+          <option value="release_date.desc">Latest</option>
+          <option value="vote_average.desc">Top Rated</option>
+          <option value="vote_count.desc">Most Viewed</option>
         </select>
 
-        <button style={buttonStyle}>Search</button>
+        {/* Search Button */}
+        <button style={buttonStyle} onClick={handleSearch}>
+          Search
+        </button>
       </div>
 
-      <MovieList movies={exampleMovies} />
+      {/* Movie List */}
+      <MovieList movies={movies} />
     </div>
   );
 }
