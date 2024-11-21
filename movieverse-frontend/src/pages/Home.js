@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import SectionTitle from "../components/SectionTitle";
 import MovieList from "../components/MovieList";
@@ -65,9 +64,6 @@ export default function Home() {
       />
       <SectionTitle title="REVIEWS" linkPath="/more-reviews" />
       <ReviewList reviews={reviews} movies={movies} />
-      <Link to={"/search"}>
-        <h3>Search</h3>
-      </Link>
       <Footer /> {/* Add Footer to the bottom of the page */}
     </div>
   );

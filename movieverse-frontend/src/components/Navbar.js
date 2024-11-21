@@ -1,14 +1,24 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';  // Import Link from react-router-dom
-import './Navbar.css';  // Make sure to import the CSS file for styles
-
+import { Link, useNavigate } from 'react-router-dom';
+import './Navbar.css';
 import logo from '../logo.png';
 
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+  const handleSearch = () => {
+    if (query.trim()) {
+      navigate(`/search-results?query=${encodeURIComponent(query)}`);
+    } else {
+      alert("Please enter a search term!");
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
   };
 
   return (
@@ -19,26 +29,28 @@ const Navbar = () => {
       </div>
 
       {/* Hamburger Icon */}
-      <div className="hamburger-icon" onClick={toggleMenu}>
+      <div className="hamburger-icon">
         ☰
       </div>
 
       {/* Navbar Links */}
-      <div className={`navbar-links ${isMenuOpen ? 'open' : ''}`}>
-          <div className="navbar-center">
-            <Link to="/" className="nav-link">HOME</Link>  {/* Updated to Link */}
-            <Link to="/favorites" className="nav-link">FAVOURITE</Link>  {/* Updated to Link */}
-            <Link to="/show-time" className="nav-link">SHOWTIMES</Link>  {/* Updated to Link */}
-            <Link to="/groups" className="nav-link">GROUP</Link>  {/* Updated to Link */}
-            <div className="search-container">
-              <input type="text" className="search-bar" placeholder="Search movies..." />
-              <button className="search-button">Search</button>
-            </div>
+      <div className="navbar-links">
+        <div className="navbar-center">
+          <Link to="/" className="nav-link">HOME</Link>
+          <Link to="/favorites" className="nav-link">FAVOURITE</Link>
+          <Link to="/show-time" className="nav-link">SHOWTIMES</Link>
+          <Link to="/groups" className="nav-link">GROUP</Link>
+          <div className="search-container">
+            <input
+              type="text"
+              className="search-bar"
+              placeholder="Search movies..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            <button className="search-button" onClick={handleSearch}>Search</button>
           </div>
-        
-        <div className="navbar-right">
-          <div className="account-icon">A</div>
-          <a href="#signin" className="nav-link">Sign In</a>
         </div>
       </div>
     </nav>

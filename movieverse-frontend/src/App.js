@@ -7,7 +7,7 @@ import Select from "./pages/Select";
 import MovieDetail from "./pages/MovieDetail"; // Import the MovieDetail component
 import ReviewDetail from "./pages/ReviewDetail";
 import ShowTime from "./pages/ShowTime";
-import Search from "./pages/Search";
+import SearchResults from "./pages/SearchResults";
 import Favorites from "./pages/Favorites";
 
 function App() {
@@ -20,12 +20,11 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/show-time" element={<ShowTime />} />
           <Route path="/more-reviews" element={<MoreReviews />} />
-          <Route path="/search" element={<Search />} />
           <Route path="/select-movies" element={<Select />} />
           <Route path="/movies/:id" element={<MovieDetail />} />
           <Route path="/reviews/:reviewId" element={<ReviewDetail />} />
           <Route path="/favorites" element={<Favorites accountId={1} />} />
-          <Route path="/search-results" element={<Search />} />
+          <Route path="/search-results" element={<SearchResults />} />
         </Routes>
       </div>
     </BrowserRouter>

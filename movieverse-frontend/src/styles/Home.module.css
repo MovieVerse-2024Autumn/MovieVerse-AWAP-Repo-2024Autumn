@@ -10,7 +10,7 @@
 }
 
 .pagination .active {
-  color: blue;
+  color: red;
 }
 
 .pagination li a {
