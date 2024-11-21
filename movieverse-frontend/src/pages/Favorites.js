@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 
 const Favorites = ({ accountId }) => {
     const [favorites, setFavorites] = useState([]);
+    const [shareUrl, setShareUrl] = useState(null); // State for shareable link
 
     useEffect(() => {
         fetchFavorites();
-    }, []);
-
-   
+    }, [accountId]); 
 
     // Fetch favorites from the backend
     const fetchFavorites = async () => {
         try {
             const response = await fetch(`http://localhost:3001/api/favorites/${accountId}`);
             const data = await response.json();
+            console.log("Fetched favorites:", data);
             setFavorites(data); // Update state with the list of favorites
         } catch (error) {
             console.error("Error fetching favorites:", error);
@@ -23,6 +23,7 @@ const Favorites = ({ accountId }) => {
     // Remove a favorite
     const removeFavorite = async (movieId) => {
         try {
+            console.log("Removing Movie ID:", movieId); // Debug
             const response = await fetch(`http://localhost:3001/api/favorites`, {
                 method: "DELETE",
                 headers: {
@@ -33,10 +34,11 @@ const Favorites = ({ accountId }) => {
                     movie_id: movieId,
                 }),
             });
-    
+
             if (response.ok) {
-                // Filter out the movie that was just removed
-                setFavorites((prevFavorites) => prevFavorites.filter(fav => fav.id !== movieId));
+                // Update the state immediately by filtering out the removed movie
+                setFavorites((prevFavorites) => prevFavorites.filter((fav) => fav.movie_id !== movieId));
+                console.log("Movie removed successfully");
             } else {
                 console.error("Failed to remove favorite");
             }
@@ -44,12 +46,36 @@ const Favorites = ({ accountId }) => {
             console.error("Error removing favorite:", error);
         }
     };
-    
- 
+    // Share the favorites list
+    const shareFavorites = async () => {
+        try {
+            const response = await fetch(`http://localhost:3001/api/favorites/share`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ account_id: accountId, share: true }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setShareUrl(data.share_url);
+                alert(`Shareable Link: ${data.share_url}`);
+            } else {
+                console.error("Failed to share favorites");
+            }
+        } catch (error) {
+            console.error("Error sharing favorites:", error);
+        }
+    };
 
     return (
         <div>
             <h1>Your Favorites</h1>
+            <button onClick={shareFavorites}>Share</button>
+            {shareUrl && (
+                <p>
+                    Share this link: <a href={shareUrl}>{shareUrl}</a>
+                </p>
+            )}
             <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
                 {favorites.length ? (
                     favorites.map((fav) => (
@@ -60,17 +86,16 @@ const Favorites = ({ accountId }) => {
                                 style={{ width: "100%", borderRadius: "8px" }}
                             />
                             <h3 style={{ fontSize: "16px" }}>{fav.title}</h3>
-                            {/* <button onClick={() => removeFavorite(fav.movie_id)}>Remove</button> */}
                             <button
-    onClick={() => {
-        console.log("Movie ID to remove:", fav.id || fav.movie_id);
-        removeFavorite(fav.id || fav.movie_id);
-    }}
->
-    Remove
-</button>
+                                onClick={() => {
+                                    console.log("Movie ID to remove:", fav.id || fav.movie_id); // Use appropriate key
+                                    removeFavorite(fav.id || fav.movie_id); // Pass the correct ID
+                                }}
+                            >
+                                Remove
+                            </button>
 
-                            
+
                         </div>
                     ))
                 ) : (

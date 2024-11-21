@@ -31,6 +31,28 @@ const Favorite = {
         const result = await pool.query(query, [accountId, movieId]);
         return result.rowCount > 0; // Return `true` if a row was deleted
     }
+,
+    // Get the current sharing status for an account
+    getFavoritesByAccountId: async (accountId) => {
+        const query = `
+            SELECT f.movie_id
+            FROM favourite f
+            WHERE f.account_id = $1;
+        `;
+        const result = await pool.query(query, [accountId]);
+        return result.rows.map((row) => row.movie_id);
+    },
+
+    toggleShareUrl: async (accountId, shareUrl) => {
+        const query = `
+            UPDATE account
+            SET share_url = $1
+            WHERE id = $2
+            RETURNING share_url;
+        `;
+        const result = await pool.query(query, [shareUrl, accountId]);
+        return result.rowCount > 0;
+    },
 };
 
 export default Favorite;
