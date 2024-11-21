@@ -153,7 +153,7 @@ export default function ShowTime() {
   };
 
   return (
-    <div className={styles["showtime-page"]}>
+    <div>
       <Navbar />
       <h2 className={styles.heading}>Movies on Show</h2>
       <div className={styles.selectionContainer}>
