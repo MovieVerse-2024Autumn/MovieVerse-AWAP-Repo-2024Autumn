@@ -4,6 +4,7 @@ import './Navbar.css';
 import logo from '../logo.png';
 
 const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
@@ -13,6 +14,10 @@ const Navbar = () => {
     } else {
       alert("Please enter a search term!");
     }
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
   const handleKeyDown = (event) => {
@@ -29,12 +34,12 @@ const Navbar = () => {
       </div>
 
       {/* Hamburger Icon */}
-      <div className="hamburger-icon">
+      <div className="hamburger-icon" onClick={toggleMenu}>
         ☰
       </div>
 
       {/* Navbar Links */}
-      <div className="navbar-links">
+      <div className={`navbar-links ${isMenuOpen ? 'open' : ''}`}>
         <div className="navbar-center">
           <Link to="/" className="nav-link">HOME</Link>
           <Link to="/favorites" className="nav-link">FAVOURITE</Link>
