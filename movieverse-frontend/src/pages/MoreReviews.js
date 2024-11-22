@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReviewCardForHomePage from "../components/ReviewCardForHomePage";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 const url = "http://localhost:3001/api";
 
 export default function MoreReviews() {
@@ -25,18 +27,22 @@ export default function MoreReviews() {
   }, []);
 
   return (
-    <div style={reviewlistStyle}>
-      {reviews.map((review) => {
-        const movie = movies.find((movie) => movie.id === review.movie_id);
+    <div>
+      <Navbar />
+      <div style={reviewlistStyle}>
+        {reviews.map((review) => {
+          const movie = movies.find((movie) => movie.id === review.movie_id);
 
-        return (
-          <ReviewCardForHomePage
-            key={review.id}
-            review={review}
-            movie={movie}
-          />
-        );
-      })}
+          return (
+            <ReviewCardForHomePage
+              key={review.id}
+              review={review}
+              movie={movie}
+            />
+          );
+        })}
+      </div>
+      <Footer />
     </div>
   );
 }

@@ -13,7 +13,7 @@ export default function Home() {
   const [movies, setMovies] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const moviesPerPage = 4;
+  const [moviesPerPage, setMoviesPerPage] = useState(1);
 
   useEffect(() => {
     fetch(`${url}/movies-homepage`)
@@ -35,35 +35,51 @@ export default function Home() {
       .catch((error) => console.error("Error fetching reviews:", error));
   }, []);
 
-  // Handle page change for pagination
+  // Adjust movies per page dynamically
+  useEffect(() => {
+    const updateMoviesPerPage = () => {
+      const screenWidth = window.innerWidth;
+      const moviesPerRow = Math.floor(screenWidth / 180); // 180px for each card (150px + margin)
+      setMoviesPerPage(moviesPerRow * 1); // Two rows
+    };
+    updateMoviesPerPage();
+    window.addEventListener("resize", updateMoviesPerPage);
+    return () => window.removeEventListener("resize", updateMoviesPerPage);
+  }, []);
+
+  // Handle page change
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
 
-  // Get the current movies for the page
-  const currentMovies = movies.slice(
-    currentPage * moviesPerPage,
-    (currentPage + 1) * moviesPerPage
-  );
+  // Get current movies for the page
+  const startIndex = currentPage * moviesPerPage;
+  const currentMovies = movies.slice(startIndex, startIndex + moviesPerPage);
 
   return (
-    <div>
+    <div className={styles.homeContainer}>
       <Navbar />
-      <SectionTitle title="MOVIES" linkPath="/select-movies" />
-      <div>
-        <MovieList movies={currentMovies} />
+      <div className={styles.contentWrapper}>
+        <div className={styles.section}>
+          <SectionTitle title="MOVIES" linkPath="/select-movies" />
+
+          <MovieList movies={currentMovies} />
+
+          {/* Pagination controls */}
+          <ReactPaginate
+            previousLabel="<"
+            nextLabel=">"
+            pageCount={Math.ceil(movies.length / moviesPerPage)}
+            onPageChange={handlePageChange}
+            containerClassName={styles.pagination}
+            activeClassName={styles.active}
+          />
+        </div>
+        <div className={styles.section}>
+          <SectionTitle title="REVIEWS" linkPath="/more-reviews" />
+          <ReviewList reviews={reviews} movies={movies} />
+        </div>
       </div>
-      {/* Pagination controls */}
-      <ReactPaginate
-        previousLabel="<"
-        nextLabel=">"
-        pageCount={Math.ceil(movies.length / moviesPerPage)}
-        onPageChange={handlePageChange}
-        containerClassName={styles.pagination}
-        activeClassName={styles.active}
-      />
-      <SectionTitle title="REVIEWS" linkPath="/more-reviews" />
-      <ReviewList reviews={reviews} movies={movies} />
       <Footer /> {/* Add Footer to the bottom of the page */}
     </div>
   );

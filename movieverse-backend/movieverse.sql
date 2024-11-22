@@ -30,6 +30,10 @@ CREATE TABLE review (
     CONSTRAINT review_account_fk FOREIGN KEY (account_id) REFERENCES account(id)
 );
 
+ALTER TABLE review
+ADD COLUMN poster_path VARCHAR(255);
+
+
 CREATE TABLE favourite (
     account_id INTEGER NOT NULL,
     movie_id   INTEGER NOT NULL,

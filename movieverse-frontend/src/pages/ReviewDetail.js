@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+const API_IMG = "https://image.tmdb.org/t/p/w500";
 
 const url = "http://localhost:3001/api"; // Ensure this matches your API base URL
 
@@ -22,15 +25,56 @@ export default function ReviewDetail() {
     return <div>Loading...</div>; // Optionally, display a loading message
   }
 
+  const movie_link = `/movies/${review.movie_id}`;
+  const poster_path = review.movie_poster_path;
+
+  // Helper function to render stars
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 0; i < rating; i++) {
+      stars.push(
+        <span key={i} style={reviewStarStyle}>
+          ★
+        </span>
+      );
+    }
+    return stars;
+  };
+
   return (
-    <div style={reviewDetailStyle}>
-      <h2>{review.title}</h2>
-      <div style={reviewInfoStyle}>
-        <span>{review.author}</span>
-        <span>{new Date(review.review_date).toLocaleDateString()}</span>
-        <span>{review.rating}</span>
+    <div>
+      <Navbar />
+
+      <div style={reviewDetailStyle}>
+        <Link to="/more-reviews">
+          <p>Back to Reviews</p>
+        </Link>
+        <div style={contentWrapperStyle}>
+          <Link to={movie_link}>
+            <div>
+              <img
+                src={API_IMG + poster_path}
+                alt=""
+                style={reviewPosterStyle}
+              />
+            </div>
+          </Link>
+          <div style={reviewInfoStyle}>
+            <h3>{review.title}</h3>
+            <div style={reviewMetaStyle}>
+              <span>Reviewed by {review.author}</span>
+              <span style={starsWrapperStyle}>
+                {renderStars(review.rating)}
+              </span>
+            </div>
+            <div style={reviewMetaStyle}>
+              <span>{new Date(review.review_date).toLocaleDateString()}</span>
+            </div>
+          </div>
+        </div>
+        <p style={reviewDescriptionStyle}>{review.description}</p>
       </div>
-      <p>{review.description}</p>
+      <Footer />
     </div>
   );
 }
@@ -43,17 +87,43 @@ const reviewDetailStyle = {
   fontFamily: "Arial, sans-serif",
 };
 
-const reviewInfoStyle = {
+const contentWrapperStyle = {
   display: "flex",
-  gap: "10px",
-  fontSize: "14px",
-  color: "#666",
+  alignItems: "flex-start", // Align poster and text vertically at the top
+  gap: "20px",
 };
 
-const reviewImageStyle = {
-  width: "200px",
-  height: "300px",
-  objectFit: "cover",
+const reviewPosterStyle = {
+  maxWidth: "90px", // Set a maximum width for the poster
   borderRadius: "8px",
-  marginTop: "10px",
+};
+
+const reviewInfoStyle = {
+  display: "flex",
+  flexDirection: "column", // Stack text elements vertically
+};
+
+const reviewMetaStyle = {
+  display: "flex",
+  alignItems: "center",
+  color: "#666", // Lighter color for meta text
+  fontSize: "14px",
+  gap: "15px",
+  marginBottom: "15px",
+};
+
+const reviewDescriptionStyle = {
+  marginTop: "20px",
+  lineHeight: "1.6", // Improve readability with proper line height
+  fontSize: "16px",
+};
+
+const reviewStarStyle = {
+  color: "#FFD700", // Yellow color for the stars
+  fontSize: "16px",
+  marginRight: "2px",
+};
+
+const starsWrapperStyle = {
+  display: "flex", // Ensure stars align horizontally
 };
