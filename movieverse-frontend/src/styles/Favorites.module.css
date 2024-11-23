@@ -1,15 +1,22 @@
+
+
 .favorites {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    color: #fff;
+    background-color: #000; 
+    color: #fff; 
+    min-height: 100vh; 
 }
-
-.favorites h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
+.title {
+    background-color: black; 
+    color: white;           
+    text-align: center;     
+    padding: 20px;          
+    margin: 0;               
+    font-size: 2rem; 
+}       
 
 .favorites-grid {
     display: flex;
@@ -21,18 +28,32 @@
 .favorite-item {
     width: 150px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: space-between; 
+    height: 250px; 
+    padding: 10px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); 
+    background-color: #1e1e1e; 
+    border-radius: 8px; 
 }
 
 .favorite-item img {
     width: 100%;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+.favorite-item h3 {
+    font-size: 16px;
+    margin: 10px 0;
+    color: white; 
 }
 
 .favorite-item button {
-    margin-top: 10px;
+    margin-top: auto; 
     padding: 5px 10px;
-    background-color: #007bff;
+    background-color: #ff4d4d;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -40,5 +61,67 @@
 }
 
 .favorite-item button:hover {
-    background-color: #0056b3;
+    background-color: #d43f3f;
+}
+
+
+.share-button-container {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.share-button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.popup-modal {
+    position: fixed;
+    top: 80%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.8); 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
+    padding: 15px; 
+    z-index: 1000; 
+    text-align: center;
+    width: 300px; 
+    height: auto; 
+    backdrop-filter: blur(5px); 
+}
+
+.popup-modal h2 {
+    margin-bottom: 10px; 
+    color: #333; 
+}
+
+.popup-modal p {
+    margin-bottom: 15px; 
+    font-size: 14px; 
+    word-wrap: break-word; 
+}
+
+.popup-modal a {
+    color: #007bff; 
+    text-decoration: none;
+    word-wrap: break-word; 
+}
+
+.popup-modal a:hover {
+    text-decoration: underline;
+}
+
+.popup-modal .share-button {
+    background-color: #4caf50; 
+    color: #fff;
+    border: none;
+    padding: 8px 16px; 
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px; 
 }
