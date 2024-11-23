@@ -46,9 +46,9 @@ const Favorite = {
     toggleShareUrl: async (accountId, shareUrl) => {
         const query = `
             UPDATE account
-            SET share_url = $1
+            SET link = $1
             WHERE id = $2
-            RETURNING share_url;
+            RETURNING link;
         `;
         const result = await pool.query(query, [shareUrl, accountId]);
         return result.rowCount > 0;

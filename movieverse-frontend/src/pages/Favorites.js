@@ -118,23 +118,26 @@ const Favorites = ({ accountId }) => {
                                     <h3 style={{ fontSize: "16px", margin: "10px 0 0 0", color: "#fff" }}>{fav.title}</h3>
 
                                     <button
-                                        onClick={(e) => {
-                                            e.stopPropagation(); // Prevent card click
-                                            removeFavorite(fav.movie_id); // Remove favorite
-                                        }}
-                                        style={{
-                                            marginTop: "10px",
-                                            backgroundColor: "#ff4d4d",
-                                            color: "#fff",
-                                            border: "none",
-                                            padding: "8px 12px",
-                                            borderRadius: "5px",
-                                            cursor: "pointer",
-                                            fontSize: "14px",
-                                        }}
-                                    >
-                                        Remove
-                                    </button>
+    onClick={(e) => {
+        e.stopPropagation(); // Prevent card click
+        console.log("Attempting to remove favorite with movie ID:", fav.movie_id || fav.id);
+        removeFavorite(fav.movie_id || fav.id); // Pass the correct movie ID
+    }}
+    style={{
+        marginTop: "10px",
+        backgroundColor: "#ff4d4d",
+        color: "#fff",
+        border: "none",
+        padding: "8px 12px",
+        borderRadius: "5px",
+        cursor: "pointer",
+        fontSize: "14px",
+    }}
+>
+    Remove
+</button>
+
+
                                 </div>
                             ))
                         ) : (
