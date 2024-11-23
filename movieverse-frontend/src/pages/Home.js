@@ -29,8 +29,11 @@ export default function Home() {
     fetch(`${url}/reviews`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("data", data);
-        setReviews(data);
+        const sortedReviews = data.sort(
+          (a, b) => new Date(b.review_date) - new Date(a.review_date)
+        );
+        console.log("Sorted Reviews data", sortedReviews);
+        setReviews(sortedReviews);
       })
       .catch((error) => console.error("Error fetching reviews:", error));
   }, []);
@@ -40,7 +43,7 @@ export default function Home() {
     const updateMoviesPerPage = () => {
       const screenWidth = window.innerWidth;
       const moviesPerRow = Math.floor(screenWidth / 180); // 180px for each card (150px + margin)
-      setMoviesPerPage(moviesPerRow * 1); // Two rows
+      setMoviesPerPage(moviesPerRow);
     };
     updateMoviesPerPage();
     window.addEventListener("resize", updateMoviesPerPage);
@@ -56,13 +59,14 @@ export default function Home() {
   const startIndex = currentPage * moviesPerPage;
   const currentMovies = movies.slice(startIndex, startIndex + moviesPerPage);
 
+  const homepageReviews = reviews.slice(0, 5);
+
   return (
     <div className={styles.homeContainer}>
       <Navbar />
       <div className={styles.contentWrapper}>
         <div className={styles.section}>
           <SectionTitle title="MOVIES" linkPath="/select-movies" />
-
           <MovieList movies={currentMovies} />
 
           {/* Pagination controls */}
@@ -76,8 +80,8 @@ export default function Home() {
           />
         </div>
         <div className={styles.section}>
-          <SectionTitle title="REVIEWS" linkPath="/more-reviews" />
-          <ReviewList reviews={reviews} movies={movies} />
+          <SectionTitle title="REVIEWS Most Popular" linkPath="/more-reviews" />
+          <ReviewList reviews={homepageReviews} movies={movies} />
         </div>
       </div>
       <Footer /> {/* Add Footer to the bottom of the page */}

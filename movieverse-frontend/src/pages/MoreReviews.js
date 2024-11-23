@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReviewCardForHomePage from "../components/ReviewCardForHomePage";
+import styles from "../styles/Home.module.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 const url = "http://localhost:3001/api";
@@ -29,7 +30,8 @@ export default function MoreReviews() {
   return (
     <div>
       <Navbar />
-      <div style={reviewlistStyle}>
+      <div className={styles.reviewList}>
+        <h3>All Reviews</h3>
         {reviews.map((review) => {
           const movie = movies.find((movie) => movie.id === review.movie_id);
 
@@ -46,9 +48,3 @@ export default function MoreReviews() {
     </div>
   );
 }
-
-const reviewlistStyle = {
-  display: "flex",
-  flexDirection: "column",
-  gap: "20px",
-};

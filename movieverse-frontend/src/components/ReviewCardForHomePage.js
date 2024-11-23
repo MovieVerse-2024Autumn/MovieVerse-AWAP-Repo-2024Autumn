@@ -55,6 +55,11 @@ export default function ReviewCardForHomePage({ review, movie }) {
             </>
           )}
         </p>
+        <div>
+          <span>10{"  "}</span>
+          <button>👍</button>
+          <button>Share</button>
+        </div>
       </div>
     </div>
   );
@@ -98,7 +103,7 @@ const reviewdescriptionStyle = {
 };
 
 const reviewlinkStyle = {
-  color: "#007bff",
+  color: "#666",
   textDecoration: "none",
 };
 
