@@ -23,7 +23,7 @@ export default function MovieCard({ id, title, poster_path, vote_average }) {
 }
 
 const moviecardStyle = {
-  width: "150px",
+  flex: "0 1 150px",
   height: "250px",
   border: "1px solid #ddd",
   borderRadius: "8px",

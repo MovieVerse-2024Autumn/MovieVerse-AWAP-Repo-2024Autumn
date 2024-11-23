@@ -114,6 +114,7 @@ const MovieDetail = () => {
           body: JSON.stringify({
             account_id: 1, // Replace with dynamic account_id
             movie_id: id,
+            movie_poster_path: movie.poster_path,
             title: newReview.title,
             rating: Number(newReview.rating),
             description: newReview.text,
