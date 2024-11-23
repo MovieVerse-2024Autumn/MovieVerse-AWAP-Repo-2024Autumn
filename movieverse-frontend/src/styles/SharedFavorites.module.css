@@ -1,0 +1,83 @@
+/* Title styling */
+.title {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin: 0 auto;
+    font-size: 2.5rem;
+    font-weight: bold;
+    width: fit-content;
+    border-radius: 8px;
+}
+
+/* Main container for shared favorites */
+.shared-favorites {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+    background-color: #000;
+    min-height: 100vh;
+}
+
+/* Grid container for favorite items */
+.shared-favorites-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Individual favorite item card */
+.shared-favorite-item {
+    width: 200px;
+    height: 370px; /* Increased height slightly */
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect for cards */
+.shared-favorite-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* Image styling */
+.shared-favorite-item img {
+    width: 100%;
+    height: 270px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+}
+
+/* Title styling inside cards */
+.shared-favorite-item h3 {
+    font-size: 1.1rem;
+    color: #fff;
+    margin: 10px 0;
+    padding: 0 10px;
+    text-align: center;
+    word-wrap: break-word;
+    overflow: hidden;
+    white-space: normal; /* Allow titles to wrap onto multiple lines */
+    line-height: 1.3; /* Adjust line height for better readability */
+    height: 40px; /* Limit height to two lines of text */
+}
+
+/* Empty message styling */
+.empty-message {
+    color: #aaa;
+    font-size: 1.2rem;
+    margin-top: 50px;
+    text-align: center;
+}

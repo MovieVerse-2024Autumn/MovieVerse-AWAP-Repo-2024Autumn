@@ -9,6 +9,7 @@ import ReviewDetail from "./pages/ReviewDetail";
 import ShowTime from "./pages/ShowTime";
 import SearchResults from "./pages/SearchResults";
 import Favorites from "./pages/Favorites";
+import SharedFavorites from "./components/SharedFavorites";
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
           <Route path="/reviews/:reviewId" element={<ReviewDetail />} />
           <Route path="/favorites" element={<Favorites accountId={1} />} />
           <Route path="/search-results" element={<SearchResults />} />
+          <Route path="/favorites/shared/:account_id" element={<SharedFavorites />} />
+
         </Routes>
       </div>
     </BrowserRouter>

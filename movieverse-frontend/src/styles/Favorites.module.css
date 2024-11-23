@@ -1,5 +1,3 @@
-
-
 .favorites {
     display: flex;
     flex-direction: column;
@@ -9,6 +7,7 @@
     color: #fff; 
     min-height: 100vh; 
 }
+
 .title {
     background-color: black; 
     color: white;           
@@ -26,28 +25,43 @@
 }
 
 .favorite-item {
-    width: 150px;
-    text-align: center;
+    width: 200px;
+    height: 370px; /* Updated to match shared favorites */
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    align-items: center; 
-    justify-content: space-between; 
-    height: 250px; 
-    padding: 10px; 
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); 
-    background-color: #1e1e1e; 
-    border-radius: 8px; 
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.favorite-item:hover {
+    transform: translateY(-5px); /* Apply hover transform */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.5); /* Add stronger shadow */
 }
 
 .favorite-item img {
     width: 100%;
-    border-radius: 8px;
+    height: 270px; /* Match shared favorites */
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
 }
 
 .favorite-item h3 {
-    font-size: 16px;
+    font-size: 1.1rem;
+    color: #fff;
     margin: 10px 0;
-    color: white; 
+    padding: 0 10px;
+    text-align: center;
+    word-wrap: break-word;
+    overflow: hidden;
+    white-space: normal; /* Allow titles to wrap onto multiple lines */
+    line-height: 1.3; /* Adjust line height for better readability */
+    height: 40px; /* Limit height to two lines of text */
 }
 
 .favorite-item button {
@@ -58,12 +72,12 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .favorite-item button:hover {
-    background-color: #d43f3f;
+    background-color: #d43f3f; /* Darker red on hover */
 }
-
 
 .share-button-container {
     margin-top: 30px;
@@ -78,21 +92,25 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.share-button:hover {
+    background-color: #3e8e41; /* Darker green on hover */
 }
 
 .popup-modal {
     position: fixed;
-    top: 80%; 
+    top: 50%; 
     left: 50%; 
     transform: translate(-50%, -50%);
-    background-color: rgba(255, 255, 255, 0.8); 
+    background-color: rgba(255, 255, 255, 0.9);
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
-    padding: 15px; 
+    padding: 20px; 
     z-index: 1000; 
     text-align: center;
     width: 300px; 
-    height: auto; 
-    backdrop-filter: blur(5px); 
+    border-radius: 10px;
 }
 
 .popup-modal h2 {
@@ -124,4 +142,9 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px; 
+    transition: background-color 0.3s ease;
+}
+
+.popup-modal .share-button:hover {
+    background-color: #3e8e41;
 }

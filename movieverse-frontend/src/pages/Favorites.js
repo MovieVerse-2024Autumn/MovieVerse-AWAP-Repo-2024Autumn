@@ -117,7 +117,7 @@ const Favorites = ({ accountId }) => {
                                     />
                                     <h3 style={{ fontSize: "16px", margin: "10px 0 0 0", color: "#fff" }}>{fav.title}</h3>
 
-                                    <button
+    <button
     onClick={(e) => {
         e.stopPropagation(); // Prevent card click
         console.log("Attempting to remove favorite with movie ID:", fav.movie_id || fav.id);
@@ -138,12 +138,12 @@ const Favorites = ({ accountId }) => {
 </button>
 
 
-                                </div>
-                            ))
-                        ) : (
-                            <p>No favorites found.</p>
-                        )}
-                    </div>
+</div>
+ ))
+) : (
+<p>No favorites found.</p>
+     )}
+</div>
 
                     {/* Share Button */}
                     <div className={styles["share-button-container"]}>
