@@ -6,6 +6,8 @@ dotenv.config();
 import movieRouter from "./routers/movieRouter.js";
 import reviewRouter from "./routers/reviewRouter.js";
 import favoriteRouter from "./routers/favoriteRouter.js";
+import selectRouter from "./routers/selectRouter.js";
+
 
 
 
@@ -15,7 +17,7 @@ const port = process.env.PORT;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use("/api", movieRouter, reviewRouter, favoriteRouter); 
+app.use("/api", movieRouter, reviewRouter, favoriteRouter, selectRouter); 
 
 app.use((err, req, res, next) => {
   console.error("Error:", err.message);
