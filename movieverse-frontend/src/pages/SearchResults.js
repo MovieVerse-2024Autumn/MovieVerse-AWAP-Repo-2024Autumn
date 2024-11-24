@@ -18,7 +18,9 @@ export default function SearchResults() {
   const query = new URLSearchParams(location.search).get("query") || "";
 
   useEffect(() => {
-    fetch(`${url}/movies-search?query=${encodeURIComponent(query)}&page=${page}`)
+    fetch(
+      `${url}/movies-search?query=${encodeURIComponent(query)}&page=${page}`
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log("data", data);
@@ -26,7 +28,7 @@ export default function SearchResults() {
         setPageCount(data.totalPages);
       })
       .catch((error) => console.error("Error fetching movies:", error));
-  }, [query, page])
+  }, [query, page]);
 
   return (
     <div>

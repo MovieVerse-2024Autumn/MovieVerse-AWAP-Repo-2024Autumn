@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { FiThumbsUp } from "react-icons/fi";
+import { TbShare3 } from "react-icons/tb";
+import styles from "../styles/Home.module.css";
 const API_IMG = "https://image.tmdb.org/t/p/w500";
 
-export default function ReviewCardForHomePage({ review, movie }) {
+export default function ReviewCardForHomePage({ review }) {
   const {
     movie_id,
     movie_poster_path,
@@ -11,6 +14,7 @@ export default function ReviewCardForHomePage({ review, movie }) {
     description,
     rating,
     author,
+    like_count,
   } = review;
   const movie_link = `/movies/${movie_id}`;
   const review_link = `/reviews/${review.id}`;
@@ -21,7 +25,7 @@ export default function ReviewCardForHomePage({ review, movie }) {
     const stars = [];
     for (let i = 0; i < rating; i++) {
       stars.push(
-        <span key={i} style={reviewStarsStyle}>
+        <span key={i} className={styles.reviewStars}>
           ★
         </span>
       );
@@ -29,86 +33,75 @@ export default function ReviewCardForHomePage({ review, movie }) {
     return stars;
   };
 
+  // Like functionality
+  const [likeCount, setLikeCount] = useState(like_count);
+
+  const handleLike = async () => {
+    try {
+      // Optional: Update like count in backend
+      const response = await fetch(
+        `http://localhost:3001/api/reviews/${review.id}/like`,
+        {
+          method: "POST",
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to update like count");
+      }
+      const data = await response.json();
+      setLikeCount(data.like_count);
+    } catch (err) {
+      console.error("Error updating like count:", err);
+    }
+  };
+
   return (
-    <div style={reviewcardStyle}>
+    <div className={styles.reviewCard}>
       <Link to={movie_link}>
-        <div style={reviewimagecontainerStyle}>
-          <img src={API_IMG + poster_path} alt="" style={reviewimageStyle} />
+        <div className={styles.reviewImageContainer}>
+          <img
+            src={API_IMG + poster_path}
+            alt=""
+            className={styles.reviewImage}
+          />
         </div>
       </Link>
 
-      <div style={reviewtextStyle}>
-        <h4 style={reviewtitleStyle}>{title}</h4>
-        <div style={reviewinfoStyle}>
+      <div className={styles.reviewText}>
+        <h4 className={styles.reviewTitle}>{title}</h4>
+        <div className={styles.reviewInfo}>
           <span>{author}</span>
           <span>{new Date(review_date).toLocaleDateString()}</span>
           <span>{renderStars(rating)}</span>
         </div>
-        <p style={reviewdescriptionStyle}>
+        <p className={styles.reviewDescription}>
           {description.split(" ").slice(0, 40).join(" ")}
           {description.split(" ").length > 40 && (
             <>
               {"... "}
-              <Link to={review_link} style={reviewlinkStyle}>
+              <Link to={review_link} className={styles.reviewLink}>
                 (more)
               </Link>
             </>
           )}
         </p>
-        <div>
-          <span>10{"  "}</span>
-          <button>👍</button>
-          <button>Share</button>
+        <div className={styles.reviewActions}>
+          <button className={styles.likeButton} onClick={handleLike}>
+            <FiThumbsUp /> {likeCount > 0 && likeCount} Likes
+          </button>
+          <button
+            className={styles.shareButton}
+            onClick={() =>
+              navigator.clipboard.writeText(
+                window.location.origin + review_link
+              )
+            }
+          >
+            <TbShare3 />
+            Share
+          </button>
         </div>
       </div>
     </div>
   );
 }
-
-const reviewcardStyle = {
-  display: "flex",
-  border: "1px solid #ddd",
-  borderRadius: "8px",
-  overflow: "hidden",
-  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-  padding: "20px",
-  marginBottom: "2px",
-};
-
-const reviewimagecontainerStyle = { flexShrink: 0, marginRight: "20px" };
-
-const reviewtextStyle = { flex: 1 };
-
-const reviewimageStyle = {
-  width: "100px",
-  height: "150px",
-  objectFit: "cover",
-  borderRadius: "4px",
-};
-
-const reviewtitleStyle = { margin: "0 0 10px 0" };
-
-const reviewinfoStyle = {
-  display: "flex",
-  gap: "10px",
-  fontSize: "13px",
-  color: "#666",
-  alignItems: "center",
-};
-
-const reviewdescriptionStyle = {
-  margin: "10px 40px 10px 0",
-  fontSize: "15px",
-  lineHeight: "1.5em",
-};
-
-const reviewlinkStyle = {
-  color: "#666",
-  textDecoration: "none",
-};
-
-const reviewStarsStyle = {
-  color: "#FFD700",
-  fontSize: "16px",
-  marginRight: "2px",
-};

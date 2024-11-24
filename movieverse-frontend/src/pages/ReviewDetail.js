@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import { FiThumbsUp } from "react-icons/fi";
+import { TbShare3 } from "react-icons/tb";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import styles from "../styles/Home.module.css";
 const API_IMG = "https://image.tmdb.org/t/p/w500";
 
 const url = "http://localhost:3001/api"; // Ensure this matches your API base URL
@@ -9,6 +12,7 @@ const url = "http://localhost:3001/api"; // Ensure this matches your API base UR
 export default function ReviewDetail() {
   const { reviewId } = useParams(); // Get reviewId from URL params
   const [review, setReview] = useState(null);
+  const [likes, setLikes] = useState(0);
 
   useEffect(() => {
     // Fetch the review by ID
@@ -17,6 +21,7 @@ export default function ReviewDetail() {
       .then((data) => {
         console.log("Fetched review data:", data[0]);
         setReview(data[0]); // Set the fetched review data
+        setLikes(data[0].like_count || 0); // Set the initial like count
       })
       .catch((error) => console.error("Error fetching review:", error));
   }, [reviewId]); // Re-run the effect when the reviewId changes
@@ -27,6 +32,29 @@ export default function ReviewDetail() {
 
   const movie_link = `/movies/${review.movie_id}`;
   const poster_path = review.movie_poster_path;
+
+  const handleLike = () => {
+    // Optimistically update likes in the UI
+    setLikes((prevLikes) => prevLikes + 1);
+
+    // Send updated likes count to the backend
+    fetch(`${url}/reviews/${reviewId}/like`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).catch((error) => {
+      console.error("Error updating likes:", error);
+      // Revert the like count in case of error
+      setLikes((prevLikes) => prevLikes - 1);
+    });
+  };
+
+  const handleShare = () => {
+    const shareUrl = window.location.href;
+    navigator.clipboard.writeText(shareUrl);
+    alert("Review link copied to clipboard!");
+  };
 
   // Helper function to render stars
   const renderStars = (rating) => {
@@ -73,6 +101,15 @@ export default function ReviewDetail() {
           </div>
         </div>
         <p style={reviewDescriptionStyle}>{review.description}</p>
+
+        <div className={styles.reviewActions}>
+          <button className={styles.likeButton} onClick={handleLike}>
+            <FiThumbsUp /> {likes} Likes
+          </button>
+          <button className={styles.shareButton} onClick={handleShare}>
+            <TbShare3 /> Share
+          </button>
+        </div>
       </div>
       <Footer />
     </div>
