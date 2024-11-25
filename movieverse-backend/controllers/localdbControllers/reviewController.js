@@ -60,7 +60,7 @@ const addReview = async (req, res, next) => {
 
   try {
     const query = `
-      INSERT INTO review (movie_id, movie_poster_path, account_id, title, description, rating, review_date, like_count)
+      INSERT INTO review (movie_id, movie_poster_path, account_id, title, description, rating, like_count, review_date)
       VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
       RETURNING *;
     `;
