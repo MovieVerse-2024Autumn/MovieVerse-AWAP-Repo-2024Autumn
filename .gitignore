@@ -1,1 +1,3 @@
 movieverse-backend/.env
+movieverse-backend/node_modules
+node_modules

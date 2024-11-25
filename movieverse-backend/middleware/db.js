@@ -2,6 +2,8 @@ import pkg from "pg";
 import dotenv from "dotenv";
 
 dotenv.config();
+console.log("DB Password:", process.env.DB_PASSWORD); 
+
 
 const { Pool } = pkg;
 

@@ -11,6 +11,9 @@ CREATE TABLE account (
     last_name VARCHAR(50) NOT NULL
     link VARCHAR(255) NOT NULL
 );
+ALTER TABLE account
+ALTER COLUMN password TYPE VARCHAR(255);
+
 
 INSERT INTO account (email, password, is_active, first_name, last_name, link)
 VALUES

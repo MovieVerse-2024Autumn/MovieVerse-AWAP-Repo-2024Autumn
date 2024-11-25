@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
 
+import authRouter from "./routers/authRouter.js";
 import movieRouter from "./routers/movieRouter.js";
 import reviewRouter from "./routers/reviewRouter.js";
 import favoriteRouter from "./routers/favoriteRouter.js";
@@ -12,11 +13,12 @@ import selectRouter from "./routers/selectRouter.js";
 
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use('/api/auth', authRouter);
 app.use("/api", movieRouter, reviewRouter, favoriteRouter, selectRouter); 
 
 app.use((err, req, res, next) => {
