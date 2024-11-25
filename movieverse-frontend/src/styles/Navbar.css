@@ -51,6 +51,11 @@
     border: 1px solid #444;
     background-color: #222;
   }
+
+  .search-container:focus-within {
+    border: 1px solid #e50914; /* Kolor obwódki */
+    box-shadow: 0 0 5px rgba(229, 9, 20, 0.5); /* Opcjonalny efekt świecenia */
+  }
   
   .search-bar {
     padding: 10px 15px;
@@ -81,6 +86,12 @@
   .search-button:hover {
     background-color: #b20810;
   }
+
+  .search-bar:focus, 
+  .search-button:focus {
+    outline: none; /* Usuwa niebieską obwódkę */
+  }
+
   
   /* Account Icon */
   .account-icon {

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "./axiosInstance"; // Import your axios instance
-import "../pages/Authentication.css";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import "../styles/Authentication.css";
 import logo from "../logo.png"; // Import your logo
 
 const Authentication = () => {
