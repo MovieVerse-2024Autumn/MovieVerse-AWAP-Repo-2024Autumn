@@ -53,8 +53,8 @@
   }
 
   .search-container:focus-within {
-    border: 1px solid #e50914; /* Kolor obwódki */
-    box-shadow: 0 0 5px rgba(229, 9, 20, 0.5); /* Opcjonalny efekt świecenia */
+    border: 1px solid #e50914;
+    box-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
   }
   
   .search-bar {
@@ -89,7 +89,7 @@
 
   .search-bar:focus, 
   .search-button:focus {
-    outline: none; /* Usuwa niebieską obwódkę */
+    outline: none;
   }
 
   
