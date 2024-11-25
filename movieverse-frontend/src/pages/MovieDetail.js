@@ -233,7 +233,7 @@ const MovieDetail = () => {
                 <strong>Title:</strong> {review.title}
               </p>
               <p>
-                <strong>Rating:</strong> {review.rating}/10
+                <strong>Rating:</strong> {review.rating}/5
               </p>
               <p>{review.text}</p>
             </div>
