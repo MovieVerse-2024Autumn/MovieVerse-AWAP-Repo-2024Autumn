@@ -12,6 +12,8 @@ import SearchResults from "./pages/SearchResults";
 import Favorites from "./pages/Favorites";
 import SharedFavorites from "./components/SharedFavorites";
 import Authentication from "./pages/Authentication";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
       future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
     >
       <div className="App">
+      <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/show-time" element={<ShowTime />} />
@@ -33,6 +36,7 @@ function App() {
           <Route path="/authentication" element={<Authentication />} />
 
         </Routes>
+      <Footer />
       </div>
     </BrowserRouter>
   );

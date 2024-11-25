@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+#node modules in gitignore
+/node_modules
+
 # production
 /build
 

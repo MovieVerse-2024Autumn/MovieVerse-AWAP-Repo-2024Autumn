@@ -89,7 +89,7 @@ const Authentication = () => {
 
   return (
     <>
-      <Navbar token={token} handleSignOut={handleSignOut} />
+      {/* <Navbar token={token} handleSignOut={handleSignOut} /> */}
       <div className="auth-container">
         <div className="auth-box">
           {/* Logo */}

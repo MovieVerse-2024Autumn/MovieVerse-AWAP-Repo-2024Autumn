@@ -1,5 +1,3 @@
-import Navbar from '../components/Navbar';
-import Footer from "../components/Footer";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styles from "../styles/MovieDetail.module.css";
@@ -138,8 +136,6 @@ const MovieDetail = () => {
 
   return (
     <>
-    <Navbar/>
-      
     <div className={styles["movie-detail"]}>
       <div className={styles["movie-header"]}>
         <img
@@ -243,7 +239,6 @@ const MovieDetail = () => {
         )}
       </div>
     </div>
-    <Footer/>
     </>
   );
 };

@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-//import Search from "../components/Search";
 import MovieList from "../components/MovieList";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import "../styles/Search.css";
 
 const url = "http://localhost:3001/api";
@@ -18,7 +15,9 @@ export default function SearchResults() {
   const query = new URLSearchParams(location.search).get("query") || "";
 
   useEffect(() => {
-    fetch(`${url}/movies-search?query=${encodeURIComponent(query)}&page=${page}`)
+    fetch(
+      `${url}/movies-search?query=${encodeURIComponent(query)}&page=${page}`
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log("data", data);
@@ -26,11 +25,10 @@ export default function SearchResults() {
         setPageCount(data.totalPages);
       })
       .catch((error) => console.error("Error fetching movies:", error));
-  }, [query, page])
+  }, [query, page]);
 
   return (
     <div>
-      <Navbar />
       <div className="search-results-container">
         <h2>Search results</h2>
         <hr />
@@ -46,7 +44,6 @@ export default function SearchResults() {
           className="pagination"
         />
       </div>
-      <Footer />
     </div>
   );
 }
