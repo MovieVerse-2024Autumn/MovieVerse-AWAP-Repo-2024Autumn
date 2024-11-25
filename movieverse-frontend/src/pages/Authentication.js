@@ -193,7 +193,7 @@ const Authentication = () => {
           )}
         </div>
       </div>
-      <Footer />
+      
     </>
   );
 };
