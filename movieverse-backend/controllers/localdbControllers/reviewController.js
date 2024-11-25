@@ -72,7 +72,7 @@ const addReview = async (req, res, next) => {
       title,
       description,
       rating,
-      like_count,
+      0,
     ];
 
     const result = await pool.query(query, values);
