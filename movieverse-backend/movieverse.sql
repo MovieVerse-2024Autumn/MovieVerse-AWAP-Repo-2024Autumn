@@ -31,7 +31,7 @@ CREATE TABLE review (
 );
 
 ALTER TABLE review
-ADD COLUMN poster_path VARCHAR(255);
+ADD COLUMN movie_poster_path VARCHAR(255);
 ALTER TABLE review ADD COLUMN like_count INT DEFAULT 0;
 
 
