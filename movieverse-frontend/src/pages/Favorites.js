@@ -1,5 +1,3 @@
-import Navbar from '../components/Navbar';
-import Footer from "../components/Footer";
 import styles from "../styles/Favorites.module.css";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -85,7 +83,6 @@ const Favorites = ({ accountId }) => {
 
     return (
         <>
-            <Navbar />
             <h1 className={styles.title}>Your Favorites</h1>
             <div className={styles.favorites}>
                 <div style={{ padding: "20px" }}>
@@ -165,7 +162,6 @@ const Favorites = ({ accountId }) => {
                     </div>
                 )}
             </div>
-            <Footer />
         </>
     );
 };

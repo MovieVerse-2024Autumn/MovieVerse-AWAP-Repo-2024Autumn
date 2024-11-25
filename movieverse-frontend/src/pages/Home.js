@@ -4,8 +4,6 @@ import { useFetchData } from "../hooks/useFetchData";
 import SectionTitle from "../components/SectionTitle";
 import MovieList from "../components/MovieList";
 import ReviewList from "../components/ReviewList";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import styles from "../styles/Home.module.css";
 
 const url = "http://localhost:3001/api";
@@ -47,7 +45,6 @@ export default function Home() {
 
   return (
     <div>
-      <Navbar />
       <div className={styles.contentWrapper}>
         <div className={styles.section}>
           <SectionTitle title="MOVIES" linkPath="/select-movies" />
@@ -70,7 +67,6 @@ export default function Home() {
           <ReviewList reviews={homepageReviews} movies={movies} />
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

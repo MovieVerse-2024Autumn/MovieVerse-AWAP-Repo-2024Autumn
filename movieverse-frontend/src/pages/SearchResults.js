@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-//import Search from "../components/Search";
 import MovieList from "../components/MovieList";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import "../styles/Search.css";
 
 const url = "http://localhost:3001/api";
@@ -32,7 +29,6 @@ export default function SearchResults() {
 
   return (
     <div>
-      <Navbar />
       <div className="search-results-container">
         <h2>Search results</h2>
         <hr />
@@ -48,7 +44,6 @@ export default function SearchResults() {
           className="pagination"
         />
       </div>
-      <Footer />
     </div>
   );
 }

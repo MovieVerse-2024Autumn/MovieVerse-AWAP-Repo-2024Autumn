@@ -10,6 +10,8 @@ import ShowTime from "./pages/ShowTime";
 import SearchResults from "./pages/SearchResults";
 import Favorites from "./pages/Favorites";
 import SharedFavorites from "./components/SharedFavorites";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -17,6 +19,7 @@ function App() {
       future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
     >
       <div className="App">
+      <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/show-time" element={<ShowTime />} />
@@ -29,6 +32,7 @@ function App() {
           <Route path="/favorites/shared/:account_id" element={<SharedFavorites />} />
 
         </Routes>
+      <Footer />
       </div>
     </BrowserRouter>
   );

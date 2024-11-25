@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import MovieList from '../components/MovieList';
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 
 
 const API_KEY = "159c3b0b72b70b61f703169a3153283a"; //TMDB API key
@@ -105,7 +103,6 @@ export default function MoviePage() {
 
   return (
     <>
-    <Navbar />
     <div style={{ padding: '20px' }}>
       <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>
         Select Movies
@@ -175,7 +172,6 @@ export default function MoviePage() {
       {/* Movie List */}
       <MovieList movies={movies} />
     </div>
-    <Footer/>
     </>
     
   );

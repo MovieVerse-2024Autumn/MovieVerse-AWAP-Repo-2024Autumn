@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FiThumbsUp } from "react-icons/fi";
 import { TbShare3 } from "react-icons/tb";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import styles from "../styles/Home.module.css";
 const API_IMG = "https://image.tmdb.org/t/p/w500";
 
@@ -71,8 +69,6 @@ export default function ReviewDetail() {
 
   return (
     <div>
-      <Navbar />
-
       <div style={reviewDetailStyle}>
         <Link to="/more-reviews">
           <p>Back to Reviews</p>
@@ -111,7 +107,6 @@ export default function ReviewDetail() {
           </button>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

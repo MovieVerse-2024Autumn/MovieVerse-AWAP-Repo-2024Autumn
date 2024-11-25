@@ -3,8 +3,6 @@ import ReactPaginate from "react-paginate";
 import { useFetchData } from "../hooks/useFetchData";
 import ReviewCardForHomePage from "../components/ReviewCardForHomePage";
 import styles from "../styles/Home.module.css";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 
 const url = "http://localhost:3001/api";
 
@@ -46,7 +44,6 @@ export default function MoreReviews() {
 
   return (
     <div>
-      <Navbar />
       <div className={styles.reviewList}>
         <div className={styles.labelContainer}>
           <h3>All Reviews</h3>
@@ -90,7 +87,6 @@ export default function MoreReviews() {
         containerClassName={styles.pagination}
         activeClassName={styles.activePage}
       />
-      <Footer />
     </div>
   );
 }
