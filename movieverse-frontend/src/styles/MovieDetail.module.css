@@ -3,23 +3,21 @@
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    background-color: #000;
-    color: #fff;
+    background-color: #fff; /* Changed to white */
+    color: #000; /* Changed to black for better contrast */
     min-height: 100vh;
 }
 
 .movie-header, .movie-reviews, .add-review {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.05); /* Light grey for card background */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Soft grey border */
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
     width: 100%;
     max-width: 1000px;
-    color: #fff;
+    color: #000; /* Black text color */
 }
 
 .movie-header {
@@ -35,7 +33,7 @@
     border-radius: 12px;
     margin-right: 20px;
     flex-shrink: 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Reduced shadow intensity */
 }
 
 .movie-info {
@@ -48,11 +46,11 @@
 .movie-info h1 {
     font-size: 24px;
     margin: 0;
-    color: #fff;
+    color: #000; /* Black heading */
 }
 
 .movie-genres {
-    color: #d3d3d3;
+    color: #555; /* Dark grey for genres */
     margin: 8px 0;
 }
 
@@ -69,25 +67,27 @@
 }
 
 .favorite-button {
-    background: rgba(255, 255, 255, 0.2);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    margin-left: 20px; /* Added margin to push the button away from the rating */
+    background: rgba(0, 0, 0, 0.1); /* Light grey */
+    color: #000;
+    border: 1px solid rgba(0, 0, 0, 0.2); /* Grey border */
     border-radius: 8px;
     padding: 10px 20px;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
+
 .favorite-button:hover {
-    background: rgba(255, 255, 255, 0.4);
-    color: #000;
+    background: rgba(0, 0, 0, 0.2); /* Slightly darker grey */
+    color: #fff; /* White text on hover */
 }
 
 .movie-overview {
     margin-top: 15px;
     font-size: 14px;
     line-height: 1.6;
-    color: #eaeaea;
+    color: #333; /* Dark grey for overview text */
 }
 
 .movie-reviews {
@@ -96,12 +96,13 @@
 
 .review {
     padding: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Light border */
     margin-bottom: 10px;
 }
 
 .add-review h2 {
     margin-bottom: 10px;
+    color: #000; /* Black heading */
 }
 
 .add-review form {
@@ -112,7 +113,7 @@
 
 .add-review label {
     font-size: 14px;
-    color: #fff;
+    color: #000; /* Black labels */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -124,24 +125,24 @@
     width: 100%;
     padding: 8px;
     font-size: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.2); /* Grey border */
     border-radius: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    background: rgba(0, 0, 0, 0.05); /* Light grey background */
+    color: #000; /* Black text */
     outline: none;
     box-shadow: none;
     transition: border 0.2s ease, background-color 0.2s ease;
 }
 
 .add-review textarea:focus {
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.4); /* Darker border on focus */
+    background: rgba(0, 0, 0, 0.1); /* Slightly darker background on focus */
 }
 
 .submit-button {
     padding: 10px;
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #fff;
+    background-color: rgba(0, 0, 0, 0.1); /* Light grey */
+    color: #000; /* Black text */
     font-size: 16px;
     border: none;
     border-radius: 5px;
@@ -150,8 +151,8 @@
 }
 
 .submit-button:hover {
-    background-color: rgba(255, 255, 255, 0.4);
-    color: #000;
+    background-color: rgba(0, 0, 0, 0.2); /* Darker grey */
+    color: #fff; /* White text on hover */
 }
 
 .star-rating {
@@ -168,7 +169,7 @@
 
 .star-rating label {
     font-size: 24px;
-    color: #ccc;
+    color: #ccc; /* Light grey stars */
     cursor: pointer;
     transition: color 0.2s ease-in-out;
 }
@@ -176,5 +177,5 @@
 .star-rating input:checked ~ label,
 .star-rating label:hover,
 .star-rating label:hover ~ label {
-    color: #f6ff00ed;
+    color: #ffa500; /* Orange for active stars */
 }

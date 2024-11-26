@@ -90,45 +90,23 @@ const Favorites = ({ accountId }) => {
                         {favorites.length ? (
                             favorites.map((fav) => (
                                 <div
-                                key={fav.id || fav.movie_id} // Use the correct key
-                                style={{
-                                    textAlign: "center",
-                                    width: "150px",
-                                    height: "300px",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    justifyContent: "space-between",
-                                    alignItems: "center",
-                                    border: "1px solid #ccc",
-                                    borderRadius: "8px",
-                                    backgroundColor: "#1e1e1e",
-                                    padding: "10px",
-                                    cursor: "pointer", // Indicate clickability
-                                }}
-                                onClick={() => handleCardClick(fav.id || fav.movie_id)} // Use the correct movie ID property
-                            >
+                                    key={fav.id || fav.movie_id} // Use the correct key
+                                    className={styles['favorite-item']}
+                                    onClick={() => handleCardClick(fav.id || fav.movie_id)} // Use the correct movie ID property
+                                >
                                     <img
                                         src={`https://image.tmdb.org/t/p/w500${fav.poster_path}`}
                                         alt={fav.title}
-                                        style={{ width: "100%", height: "200px", objectFit: "cover", borderRadius: "8px" }}
+                                        className={styles['favorite-img']}
                                     />
-                                    <h3 style={{ fontSize: "16px", margin: "10px 0 0 0", color: "#fff" }}>{fav.title}</h3>
+                                    <h3 className={styles['favorite-title']}>{fav.title}</h3>
 
                                     <button
                                         onClick={(e) => {
                                             e.stopPropagation(); // Prevent card click
                                             removeFavorite(fav.movie_id); // Remove favorite
                                         }}
-                                        style={{
-                                            marginTop: "10px",
-                                            backgroundColor: "#ff4d4d",
-                                            color: "#fff",
-                                            border: "none",
-                                            padding: "8px 12px",
-                                            borderRadius: "5px",
-                                            cursor: "pointer",
-                                            fontSize: "14px",
-                                        }}
+                                        className={styles['favorite-button']}
                                     >
                                         Remove
                                     </button>

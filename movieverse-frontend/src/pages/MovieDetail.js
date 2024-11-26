@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styles from "../styles/MovieDetail.module.css";
 
-
 const MovieDetail = () => {
   const { id } = useParams(); // Get movie ID from the URL
   const [movie, setMovie] = useState(null);
@@ -136,109 +135,111 @@ const MovieDetail = () => {
 
   return (
     <>
-    <div className={styles["movie-detail"]}>
-      <div className={styles["movie-header"]}>
-        <img
-          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-          alt={movie.title}
-          className={styles["movie-poster"]}
-        />
-        <div className={styles["movie-info"]}>
-          <h1>
-            {movie.title}{" "}
-            <span>({new Date(movie.release_date).getFullYear()})</span>
-          </h1>
-          <p className={styles["movie-genres"]}>
-            {movie.genres.map((genre) => genre.name).join(", ")}
-          </p>
-          <div className={styles["movie-actions"]}>
-            <button
-              className={`${styles["favorite-button"]} ${
-                isFavorite ? styles["favorite-active"] : ""
-              }`}
-              onClick={toggleFavorite}
-            >
-              <span role="img" aria-label="heart">
-                ❤️
-              </span>{" "}
-              {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
-            </button>
+      <div className={styles["movie-detail"]}>
+        <div className={styles["movie-header"]}>
+          <img
+            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            alt={movie.title}
+            className={styles["movie-poster"]}
+          />
+          <div className={styles["movie-info"]}>
+            <h1>
+              {movie.title}{" "}
+              <span>({new Date(movie.release_date).getFullYear()})</span>
+            </h1>
+            <p className={styles["movie-genres"]}>
+              {movie.genres.map((genre) => genre.name).join(", ")}
+            </p>
+            <div className={styles["movie-actions"]}>
+              <p className={styles["rating-number"]}>
+                {movie.vote_average}/10 {/* TMDB rating */}
+              </p>
+              <button
+                className={`${styles["favorite-button"]} ${
+                  isFavorite ? styles["favorite-active"] : ""
+                }`}
+                onClick={toggleFavorite}
+              >
+                <span role="img" aria-label="heart">
+                  ❤️
+                </span>{" "}
+                {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+              </button>
+            </div>
+            <p className={styles["movie-overview"]}>{movie.overview}</p>
           </div>
-          <p className={styles["movie-overview"]}>{movie.overview}</p>
+        </div>
+
+        {/* Add Review Section */}
+        <div className={styles["add-review"]}>
+          <h2>Add Your Review</h2>
+          <form onSubmit={handleSubmitReview}>
+            <label>
+              Rating:
+              <div className={styles["star-rating"]}>
+                {[5, 4, 3, 2, 1].map((star) => (
+                  <React.Fragment key={star}>
+                    <input
+                      type="radio"
+                      id={`star${star}`}
+                      name="rating"
+                      value={star}
+                      checked={Number(newReview.rating) === star}
+                      onChange={handleInputChange}
+                      required
+                    />
+                    <label htmlFor={`star${star}`}>&#9733;</label>
+                  </React.Fragment>
+                ))}
+              </div>
+            </label>
+
+            <label>
+              Title:
+              <input
+                type="text"
+                name="title"
+                value={newReview.title}
+                onChange={handleInputChange}
+                required
+              />
+            </label>
+
+            <label>
+              Review:
+              <textarea
+                name="text"
+                value={newReview.text}
+                onChange={handleInputChange}
+                required
+              />
+            </label>
+            <button type="submit" className={styles["submit-button"]}>
+              Submit Review
+            </button>
+          </form>
+        </div>
+
+        {/* User Reviews Section */}
+        <h2>User Reviews</h2>
+        <div className={styles["movie-reviews"]}>
+          {reviews.length > 0 ? (
+            reviews.map((review, index) => (
+              <div key={index} className={styles["review"]}>
+                <p>
+                  <strong>Title:</strong> {review.title}
+                </p>
+                <p>
+                  <strong>Rating:</strong> {review.rating}/5 {/* Show out of 5 */}
+                </p>
+                <p>{review.description}</p> {/* Fixed: Show review description */}
+              </div>
+            ))
+          ) : (
+            <p>No reviews yet. Be the first to review!</p>
+          )}
         </div>
       </div>
-      
-
-      {/* Add Review Section */}
-      <div className={styles["add-review"]}>
-        <h2>Add Your Review</h2>
-        <form onSubmit={handleSubmitReview}>
-          <label>
-            Rating:
-            <div className={styles["star-rating"]}>
-              {[5, 4, 3, 2, 1].map((star) => (
-                <React.Fragment key={star}>
-                  <input
-                    type="radio"
-                    id={`star${star}`}
-                    name="rating"
-                    value={star}
-                    checked={Number(newReview.rating) === star}
-                    onChange={handleInputChange}
-                    required
-                  />
-                  <label htmlFor={`star${star}`}>&#9733;</label>
-                </React.Fragment>
-              ))}
-            </div>
-          </label>
-
-          <label>
-            Title:
-            <input
-              type="text"
-              name="title"
-              value={newReview.title}
-              onChange={handleInputChange}
-              required
-            />
-          </label>
-
-          <label>
-            Review:
-            <textarea
-              name="text"
-              value={newReview.text}
-              onChange={handleInputChange}
-              required
-            />
-          </label>
-          <button type="submit" className={styles["submit-button"]}>
-            Submit Review
-          </button>
-        </form>
-      </div>
-
-      {/* User Reviews Section */}
-      <h2>User Reviews</h2>
-      <div className={styles["movie-reviews"]}>
-        {reviews.length > 0 ? (
-          reviews.map((review, index) => (
-            <div key={index} className={styles["review"]}>
-              <p>
-                <strong>Title:</strong> {review.title}
-              </p>
-              <p>
-                <strong>Rating:</strong> {review.rating}/10
-              </p>
-              <p>{review.text}</p>
-            </div>
-          ))
-        ) : (
-          <p>No reviews yet. Be the first to review!</p>
-        )}
-      </div>
-    </div>
     </>
   );
 };

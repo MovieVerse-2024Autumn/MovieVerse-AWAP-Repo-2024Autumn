@@ -1,7 +1,6 @@
-/* Title styling */
 .title {
-    background-color: black;
-    color: white;
+    background-color: #f0f0f0;
+    color: #333;
     text-align: center;
     padding: 20px;
     margin: 0 auto;
@@ -9,19 +8,19 @@
     font-weight: bold;
     width: fit-content;
     border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Main container for shared favorites */
 .shared-favorites {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 30px 20px;
-    background-color: #000;
+    background-color: #fff;
     min-height: 100vh;
+    color: #000;
 }
 
-/* Grid container for favorite items */
 .shared-favorites-grid {
     display: flex;
     flex-wrap: wrap;
@@ -31,28 +30,29 @@
     margin: 0 auto;
 }
 
-/* Individual favorite item card */
 .shared-favorite-item {
     width: 200px;
-    height: 370px; /* Increased height slightly */
-    background-color: #1e1e1e;
+    height: 370px;
+    background: rgba(201, 195, 195, 0.5);
     border-radius: 10px;
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(61, 54, 54, 0.2);
+    cursor: pointer;
 }
 
-/* Hover effect for cards */
 .shared-favorite-item:hover {
     transform: translateY(-5px);
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-/* Image styling */
 .shared-favorite-item img {
     width: 100%;
     height: 270px;
@@ -60,23 +60,21 @@
     border-radius: 10px 10px 0 0;
 }
 
-/* Title styling inside cards */
 .shared-favorite-item h3 {
     font-size: 1.1rem;
-    color: #fff;
+    color: #000;
     margin: 10px 0;
     padding: 0 10px;
     text-align: center;
     word-wrap: break-word;
     overflow: hidden;
-    white-space: normal; /* Allow titles to wrap onto multiple lines */
-    line-height: 1.3; /* Adjust line height for better readability */
-    height: 40px; /* Limit height to two lines of text */
+    white-space: normal;
+    line-height: 1.3;
+    height: auto;
 }
 
-/* Empty message styling */
 .empty-message {
-    color: #aaa;
+    color: #555;
     font-size: 1.2rem;
     margin-top: 50px;
     text-align: center;
