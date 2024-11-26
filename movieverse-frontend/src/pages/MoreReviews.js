@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
-import { useFetchData } from "../hooks/useFetchData";
+import { useFetchData } from "../utils/useFetchData";
 import ReviewCardForHomePage from "../components/ReviewCardForHomePage";
 import styles from "../styles/Home.module.css";
 

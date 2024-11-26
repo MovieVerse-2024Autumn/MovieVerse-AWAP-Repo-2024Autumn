@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
-import { useFetchData } from "../hooks/useFetchData";
+import { useFetchData } from "../utils/useFetchData";
 import SectionTitle from "../components/SectionTitle";
 import MovieList from "../components/MovieList";
 import ReviewList from "../components/ReviewList";
@@ -34,10 +34,14 @@ export default function Home() {
 
   // Check if movies and reviews are arrays
   const startIndex = currentPage * moviesPerPage;
-  const currentMovies = Array.isArray(movies) ? movies.slice(startIndex, startIndex + moviesPerPage) : [];
+  const currentMovies = Array.isArray(movies)
+    ? movies.slice(startIndex, startIndex + moviesPerPage)
+    : [];
 
   const sortedReviews = Array.isArray(reviews)
-    ? [...reviews].sort((a, b) => new Date(b.review_date) - new Date(a.review_date))
+    ? [...reviews].sort(
+        (a, b) => new Date(b.review_date) - new Date(a.review_date)
+      )
     : [];
 
   const homepageReviews = sortedReviews.slice(0, 5);

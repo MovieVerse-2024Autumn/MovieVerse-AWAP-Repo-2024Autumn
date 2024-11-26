@@ -45,17 +45,26 @@ CREATE TABLE favourite (
     PRIMARY KEY (account_id, movie_id),
     CONSTRAINT favourite_account_fk FOREIGN KEY (account_id) REFERENCES account(id)
 );
+
+
 CREATE TABLE movie_group (
     id          SERIAL PRIMARY KEY,
     name        VARCHAR(50) NOT NULL,
     owner_id    INTEGER NOT NULL,
     description VARCHAR(255) NOT NULL
+    CONSTRAINT movie_group_account_fk FOREIGN KEY (owner_id) REFERENCES account(id)
 );
+
+ALTER TABLE movie_group
+RENAME COLUMN owner_id TO admin_id;
+
+
 CREATE TABLE group_member (
     account_id    INTEGER NOT NULL,
     group_id      INTEGER NOT NULL,
     member_status VARCHAR(50) NOT NULL,
     PRIMARY KEY (account_id, group_id),
     CONSTRAINT group_member_account_fk FOREIGN KEY (account_id) REFERENCES account(id),
-    CONSTRAINT group_member_group_fk FOREIGN KEY (group_id) REFERENCES movie_group(id)
+    CONSTRAINT group_member_movie_group_fk FOREIGN KEY (group_id) REFERENCES movie_group(id),
+    CONSTRAINT member_status_check CHECK (member_status IN ('accepted', 'declined', 'pending'))
 );
