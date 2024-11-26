@@ -1,15 +1,32 @@
 import styles from "../styles/Favorites.module.css";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
-const Favorites = ({ accountId }) => {
+const Favorites = () => {
     const [favorites, setFavorites] = useState([]);
-    const [shareUrl, setShareUrl] = useState(null); // State for shareable link
-    const [showPopup, setShowPopup] = useState(false); // State to control popup visibility
-    const navigate = useNavigate(); // Hook for navigation
+    const [shareUrl, setShareUrl] = useState(null);
+    const [showPopup, setShowPopup] = useState(false);
+    const navigate = useNavigate();
+
+    // Function to extract account ID from JWT
+    const getAccountId = () => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            const decoded = jwtDecode(token);
+            return decoded.id; // Assuming `id` is part of the decoded JWT payload
+        }
+        return null;
+    };
+
+    const accountId = getAccountId();
 
     useEffect(() => {
-        fetchFavorites();
+        if (accountId) {
+            fetchFavorites();
+        } else {
+            console.error("User is not logged in.");
+        }
     }, [accountId]);
 
     // Fetch favorites from the backend
@@ -18,7 +35,7 @@ const Favorites = ({ accountId }) => {
             const response = await fetch(`http://localhost:3001/api/favorites/${accountId}`);
             const data = await response.json();
             console.log("Fetched favorites:", data);
-            setFavorites(data); // Update state with the list of favorites
+            setFavorites(data);
         } catch (error) {
             console.error("Error fetching favorites:", error);
         }
@@ -27,7 +44,7 @@ const Favorites = ({ accountId }) => {
     // Remove a favorite
     const removeFavorite = async (movieId) => {
         try {
-            console.log("Removing Movie ID:", movieId); 
+            console.log("Removing Movie ID:", movieId);
             const response = await fetch(`http://localhost:3001/api/favorites`, {
                 method: "DELETE",
                 headers: {
@@ -40,8 +57,9 @@ const Favorites = ({ accountId }) => {
             });
 
             if (response.ok) {
-                // Update the state immediately by filtering out the removed movie
-                setFavorites((prevFavorites) => prevFavorites.filter((fav) => fav.movie_id !== movieId));
+                setFavorites((prevFavorites) =>
+                    prevFavorites.filter((fav) => fav.movie_id !== movieId)
+                );
                 console.log("Movie removed successfully");
             } else {
                 console.error("Failed to remove favorite");
@@ -63,7 +81,7 @@ const Favorites = ({ accountId }) => {
             if (response.ok) {
                 const data = await response.json();
                 setShareUrl(data.share_url);
-                setShowPopup(true); // Show popup when share URL is generated
+                setShowPopup(true);
             } else {
                 console.error("Failed to share favorites");
             }
@@ -75,11 +93,15 @@ const Favorites = ({ accountId }) => {
     // Navigate to the movie details page
     const handleCardClick = (movieId) => {
         if (movieId) {
-            navigate(`/movies/${movieId}`); // Navigate to movie details
+            navigate(`/movies/${movieId}`);
         } else {
-            console.error("Invalid movie ID:", movieId); // Handle the error gracefully
+            console.error("Invalid movie ID:", movieId);
         }
     };
+
+    if (!accountId) {
+        return <p>Please log in to view your favorites.</p>;
+    }
 
     return (
         <>
@@ -90,23 +112,22 @@ const Favorites = ({ accountId }) => {
                         {favorites.length ? (
                             favorites.map((fav) => (
                                 <div
-                                    key={fav.id || fav.movie_id} // Use the correct key
-                                    className={styles['favorite-item']}
-                                    onClick={() => handleCardClick(fav.id || fav.movie_id)} // Use the correct movie ID property
+                                    key={fav.id || fav.movie_id}
+                                    className={styles["favorite-item"]}
+                                    onClick={() => handleCardClick(fav.id || fav.movie_id)}
                                 >
                                     <img
                                         src={`https://image.tmdb.org/t/p/w500${fav.poster_path}`}
                                         alt={fav.title}
-                                        className={styles['favorite-img']}
+                                        className={styles["favorite-img"]}
                                     />
-                                    <h3 className={styles['favorite-title']}>{fav.title}</h3>
-
+                                    <h3 className={styles["favorite-title"]}>{fav.title}</h3>
                                     <button
                                         onClick={(e) => {
-                                            e.stopPropagation(); // Prevent card click
-                                            removeFavorite(fav.movie_id); // Remove favorite
+                                            e.stopPropagation();
+                                            removeFavorite(fav.movie_id);
                                         }}
-                                        className={styles['favorite-button']}
+                                        className={styles["favorite-button"]}
                                     >
                                         Remove
                                     </button>
@@ -116,16 +137,12 @@ const Favorites = ({ accountId }) => {
                             <p>No favorites found.</p>
                         )}
                     </div>
-
-                    {/* Share Button */}
                     <div className={styles["share-button-container"]}>
                         <button className={styles["share-button"]} onClick={shareFavorites}>
                             Share
                         </button>
                     </div>
                 </div>
-
-                {/* Popup Modal for Shareable Link */}
                 {showPopup && (
                     <div className={styles["popup-modal"]}>
                         <h2>Copy Link</h2>

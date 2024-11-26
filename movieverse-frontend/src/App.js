@@ -29,7 +29,7 @@ function App() {
           <Route path="/select-movies" element={<Select />} />
           <Route path="/movies/:id" element={<MovieDetail />} />
           <Route path="/reviews/:reviewId" element={<ReviewDetail />} />
-          <Route path="/favorites" element={<Favorites accountId={1} />} />
+          <Route path="/favorites" element={<Favorites />} />
           <Route path="/search-results" element={<SearchResults />} />
           <Route path="/favorites/shared/:account_id" element={<SharedFavorites />} />
          

@@ -1,20 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+
+
+
+
 import styles from "../styles/MovieDetail.module.css";
 
 const MovieDetail = () => {
-  const { id } = useParams(); // Get movie ID from the URL
+  const { id } = useParams();
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState([]);
-  const [isFavorite, setIsFavorite] = useState(false); // Favorite status
+  const [isFavorite, setIsFavorite] = useState(false);
   const [newReview, setNewReview] = useState({
     title: "",
     rating: "",
     text: "",
   });
 
-  // Fetch movie details and favorite status
+  const getAccountId = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+        const decoded = jwtDecode(token);
+        return decoded.id; 
+    }
+    return null;
+};
+
+  const accountId = getAccountId();
+
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
@@ -33,8 +48,11 @@ const MovieDetail = () => {
     };
 
     const checkFavoriteStatus = async () => {
+      if (!accountId) return;
       try {
-        const response = await fetch(`http://localhost:3001/api/favorites/1`); // Replace `1` with dynamic account_id
+        const response = await fetch(
+          `http://localhost:3001/api/favorites/${accountId}`
+        );
         const data = await response.json();
         const isFav = data.some((fav) => fav.movie_id === parseInt(id));
         setIsFavorite(isFav);
@@ -45,44 +63,32 @@ const MovieDetail = () => {
 
     fetchMovieDetails();
     checkFavoriteStatus();
-  }, [id]);
+  }, [id, accountId]);
 
-  // Toggle favorite status
   const toggleFavorite = async () => {
+    if (!accountId) {
+      alert("You must be logged in to add or remove favorites.");
+      return;
+    }
+
     try {
-      if (isFavorite) {
-        // Remove from favorites
-        await fetch(`http://localhost:3001/api/favorites`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            account_id: 1, // Replace with dynamic account_id
-            movie_id: id,
-          }),
-        });
-        setIsFavorite(false); // Update the button state
-      } else {
-        // Add to favorites
-        await fetch(`http://localhost:3001/api/favorites`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            account_id: 1, // Replace with dynamic account_id
-            movie_id: id,
-          }),
-        });
-        setIsFavorite(true); // Update the button state
-      }
+      const method = isFavorite ? "DELETE" : "POST";
+      await fetch(`http://localhost:3001/api/favorites`, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          account_id: accountId,
+          movie_id: id,
+        }),
+      });
+      setIsFavorite(!isFavorite);
     } catch (error) {
       console.error("Error toggling favorite:", error);
     }
   };
 
-  // Handle new review input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewReview((prevReview) => ({
@@ -91,9 +97,13 @@ const MovieDetail = () => {
     }));
   };
 
-  // Submit a new review
   const handleSubmitReview = async (e) => {
     e.preventDefault();
+
+    if (!accountId) {
+      alert("You must be logged in to submit a review.");
+      return;
+    }
 
     if (!newReview.title || !newReview.rating || !newReview.text) {
       alert("Please provide a title, rating, and review text.");
@@ -109,7 +119,7 @@ const MovieDetail = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            account_id: 1, // Replace with dynamic account_id
+            account_id: accountId,
             movie_id: id,
             movie_poster_path: movie.poster_path,
             title: newReview.title,
@@ -133,114 +143,138 @@ const MovieDetail = () => {
   if (loading) return <p>Loading...</p>;
   if (!movie) return <p>Error loading movie details</p>;
 
+  useEffect(() => {
+  const fetchMovieDetailsAndReviews = async () => {
+    try {
+      const movieResponse = await fetch(
+        `http://localhost:3001/api/movies-moviedetail/${id}`
+      );
+      if (!movieResponse.ok) throw new Error("Failed to fetch movie details");
+      const movieData = await movieResponse.json();
+      setMovie(movieData);
+
+      const reviewsResponse = await fetch(
+        `http://localhost:3001/api/movies/${id}/reviews`
+      );
+      if (!reviewsResponse.ok) throw new Error("Failed to fetch reviews");
+      const reviewsData = await reviewsResponse.json();
+      setReviews(reviewsData);
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+    }
+  };
+
+  fetchMovieDetailsAndReviews();
+}, [id]);
+
+
   return (
-    <>
-      <div className={styles["movie-detail"]}>
-        <div className={styles["movie-header"]}>
-          <img
-            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-            alt={movie.title}
-            className={styles["movie-poster"]}
-          />
-          <div className={styles["movie-info"]}>
-            <h1>
-              {movie.title}{" "}
-              <span>({new Date(movie.release_date).getFullYear()})</span>
-            </h1>
-            <p className={styles["movie-genres"]}>
-              {movie.genres.map((genre) => genre.name).join(", ")}
+    <div className={styles["movie-detail"]}>
+      <div className={styles["movie-header"]}>
+        <img
+          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+          alt={movie.title}
+          className={styles["movie-poster"]}
+        />
+        <div className={styles["movie-info"]}>
+          <h1>
+            {movie.title}{" "}
+            <span>({new Date(movie.release_date).getFullYear()})</span>
+          </h1>
+          <p className={styles["movie-genres"]}>
+            {movie.genres.map((genre) => genre.name).join(", ")}
+          </p>
+          <div className={styles["movie-actions"]}>
+            <p className={styles["rating-number"]}>
+              {movie.vote_average}/10
             </p>
-            <div className={styles["movie-actions"]}>
-              <p className={styles["rating-number"]}>
-                {movie.vote_average}/10 {/* TMDB rating */}
-              </p>
-              <button
-                className={`${styles["favorite-button"]} ${
-                  isFavorite ? styles["favorite-active"] : ""
-                }`}
-                onClick={toggleFavorite}
-              >
-                <span role="img" aria-label="heart">
-                  ❤️
-                </span>{" "}
-                {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
-              </button>
-            </div>
-            <p className={styles["movie-overview"]}>{movie.overview}</p>
-          </div>
-        </div>
-
-        {/* Add Review Section */}
-        <div className={styles["add-review"]}>
-          <h2>Add Your Review</h2>
-          <form onSubmit={handleSubmitReview}>
-            <label>
-              Rating:
-              <div className={styles["star-rating"]}>
-                {[5, 4, 3, 2, 1].map((star) => (
-                  <React.Fragment key={star}>
-                    <input
-                      type="radio"
-                      id={`star${star}`}
-                      name="rating"
-                      value={star}
-                      checked={Number(newReview.rating) === star}
-                      onChange={handleInputChange}
-                      required
-                    />
-                    <label htmlFor={`star${star}`}>&#9733;</label>
-                  </React.Fragment>
-                ))}
-              </div>
-            </label>
-
-            <label>
-              Title:
-              <input
-                type="text"
-                name="title"
-                value={newReview.title}
-                onChange={handleInputChange}
-                required
-              />
-            </label>
-
-            <label>
-              Review:
-              <textarea
-                name="text"
-                value={newReview.text}
-                onChange={handleInputChange}
-                required
-              />
-            </label>
-            <button type="submit" className={styles["submit-button"]}>
-              Submit Review
+            <button
+              className={`${styles["favorite-button"]} ${
+                isFavorite ? styles["favorite-active"] : ""
+              }`}
+              onClick={toggleFavorite}
+            >
+              <span role="img" aria-label="heart">
+                ❤️
+              </span>{" "}
+              {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
             </button>
-          </form>
-        </div>
-
-        {/* User Reviews Section */}
-        <h2>User Reviews</h2>
-        <div className={styles["movie-reviews"]}>
-          {reviews.length > 0 ? (
-            reviews.map((review, index) => (
-              <div key={index} className={styles["review"]}>
-                <p>
-                  <strong>Title:</strong> {review.title}
-                </p>
-                <p>
-                  <strong>Rating:</strong> {review.rating}/5 {/* Show out of 5 */}
-                </p>
-                <p>{review.description}</p> {/* Fixed: Show review description */}
-              </div>
-            ))
-          ) : (
-            <p>No reviews yet. Be the first to review!</p>
-          )}
+          </div>
+          <p className={styles["movie-overview"]}>{movie.overview}</p>
         </div>
       </div>
-    </>
+
+      <div className={styles["add-review"]}>
+        <h2>Add Your Review</h2>
+        <form onSubmit={handleSubmitReview}>
+          <label>
+            Rating:
+            <div className={styles["star-rating"]}>
+              {[5, 4, 3, 2, 1].map((star) => (
+                <React.Fragment key={star}>
+                  <input
+                    type="radio"
+                    id={`star${star}`}
+                    name="rating"
+                    value={star}
+                    checked={Number(newReview.rating) === star}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  <label htmlFor={`star${star}`}>&#9733;</label>
+                </React.Fragment>
+              ))}
+            </div>
+          </label>
+
+          <label>
+            Title:
+            <input
+              type="text"
+              name="title"
+              value={newReview.title}
+              onChange={handleInputChange}
+              required
+            />
+          </label>
+
+          <label>
+            Review:
+            <textarea
+              name="text"
+              value={newReview.text}
+              onChange={handleInputChange}
+              required
+            />
+          </label>
+          <button type="submit" className={styles["submit-button"]}>
+            Submit Review
+          </button>
+        </form>
+      </div>
+
+      <h2>User Reviews</h2>
+      <div className={styles["movie-reviews"]}>
+        {reviews.length > 0 ? (
+          reviews.map((review, index) => (
+            <div key={index} className={styles["review"]}>
+              <p>
+                <strong>Title:</strong> {review.title}
+              </p>
+              <p>
+                <strong>Rating:</strong> {review.rating}/5
+              </p>
+              <p>{review.description}</p>
+            </div>
+          ))
+        ) : (
+          <p>No reviews yet. Be the first to review!</p>
+        )}
+      </div>
+    </div>
   );
 };
 
