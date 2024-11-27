@@ -203,7 +203,7 @@ const MovieDetail = () => {
           src={
             member.profile_path
               ? `https://image.tmdb.org/t/p/w500${member.profile_path}`
-              : "https://via.placeholder.com/100"
+              : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
           }
           alt={member.name}
           className={styles["cast-image"]}
