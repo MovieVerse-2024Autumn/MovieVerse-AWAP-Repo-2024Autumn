@@ -3,21 +3,21 @@
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    background-color: #fff; /* Changed to white */
-    color: #000; /* Changed to black for better contrast */
+    background-color: #fff; 
+    color: #000; 
     min-height: 100vh;
 }
 
 .movie-header, .movie-reviews, .add-review {
-    background: rgba(0, 0, 0, 0.05); /* Light grey for card background */
-    border: 1px solid rgba(0, 0, 0, 0.1); /* Soft grey border */
+    background: rgba(0, 0, 0, 0.05); 
+    border: 1px solid rgba(0, 0, 0, 0.1); 
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
     width: 100%;
     max-width: 1000px;
-    color: #000; /* Black text color */
+    color: #000; 
 }
 
 .movie-header {
@@ -33,7 +33,7 @@
     border-radius: 12px;
     margin-right: 20px;
     flex-shrink: 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Reduced shadow intensity */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
 }
 
 .movie-info {
@@ -46,11 +46,11 @@
 .movie-info h1 {
     font-size: 24px;
     margin: 0;
-    color: #000; /* Black heading */
+    color: #000; 
 }
 
 .movie-genres {
-    color: #555; /* Dark grey for genres */
+    color: #555; 
     margin: 8px 0;
 }
 
@@ -67,10 +67,10 @@
 }
 
 .favorite-button {
-    margin-left: 20px; /* Added margin to push the button away from the rating */
-    background: rgba(0, 0, 0, 0.1); /* Light grey */
+    margin-left: 20px; 
+    background: rgba(0, 0, 0, 0.1); 
     color: #000;
-    border: 1px solid rgba(0, 0, 0, 0.2); /* Grey border */
+    border: 1px solid rgba(0, 0, 0, 0.2); 
     border-radius: 8px;
     padding: 10px 20px;
     cursor: pointer;
@@ -79,15 +79,15 @@
 
 
 .favorite-button:hover {
-    background: rgba(0, 0, 0, 0.2); /* Slightly darker grey */
-    color: #fff; /* White text on hover */
+    background: rgba(0, 0, 0, 0.2); 
+    color: #fff; 
 }
 
 .movie-overview {
     margin-top: 15px;
     font-size: 14px;
     line-height: 1.6;
-    color: #333; /* Dark grey for overview text */
+    color: #333; 
 }
 
 .movie-reviews {
@@ -96,13 +96,13 @@
 
 .review {
     padding: 10px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Light border */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
 }
 
 .add-review h2 {
     margin-bottom: 10px;
-    color: #000; /* Black heading */
+    color: #000; 
 }
 
 .add-review form {
@@ -113,7 +113,7 @@
 
 .add-review label {
     font-size: 14px;
-    color: #000; /* Black labels */
+    color: #000; 
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -125,24 +125,24 @@
     width: 100%;
     padding: 8px;
     font-size: 14px;
-    border: 1px solid rgba(0, 0, 0, 0.2); /* Grey border */
+    border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 4px;
-    background: rgba(0, 0, 0, 0.05); /* Light grey background */
-    color: #000; /* Black text */
+    background: rgba(0, 0, 0, 0.05); 
+    color: #000;
     outline: none;
     box-shadow: none;
     transition: border 0.2s ease, background-color 0.2s ease;
 }
 
 .add-review textarea:focus {
-    border: 1px solid rgba(0, 0, 0, 0.4); /* Darker border on focus */
-    background: rgba(0, 0, 0, 0.1); /* Slightly darker background on focus */
+    border: 1px solid rgba(0, 0, 0, 0.4); 
+    background: rgba(0, 0, 0, 0.1); 
 }
 
 .submit-button {
     padding: 10px;
-    background-color: rgba(0, 0, 0, 0.1); /* Light grey */
-    color: #000; /* Black text */
+    background-color: rgba(0, 0, 0, 0.1); 
+    color: #000; 
     font-size: 16px;
     border: none;
     border-radius: 5px;
@@ -151,8 +151,8 @@
 }
 
 .submit-button:hover {
-    background-color: rgba(0, 0, 0, 0.2); /* Darker grey */
-    color: #fff; /* White text on hover */
+    background-color: rgba(0, 0, 0, 0.2); 
+    color: #fff; 
 }
 
 .star-rating {
@@ -169,7 +169,7 @@
 
 .star-rating label {
     font-size: 24px;
-    color: #ccc; /* Light grey stars */
+    color: #ccc; 
     cursor: pointer;
     transition: color 0.2s ease-in-out;
 }
@@ -177,5 +177,67 @@
 .star-rating input:checked ~ label,
 .star-rating label:hover,
 .star-rating label:hover ~ label {
-    color: #ffa500; /* Orange for active stars */
+    color: #ffa500; 
 }
+
+    .cast-section {
+        margin-top: 1px;
+        width: 100%;
+        max-width: 1000px;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.05); 
+        border: 1px solid rgba(0, 0, 0, 0.1); 
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    }
+
+    .cast-section h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #000; 
+        font-weight: bold;
+    }
+
+    .cast-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .cast-card {
+        width: 120px;
+        text-align: center;
+        background: #fff; 
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+        padding: 10px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .cast-card:hover {
+        transform: scale(1.05); 
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); 
+    }
+
+    .cast-image {
+        width: 100%;
+        height: auto;
+        border-radius: 50%; 
+        object-fit: cover; 
+        margin-bottom: 10px;
+        border: 2px solid rgba(0, 0, 0, 0.1); 
+    }
+
+    .cast-name {
+        font-size: 14px;
+        font-weight: bold;
+        color: #000; /* Black text */
+        margin-bottom: 5px;
+    }
+
+    .cast-character {
+        font-size: 12px;
+        color: #555; 
+    }

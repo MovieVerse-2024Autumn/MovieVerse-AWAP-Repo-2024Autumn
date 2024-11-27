@@ -8,12 +8,15 @@ const MovieDetail = () => {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState([]);
+  const [cast, setCast] = useState([]); // Added state for cast
   const [isFavorite, setIsFavorite] = useState(false);
   const [newReview, setNewReview] = useState({
     title: "",
     rating: "",
     text: "",
   });
+  const [isExpanded, setIsExpanded] = useState(false);
+
 
   const getAccountId = () => {
     const token = localStorage.getItem("token");
@@ -30,6 +33,7 @@ const MovieDetail = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        // Fetch movie details
         const movieResponse = await fetch(
           `http://localhost:3001/api/movies-moviedetail/${id}`
         );
@@ -37,6 +41,16 @@ const MovieDetail = () => {
         const movieData = await movieResponse.json();
         setMovie(movieData);
 
+        // Fetch cast details
+        const castResponse = await fetch(
+          `http://localhost:3001/api/movies/${id}/cast` // Ensure this endpoint returns cast data
+        );
+        if (castResponse.ok) {
+          const castData = await castResponse.json();
+          setCast(castData || []);
+        }
+
+        // Fetch reviews
         const reviewsResponse = await fetch(
           `http://localhost:3001/api/movies/${id}/reviews`
         );
@@ -44,6 +58,7 @@ const MovieDetail = () => {
         const reviewsData = await reviewsResponse.json();
         setReviews(reviewsData || []);
 
+        // Check favorite status
         if (accountId) {
           const favoritesResponse = await fetch(
             `http://localhost:3001/api/favorites/${accountId}`
@@ -161,7 +176,7 @@ const MovieDetail = () => {
           </p>
           <div className={styles["movie-actions"]}>
             <p className={styles["rating-number"]}>
-              {movie.vote_average}/10
+              {movie.vote_average.toFixed(1)}/10
             </p>
             <button
               className={`${styles["favorite-button"]} ${
@@ -178,6 +193,37 @@ const MovieDetail = () => {
           <p className={styles["movie-overview"]}>{movie.overview}</p>
         </div>
       </div>
+
+      <div className={styles["cast-section"]}>
+  <h2>Featured Cast</h2>
+  <div className={`${styles["cast-grid"]} ${isExpanded ? styles["expanded"] : ""}`}>
+    {cast.slice(0, isExpanded ? cast.length : 6).map((member) => (
+      <div key={member.id} className={styles["cast-card"]}>
+        <img
+          src={
+            member.profile_path
+              ? `https://image.tmdb.org/t/p/w500${member.profile_path}`
+              : "https://via.placeholder.com/100"
+          }
+          alt={member.name}
+          className={styles["cast-image"]}
+        />
+        <div className={styles["cast-name"]}>{member.name}</div>
+        <div className={styles["cast-character"]}>as {member.character}</div>
+      </div>
+    ))}
+  </div>
+  {cast.length > 5 && (
+    <button
+      className={styles["show-more-button"]}
+      onClick={() => setIsExpanded(!isExpanded)}
+    >
+      {isExpanded ? "Show Less ▲" : "Show More ▼"}
+    </button>
+  )}
+</div>
+
+
 
       <div className={styles["add-review"]}>
         <h2>Add Your Review</h2>
