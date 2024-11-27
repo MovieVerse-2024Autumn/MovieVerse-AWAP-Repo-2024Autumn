@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-
-
-
-
 import styles from "../styles/MovieDetail.module.css";
 
 const MovieDetail = () => {
@@ -22,47 +18,51 @@ const MovieDetail = () => {
   const getAccountId = () => {
     const token = localStorage.getItem("token");
     if (token) {
-        const decoded = jwtDecode(token);
-        return decoded.id; 
+      const decoded = jwtDecode(token);
+      return decoded.id;
     }
     return null;
-};
+  };
 
   const accountId = getAccountId();
 
   useEffect(() => {
-    const fetchMovieDetails = async () => {
+    const fetchData = async () => {
+      setLoading(true);
       try {
-        const response = await fetch(
+        const movieResponse = await fetch(
           `http://localhost:3001/api/movies-moviedetail/${id}`
         );
-        if (!response.ok) throw new Error("Failed to fetch");
-        const data = await response.json();
-        setMovie(data);
-        setReviews(data.reviews || []);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching movie details:", error);
-        setLoading(false);
-      }
-    };
+        if (!movieResponse.ok) throw new Error("Failed to fetch movie details");
+        const movieData = await movieResponse.json();
+        setMovie(movieData);
 
-    const checkFavoriteStatus = async () => {
-      if (!accountId) return;
-      try {
-        const response = await fetch(
-          `http://localhost:3001/api/favorites/${accountId}`
+        const reviewsResponse = await fetch(
+          `http://localhost:3001/api/movies/${id}/reviews`
         );
-        const data = await response.json();
-        const isFav = data.some((fav) => fav.movie_id === parseInt(id));
-        setIsFavorite(isFav);
+        if (!reviewsResponse.ok) throw new Error("Failed to fetch reviews");
+        const reviewsData = await reviewsResponse.json();
+        setReviews(reviewsData || []);
+
+        if (accountId) {
+          const favoritesResponse = await fetch(
+            `http://localhost:3001/api/favorites/${accountId}`
+          );
+          const favoritesData = await favoritesResponse.json();
+          const isFav = favoritesData.some(
+            (fav) => fav.movie_id === parseInt(id)
+          );
+          setIsFavorite(isFav);
+        }
+
+        setLoading(false);
       } catch (error) {
-        console.error("Error checking favorite status:", error);
+        console.error("Error fetching data:", error);
+        setLoading(false);
       }
     };
 
-    fetchMovieDetails();
-    checkFavoriteStatus();
+    fetchData();
   }, [id, accountId]);
 
   const toggleFavorite = async () => {
@@ -142,34 +142,6 @@ const MovieDetail = () => {
 
   if (loading) return <p>Loading...</p>;
   if (!movie) return <p>Error loading movie details</p>;
-
-  useEffect(() => {
-  const fetchMovieDetailsAndReviews = async () => {
-    try {
-      const movieResponse = await fetch(
-        `http://localhost:3001/api/movies-moviedetail/${id}`
-      );
-      if (!movieResponse.ok) throw new Error("Failed to fetch movie details");
-      const movieData = await movieResponse.json();
-      setMovie(movieData);
-
-      const reviewsResponse = await fetch(
-        `http://localhost:3001/api/movies/${id}/reviews`
-      );
-      if (!reviewsResponse.ok) throw new Error("Failed to fetch reviews");
-      const reviewsData = await reviewsResponse.json();
-      setReviews(reviewsData);
-
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setLoading(false);
-    }
-  };
-
-  fetchMovieDetailsAndReviews();
-}, [id]);
-
 
   return (
     <div className={styles["movie-detail"]}>
