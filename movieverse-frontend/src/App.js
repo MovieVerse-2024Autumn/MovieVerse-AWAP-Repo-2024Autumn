@@ -1,8 +1,7 @@
 import React from "react";
-import Home from "./pages/Home";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-
+import Home from "./pages/Home";
 import MoreReviews from "./pages/MoreReviews";
 import Select from "./pages/Select";
 import MovieDetail from "./pages/MovieDetail"; // Import the MovieDetail component
@@ -10,6 +9,7 @@ import ReviewDetail from "./pages/ReviewDetail";
 import ShowTime from "./pages/ShowTime";
 import SearchResults from "./pages/SearchResults";
 import Favorites from "./pages/Favorites";
+import Groups from "./pages/Groups";
 import SharedFavorites from "./components/SharedFavorites";
 import Authentication from "./pages/Authentication";
 import Navbar from "./components/Navbar";
@@ -21,7 +21,7 @@ function App() {
       future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
     >
       <div className="App">
-      <Navbar />
+        <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/show-time" element={<ShowTime />} />
@@ -31,12 +31,15 @@ function App() {
           <Route path="/reviews/:reviewId" element={<ReviewDetail />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/search-results" element={<SearchResults />} />
-          <Route path="/favorites/shared/:account_id" element={<SharedFavorites />} />
-         
-          <Route path="/authentication" element={<Authentication />} />
+          <Route
+            path="/favorites/shared/:account_id"
+            element={<SharedFavorites />}
+          />
+          <Route path="/groups" element={<Groups />} />
 
+          <Route path="/authentication" element={<Authentication />} />
         </Routes>
-      <Footer />
+        <Footer />
       </div>
     </BrowserRouter>
   );
