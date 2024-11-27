@@ -83,4 +83,29 @@ const addReview = async (req, res, next) => {
   }
 };
 
-export { getReviews, addReview, getOneReview, updateReviewLikeCount };
+const getReviewsForMovie = async (req, res, next) => {
+  const { movieId } = req.params; // Extract movieId from the request params
+  try {
+    const query = `
+      SELECT r.id, r.movie_id, r.movie_poster_path, r.title, r.description,
+             r.rating, r.review_date, r.like_count,
+             CONCAT(a.first_name, ' ', a.last_name) AS author
+      FROM review r
+      JOIN account a ON r.account_id = a.id
+      WHERE r.movie_id = $1
+    `;
+    const result = await pool.query(query, [movieId]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "No reviews found for this movie." });
+    }
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error("Error fetching reviews for movie:", error);
+    next(error);
+  }
+};
+
+
+export { getReviews, addReview, getOneReview,getReviewsForMovie,updateReviewLikeCount };
