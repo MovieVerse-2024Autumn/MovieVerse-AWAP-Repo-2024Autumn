@@ -46,4 +46,25 @@ const getMovieCast = async (req, res) => {
 
 
 
-export { getMovieDetails, getMovieCast};
+const getMovieTrailer = async (req, res) => {
+    const { id } = req.params; // Movie ID from the request parameters
+    try {
+        const response = await fetch(
+            `${BASE_URL}/movie/${id}/videos?api_key=${API_KEY}`
+        );
+        const data = await response.json();
+
+        if (data.results) {
+            return res.status(200).json(data.results);
+        } else {
+            return res.status(404).json({ message: "No trailers found" });
+        }
+    } catch (error) {
+        console.error("Error fetching trailer data:", error);
+        res.status(500).json({ error: "Failed to fetch trailer data" });
+    }
+};
+
+
+
+export { getMovieDetails, getMovieCast,getMovieTrailer};

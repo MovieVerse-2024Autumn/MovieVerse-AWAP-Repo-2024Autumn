@@ -16,6 +16,7 @@ const MovieDetail = () => {
     text: "",
   });
   const [isExpanded, setIsExpanded] = useState(false);
+  const [trailer, setTrailer] = useState(null);
 
 
   const getAccountId = () => {
@@ -48,6 +49,20 @@ const MovieDetail = () => {
         if (castResponse.ok) {
           const castData = await castResponse.json();
           setCast(castData || []);
+        }
+
+        // Fetch trailer details
+        const trailerResponse = await fetch(
+          `http://localhost:3001/api/movies/${id}/trailer`
+        );
+        if (trailerResponse.ok) {
+          const trailerData = await trailerResponse.json();
+          const youtubeTrailer = trailerData.find(
+            (video) => video.type === "Trailer" && video.site === "YouTube"
+          );
+          if (youtubeTrailer) {
+            setTrailer(`https://www.youtube.com/embed/${youtubeTrailer.key}`);
+          }
         }
 
         // Fetch reviews
@@ -193,6 +208,20 @@ const MovieDetail = () => {
           <p className={styles["movie-overview"]}>{movie.overview}</p>
         </div>
       </div>
+
+      {trailer && (
+        <div className={styles["trailer-section"]}>
+          <h2>Official Trailer</h2>
+          <iframe
+            width="100%"
+            height="500px"
+            src={trailer}
+            frameBorder="0"
+            allowFullScreen
+            title="Official Trailer"
+          ></iframe>
+        </div>
+      )}
 
       <div className={styles["cast-section"]}>
   <h2>Featured Cast</h2>

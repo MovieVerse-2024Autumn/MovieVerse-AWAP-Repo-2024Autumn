@@ -14,7 +14,7 @@ const getFavorites = async (req, res, next) => {
             favoriteIds.map(async (id) => {
                 const response = await fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`);
                 const movieData = await response.json();
-                return { ...movieData, movie_id: id }; // Include `movie_id` explicitly
+                return { ...movieData, movie_id: id }; 
             })
         );
 
@@ -69,10 +69,6 @@ const removeFavorite = async (req, res, next) => {
     }
 };
 
-
-
-   
-
 // Toggle sharing for a user's favorites
 const toggleSharing = async (req, res, next) => {
     const { account_id, share } = req.body;
@@ -83,7 +79,7 @@ const toggleSharing = async (req, res, next) => {
 
     try {
         const shareUrl = share
-            ? `http://localhost:3000/favorites/shared/${account_id}` // Replace with your domain
+            ? `http://localhost:3000/favorites/shared/${account_id}` 
             : null;
 
         const updated = await Favorite.toggleShareUrl(account_id, shareUrl);
@@ -123,6 +119,8 @@ const getSharedFavorites = async (req, res, next) => {
         return next(error);
     }
 };
+
+
 
 export {
     getFavorites,
