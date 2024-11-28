@@ -8,9 +8,7 @@ import movieRouter from "./routers/movieRouter.js";
 import reviewRouter from "./routers/reviewRouter.js";
 import favoriteRouter from "./routers/favoriteRouter.js";
 import selectRouter from "./routers/selectRouter.js";
-
-
-
+import groupRouter from "./routers/groupRouter.js";
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -18,8 +16,15 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use('/api/auth', authRouter);
-app.use("/api", movieRouter, reviewRouter, favoriteRouter, selectRouter); 
+app.use("/api/auth", authRouter);
+app.use(
+  "/api",
+  movieRouter,
+  reviewRouter,
+  favoriteRouter,
+  selectRouter,
+  groupRouter
+);
 
 app.use((err, req, res, next) => {
   console.error("Error:", err.message);

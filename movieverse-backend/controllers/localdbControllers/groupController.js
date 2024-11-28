@@ -3,13 +3,13 @@ import {
   createGroup,
   getUserCreatedGroups,
   getAvailableGroups,
-} from "../models/movieGroup.js";
+} from "../../models/movieGroup.js";
 import {
   requestJoinGroup,
   getJoinRequests,
   handleJoinRequest,
   getUserJoinedGroups,
-} from "../models/groupMember.js";
+} from "../../models/groupMember.js";
 
 // create group
 export const createGroupController = async (req, res, next) => {

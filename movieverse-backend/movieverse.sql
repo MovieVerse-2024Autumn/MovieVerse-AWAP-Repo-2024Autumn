@@ -51,7 +51,7 @@ CREATE TABLE movie_group (
     id          SERIAL PRIMARY KEY,
     name        VARCHAR(50) NOT NULL,
     owner_id    INTEGER NOT NULL,
-    description VARCHAR(255) NOT NULL
+    description VARCHAR(255) NOT NULL,
     CONSTRAINT movie_group_account_fk FOREIGN KEY (owner_id) REFERENCES account(id)
 );
 
@@ -68,3 +68,24 @@ CREATE TABLE group_member (
     CONSTRAINT group_member_movie_group_fk FOREIGN KEY (group_id) REFERENCES movie_group(id),
     CONSTRAINT member_status_check CHECK (member_status IN ('accepted', 'declined', 'pending'))
 );
+ALTER TABLE group_member
+ADD COLUMN admin_id INTEGER NOT NULL;
+
+
+CREATE TABLE notification (
+    id SERIAL PRIMARY KEY,
+    sender_id INTEGER NOT NULL,       
+    receiver_id INTEGER NOT NULL,    
+    group_id INTEGER NOT NULL,       
+    message TEXT NOT NULL,   
+    status VARCHAR(50) DEFAULT 'unread', 
+    created_at TIMESTAMP DEFAULT NOW(),
+    type VARCHAR(50) NOT NULL DEFAULT 'join_request',  
+    action_status VARCHAR(50) DEFAULT NULL;         
+    CONSTRAINT notification_sender_fk FOREIGN KEY (sender_id) REFERENCES account(id),
+    CONSTRAINT notification_receiver_fk FOREIGN KEY (receiver_id) REFERENCES account(id),
+    CONSTRAINT notification_group_fk FOREIGN KEY (group_id) REFERENCES movie_group(id)
+);  
+
+ALTER TABLE notification
+RENAME COLUMN status TO is_read;
