@@ -278,16 +278,21 @@ const MovieDetail = () => {
       <div className={styles["movie-reviews"]}>
         {reviews.length > 0 ? (
           reviews.map((review, index) => (
-            <div key={index} className={styles["review"]}>
+            <div key={review.id} className={styles["review"]}>
               <p>
-                <strong>Title:</strong> {review.title}
-              </p>
-              <p>
-                <strong>Rating:</strong> {review.rating}/5
-              </p>
-              <p>{review.description}</p>
-            </div>
-          ))
+               {review.author} {new Date(review.review_date).toLocaleDateString()}
+            </p>
+            <p>
+              <strong>Rating:</strong> {review.rating}/5
+            </p>
+
+            <p>
+              <strong>Title:</strong> {review.title}
+            </p>
+            <p>{review.description}</p>
+          </div>
+        ))
+    
         ) : (
           <p>No reviews yet. Be the first to review!</p>
         )}

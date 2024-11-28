@@ -34,40 +34,47 @@ const Favorites = () => {
         try {
             const response = await fetch(`http://localhost:3001/api/favorites/${accountId}`);
             const data = await response.json();
-            console.log("Fetched favorites:", data);
+            console.log("Fetched favorites data structure:", data); // Log data here
             setFavorites(data);
         } catch (error) {
             console.error("Error fetching favorites:", error);
         }
     };
 
-    // Remove a favorite
     const removeFavorite = async (movieId) => {
+        console.log("Attempting to remove Movie ID:", movieId); // Debugging step
+        if (!movieId) {
+            console.error("Movie ID is undefined or null!");
+            return;
+        }
+    
         try {
-            console.log("Removing Movie ID:", movieId);
             const response = await fetch(`http://localhost:3001/api/favorites`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    account_id: accountId,
-                    movie_id: movieId,
+                    account_id: accountId, // Ensure accountId is correct
+                    movie_id: movieId,    // Ensure movieId is passed here
                 }),
             });
-
+    
             if (response.ok) {
                 setFavorites((prevFavorites) =>
                     prevFavorites.filter((fav) => fav.movie_id !== movieId)
                 );
                 console.log("Movie removed successfully");
             } else {
-                console.error("Failed to remove favorite");
+                const errorData = await response.json();
+                console.error("Failed to remove favorite:", errorData.error || "Unknown error");
             }
         } catch (error) {
             console.error("Error removing favorite:", error);
         }
     };
+    
+      
 
     // Share the favorites list
     const shareFavorites = async () => {
@@ -111,27 +118,31 @@ const Favorites = () => {
                     <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", justifyContent: "center" }}>
                         {favorites.length ? (
                             favorites.map((fav) => (
+                               
                                 <div
-                                    key={fav.id || fav.movie_id}
-                                    className={styles["favorite-item"]}
-                                    onClick={() => handleCardClick(fav.id || fav.movie_id)}
+                                key={fav.id} // Use `id` as the unique key
+                                className={styles["favorite-item"]}
+                                onClick={() => handleCardClick(fav.id)} // Pass `id` for navigation
+                            >
+                                <img
+                                    src={`https://image.tmdb.org/t/p/w500${fav.poster_path}`}
+                                    alt={fav.title}
+                                    className={styles["favorite-img"]}
+                                />
+                                <h3 className={styles["favorite-title"]}>{fav.title}</h3>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation(); // Prevent card click
+                                        console.log("Attempting to remove Movie ID:", fav.id); // Log the correct ID
+                                        removeFavorite(fav.id); // Pass `id` instead of `movie_id`
+                                    }}
+                                    className={styles["favorite-button"]}
                                 >
-                                    <img
-                                        src={`https://image.tmdb.org/t/p/w500${fav.poster_path}`}
-                                        alt={fav.title}
-                                        className={styles["favorite-img"]}
-                                    />
-                                    <h3 className={styles["favorite-title"]}>{fav.title}</h3>
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            removeFavorite(fav.movie_id);
-                                        }}
-                                        className={styles["favorite-button"]}
-                                    >
-                                        Remove
-                                    </button>
-                                </div>
+                                    Remove
+                                </button>
+                            </div>
+                            
+                            
                             ))
                         ) : (
                             <p>No favorites found.</p>
