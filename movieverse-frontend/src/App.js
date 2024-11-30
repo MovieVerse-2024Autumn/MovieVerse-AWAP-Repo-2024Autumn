@@ -12,6 +12,7 @@ import Favorites from "./pages/Favorites";
 import Groups from "./pages/Groups";
 import SharedFavorites from "./components/SharedFavorites";
 import Authentication from "./pages/Authentication";
+import GroupDetails from "./pages/GroupDetails";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
@@ -36,6 +37,7 @@ function App() {
             element={<SharedFavorites />}
           />
           <Route path="/groups" element={<Groups />} />
+          <Route path="/group/:groupId" element={<GroupDetails />} />
 
           <Route path="/authentication" element={<Authentication />} />
         </Routes>
