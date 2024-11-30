@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import GroupCard from "../components/GroupCard";
+import Notification from "./Notification";
 import "../styles/Groups.css";
 
 const url = "http://localhost:3001/api/groups";
@@ -12,6 +13,9 @@ export default function Group() {
 
   const [joinedGroups, setJoinedGroups] = useState([]);
   const [availableGroups, setAvailableGroups] = useState([]);
+
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [isNotificationsVisible, setIsNotificationsVisible] = useState(false);
 
   // Fetch user-created groups
   const fetchYourGroups = async () => {
@@ -28,6 +32,7 @@ export default function Group() {
     }
   };
 
+  // Fetch available groups for joining
   const fetchAailableGroups = async () => {
     try {
       const response = await fetch(`${url}/available-groups`, {
@@ -42,9 +47,25 @@ export default function Group() {
     }
   };
 
+  // Fetch unread notification count
+  const fetchUnreadCount = async () => {
+    try {
+      const response = await fetch(`${url}/notifications/unread-count`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const data = await response.json();
+      setUnreadCount(data.count);
+    } catch (error) {
+      console.error("Error fetching unread count:", error);
+    }
+  };
+
   useEffect(() => {
     fetchYourGroups();
     fetchAailableGroups();
+    fetchUnreadCount();
   }, []);
 
   // Handle showing the form to create a new group
@@ -58,7 +79,7 @@ export default function Group() {
     setNewGroup({ ...newGroup, [name]: value });
   };
 
-  // Handle form submission
+  // Handle form submission for creating a new group
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!newGroup.name || !newGroup.description) {
@@ -90,8 +111,49 @@ export default function Group() {
     }
   };
 
+  // Handle sending a join request
+  const handleJoinGroup = async (groupId) => {
+    try {
+      const response = await fetch(`${url}/join-request`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ groupId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send join request");
+      }
+
+      const updatedGroupList = availableGroups.filter(
+        (group) => group.id !== groupId
+      );
+      setAvailableGroups(updatedGroupList);
+
+      alert("Your join request has been sent!");
+    } catch (error) {
+      console.error("Error sending join request:", error);
+      alert("Failed to send join request. Please try again.");
+    }
+  };
+
   return (
     <div className="group-container">
+      {/* Notification Bell Icon */}
+      <div
+        className="notification-bell"
+        onClick={() => setIsNotificationsVisible(!isNotificationsVisible)}
+      >
+        <span className="bell-icon">🔔</span>
+        {unreadCount > 0 && <span className="unread-count">{unreadCount}</span>}
+      </div>
+
+      {/* Show Notification Component when bell is clicked */}
+      {isNotificationsVisible && <Notification />}
+
+      {/* Your Groups */}
       <div className="section">
         <h2>Your groups</h2>
         <div className="group-list">
@@ -153,6 +215,8 @@ export default function Group() {
         </div>
         <p>More...</p>
       </div>
+
+      {/* More groups */}
       <div className="section">
         <h2>More groups</h2>
         <div className="group-list">
@@ -160,7 +224,12 @@ export default function Group() {
             <div className="group-card" key={index}>
               <h3>{group.name}</h3>
               <p>{group.description}</p>
-              <button className="join-group-btn">Join</button>
+              <button
+                className="join-group-btn"
+                onClick={() => handleJoinGroup(group.id)}
+              >
+                Join
+              </button>
             </div>
           ))}
           {availableGroups.length === 0 && <p>No more groups to join.</p>}
