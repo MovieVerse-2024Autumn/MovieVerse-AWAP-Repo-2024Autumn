@@ -14,6 +14,8 @@ import SharedFavorites from "./components/SharedFavorites";
 import Authentication from "./pages/Authentication";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import AboutUs from "./pages/AboutUs";
 
 function App() {
   return (
@@ -38,6 +40,9 @@ function App() {
           <Route path="/groups" element={<Groups />} />
 
           <Route path="/authentication" element={<Authentication />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/about-us" element={<AboutUs />} />
+          
         </Routes>
         <Footer />
       </div>
