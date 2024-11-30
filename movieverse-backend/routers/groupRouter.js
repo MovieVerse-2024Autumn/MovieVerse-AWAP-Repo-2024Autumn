@@ -10,13 +10,25 @@ import {
   getAvailableGroupsController,
   requestJoinGroupController,
   handleJoinRequestController,
-} from "../controllers/groupController.js";
+} from "../controllers/localdbControllers/groupController.js";
 
-router.post("/create", authenticate, createGroupController);
-router.get("/my-groups", authenticate, getUserCreatedGroupsController);
-router.get("/joined-groups", authenticate, getUserJoinedGroupsController);
-router.get("/available-groups", authenticate, getAvailableGroupsController);
-router.post("/join", authenticate, requestJoinGroupController);
-router.post("/handle-request", authenticate, handleJoinRequestController);
+router.post("/groups/create", authenticate, createGroupController);
+router.get("/groups/my-groups", authenticate, getUserCreatedGroupsController);
+router.get(
+  "/groups/joined-groups",
+  authenticate,
+  getUserJoinedGroupsController
+);
+router.get(
+  "/groups/available-groups",
+  authenticate,
+  getAvailableGroupsController
+);
+router.post("/groups/join", authenticate, requestJoinGroupController);
+router.post(
+  "/groups/handle-request",
+  authenticate,
+  handleJoinRequestController
+);
 
 export default router;

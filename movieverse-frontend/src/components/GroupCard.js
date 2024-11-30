@@ -1,5 +1,13 @@
 import React from "react";
+import "../styles/GroupCard.css";
 
-export default function GroupCard() {
-  return <div>GroupCard</div>;
-}
+const GroupCard = ({ group, onClick }) => {
+  return (
+    <div className="group-card" onClick={onClick}>
+      <h3>{group.name}</h3>
+      <p>{group.description}</p>
+    </div>
+  );
+};
+
+export default GroupCard;

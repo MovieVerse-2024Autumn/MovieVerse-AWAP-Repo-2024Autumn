@@ -1,0 +1,89 @@
+.privacy-policy {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .privacy-title {
+    font-size: 2.4rem;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .effective-date {
+    font-size: 0.9rem;
+    color: #666;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .privacy-section {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .section-title {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #444;
+  }
+  
+  .list-container {
+    margin-top: 10px;
+    padding-left: 20px;
+  }
+  
+  .list-item {
+    margin-bottom: 10px;
+    padding-left: 20px;
+    position: relative;
+  }
+  
+  .list-item::before {
+    content: "•"; /* Add a bullet point */
+    position: absolute;
+    left: 0;
+    color: #007BFF;
+    font-size: 1.2rem;
+    line-height: 1.6;
+  }
+  
+  .link {
+    color: #007BFF;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .link:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 600px) {
+    .privacy-policy {
+      padding: 15px;
+      font-size: 0.9rem;
+    }
+  
+    .privacy-title {
+      font-size: 2rem;
+    }
+  
+    .section-title {
+      font-size: 1.6rem;
+    }
+  
+    .list-container {
+      padding-left: 15px;
+    }
+  
+    .list-item {
+      padding-left: 15px;
+    }
+  }
+  

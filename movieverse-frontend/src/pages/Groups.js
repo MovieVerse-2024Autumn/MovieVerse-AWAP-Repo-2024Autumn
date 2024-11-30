@@ -1,22 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import GroupCard from "../components/GroupCard";
 import "../styles/Groups.css";
 
+const url = "http://localhost:3001/api/groups";
+
 export default function Group() {
-  const [yourGroups, setYourGroups] = useState([
-    {
-      name: "Group Name1",
-      description:
-        "Sentiments two occasional affronting solicitude travelling and one contrasted. Fortune day out",
-    },
-    {
-      name: "Group Name2",
-      description:
-        "Sentiments two occasional affronting solicitude travelling and one contrasted. Fortune day out",
-    },
-  ]);
+  const [yourGroups, setYourGroups] = useState([]);
 
   const [showGroupForm, setShowGroupForm] = useState(false);
   const [newGroup, setNewGroup] = useState({ name: "", description: "" });
+
+  const [joinedGroups, setJoinedGroups] = useState([]);
+  const [availableGroups, setAvailableGroups] = useState([]);
+
+  // Fetch user-created groups
+  const fetchYourGroups = async () => {
+    try {
+      const response = await fetch(`${url}/my-groups`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const data = await response.json();
+      setYourGroups(data);
+    } catch (error) {
+      console.error("Error fetching your groups:", error);
+    }
+  };
+
+  const fetchAailableGroups = async () => {
+    try {
+      const response = await fetch(`${url}/available-groups`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const data = await response.json();
+      setAvailableGroups(data);
+    } catch (error) {
+      console.error("Error fetching available groups:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchYourGroups();
+    fetchAailableGroups();
+  }, []);
 
   // Handle showing the form to create a new group
   const handleCreateNewGroup = () => {
@@ -30,12 +59,34 @@ export default function Group() {
   };
 
   // Handle form submission
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    if (newGroup.name && newGroup.description) {
-      setYourGroups([...yourGroups, newGroup]); // Add the new group to the list
-      setNewGroup({ name: "", description: "" }); // Reset the form
-      setShowGroupForm(false); // Hide the form
+    if (!newGroup.name || !newGroup.description) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${url}/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(newGroup),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create group");
+      }
+
+      const createdGroup = await response.json();
+      setYourGroups([...yourGroups, createdGroup]);
+      setNewGroup({ name: "", description: "" });
+      setShowGroupForm(false);
+    } catch (error) {
+      console.error("Error creating group:", error);
+      alert("Failed to create group. Please try again.");
     }
   };
 
@@ -44,11 +95,12 @@ export default function Group() {
       <div className="section">
         <h2>Your groups</h2>
         <div className="group-list">
-          {yourGroups.map((group, index) => (
-            <div className="group-card" key={index}>
-              <h3>{group.name}</h3>
-              <p>{group.description}</p>
-            </div>
+          {yourGroups.map((group) => (
+            <GroupCard
+              key={group.id}
+              group={group}
+              onClick={() => console.log(`Clicked on ${group.name}`)}
+            />
           ))}
           <button className="create-group-btn" onClick={handleCreateNewGroup}>
             + Create a new group
@@ -88,6 +140,32 @@ export default function Group() {
           </form>
         </div>
       )}
+
+      <div className="section">
+        <h2>Groups you joined</h2>
+        <div className="group-list">
+          {joinedGroups.map((group, index) => (
+            <div className="group-card" key={index}>
+              <h3>{group.name}</h3>
+              <p>{group.description}</p>
+            </div>
+          ))}
+        </div>
+        <p>More...</p>
+      </div>
+      <div className="section">
+        <h2>More groups</h2>
+        <div className="group-list">
+          {availableGroups.map((group, index) => (
+            <div className="group-card" key={index}>
+              <h3>{group.name}</h3>
+              <p>{group.description}</p>
+              <button className="join-group-btn">Join</button>
+            </div>
+          ))}
+          {availableGroups.length === 0 && <p>No more groups to join.</p>}
+        </div>
+      </div>
     </div>
   );
 }
