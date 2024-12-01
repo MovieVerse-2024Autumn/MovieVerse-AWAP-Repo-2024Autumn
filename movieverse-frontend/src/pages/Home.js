@@ -18,8 +18,10 @@ export default function Home() {
   // Update the moviesPerPage whenever window is resized
   useEffect(() => {
     const updateMoviesPerPage = () => {
-      const movieCardWidth = 180; // Each movie card's width
-      const newMoviesPerPage = Math.floor(window.innerWidth / movieCardWidth); // Calculate how many movies fit in one row
+      const movieCardWidth = 180; 
+      const movieRowCount = 2;  
+      const newMoviesPerPage =
+        Math.floor(window.innerWidth / movieCardWidth) * movieRowCount;
       setMoviesPerPage(newMoviesPerPage || 1);
     };
 
