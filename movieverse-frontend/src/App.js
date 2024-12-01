@@ -38,7 +38,7 @@ function App() {
             element={<SharedFavorites />}
           />
           <Route path="/groups" element={<Groups />} />
-
+           <Route path="/delete-account" element={<DeleteAccountFlow />} />
           <Route path="/authentication" element={<Authentication />} />
 
         </Routes>
