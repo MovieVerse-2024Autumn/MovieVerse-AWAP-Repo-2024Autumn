@@ -16,6 +16,7 @@ import {
   handleJoinRequestController,
   getJoinRequestNotificationController,
   getJoinResponseNotificationController,
+  markNotificationAsReadController,
 } from "../controllers/localdbControllers/notificationController.js";
 
 /**** Groups Page ******/
@@ -36,12 +37,12 @@ router.get(
 );
 
 /**** Notification ******/
-// send requests to join groups to admins
+// requests to join groups to admins
 router.post("/groups/join-request", authenticate, requestJoinGroupController);
 
 // admin receives join requests
 router.get(
-  "/groups/notifications",
+  "/groups/notifications/request",
   authenticate,
   getJoinRequestNotificationController
 );
@@ -55,7 +56,7 @@ router.patch(
 
 // user receives responses to join requests
 router.get(
-  "/groups/notifications",
+  "/groups/notifications/response",
   authenticate,
   getJoinResponseNotificationController
 );
@@ -65,6 +66,13 @@ router.get(
   "/groups/notifications/unread-count",
   authenticate,
   getUnreadNotificationCountController
+);
+
+// mark a notification as read
+router.patch(
+  "/groups/notifications/mark-as-read",
+  authenticate,
+  markNotificationAsReadController
 );
 
 export default router;

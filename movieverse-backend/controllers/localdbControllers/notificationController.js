@@ -1,3 +1,4 @@
+import { pool } from "../../middleware/db.js";
 import {
   getUnreadNotificationCount,
   requestJoinGroup,
@@ -5,6 +6,7 @@ import {
   handleJoinRequest,
   updateNotificationStatus,
   getJoinResponseNotification,
+  markNotificationAsRead,
 } from "../../models/notification.js";
 
 // Function to fetch unread notification count
@@ -75,13 +77,25 @@ const handleJoinRequestController = async (req, res, next) => {
         message: "Unauthorized: You are not the admin of this group.",
       });
     }
+    console.log("Request Body:", req.body, "in handleJoinRequestController");
+    console.log(
+      "groupId:",
+      groupId,
+      "userId:",
+      userId,
+      "action:",
+      action,
+      "notificationId:",
+      notificationId,
+      "in handleJoinRequestController"
+    );
 
     // Update the membership status in group_member table and send response notification
     const updatedStatus = await handleJoinRequest(groupId, userId, action);
 
     const updatedNotification = await updateNotificationStatus(
-      notificationId,
-      updatedStatus.member_status
+      updatedStatus.member_status,
+      notificationId
     );
     res.status(200).json({
       message: `Successfully ${updatedStatus.member_status} the join request.`,
@@ -103,10 +117,25 @@ const getJoinResponseNotificationController = async (req, res, next) => {
   }
 };
 
+// mark a notification as read
+const markNotificationAsReadController = async (req, res, next) => {
+  const { notificationId } = req.body;
+
+  try {
+    const updatedNotification = await markNotificationAsRead(notificationId);
+    res
+      .status(200)
+      .json({ message: "Notification marked as read", updatedNotification });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export {
   getUnreadNotificationCountController,
   requestJoinGroupController,
   handleJoinRequestController,
   getJoinRequestNotificationController,
   getJoinResponseNotificationController,
+  markNotificationAsReadController,
 };

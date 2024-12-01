@@ -129,7 +129,7 @@ const handleJoinRequest = async (groupId, userId, action) => {
       memberResult.rows[0].admin_id,
       userId,
       groupId,
-      `Your request to join group ${groupName} is ${newStatus}`,
+      `Your request to join group ${groupName} is ${newStatus}.`,
     ]);
 
     await client.query("COMMIT");
@@ -164,12 +164,34 @@ const getJoinResponseNotification = async (receiverId) => {
         FROM notification n
         JOIN account a ON n.sender_id = a.id
         JOIN movie_group mg ON n.group_id = mg.id
-        WHERE n.receiver_id = $1 AND n.is_read = 'unread'
+        WHERE n.receiver_id = $1 AND n.is_read = 'unread' AND n.type = 'join_request_response'
         ORDER BY n.created_at DESC;
     `;
 
   const result = await pool.query(query, [receiverId]);
   return result.rows;
+};
+
+// mark response notifications as read
+const markNotificationAsRead = async (notificationId) => {
+  try {
+    const query = `
+      UPDATE notification
+      SET is_read = 'read'
+      WHERE id = $1
+      RETURNING *;
+    `;
+
+    const result = await pool.query(query, [notificationId]);
+
+    if (result.rowCount === 0) {
+      throw new Error("Notification not found");
+    }
+
+    return result.rows[0];
+  } catch (err) {
+    throw new Error("Error marking notification as read: " + err.message);
+  }
 };
 
 export {
@@ -179,4 +201,5 @@ export {
   handleJoinRequest,
   updateNotificationStatus,
   getJoinResponseNotification,
+  markNotificationAsRead,
 };

@@ -151,7 +151,9 @@ export default function Group() {
       </div>
 
       {/* Show Notification Component when bell is clicked */}
-      {isNotificationsVisible && <Notification />}
+      {isNotificationsVisible && (
+        <Notification setUnreadCount={setUnreadCount} />
+      )}
 
       {/* Your Groups */}
       <div className="section">
