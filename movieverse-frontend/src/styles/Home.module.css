@@ -263,3 +263,38 @@
   color: #3cc128;
   font-size: 15px;
 }
+/* Full-width Poster Section */
+.posterWrapper {
+  position: relative;
+  width: 100%;
+  height: auto; 
+  max-height: 500px; 
+  overflow: hidden;
+}
+
+.posterImage {
+  width: 100%;
+  height: 100%; 
+  object-fit: cover; 
+  object-position: top; 
+}
+
+.posterOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.posterText {
+  color: #fff;
+  font-size: 3vw;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+}
