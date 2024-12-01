@@ -11,7 +11,7 @@ function AboutUs() {
       <section className={styles["section"]}>
         <h2 className={styles["section-title"]}>Our Mission</h2>
         <p className={styles["text"]}>
-          At <strong>MovieVerse</strong>,At MovieVerse, our mission is to provide an exceptional experience for movie enthusiasts to discover, save, and share their favorite films. Beyond just creating a favorite list, users can add reviews, create groups, and invite members to share movie details. Additionally, users can explore movie showtimes for convenient viewing options. We aim to build an engaging platform where movie lovers can connect, explore cinematic masterpieces, and foster a community of shared interests.
+          At <strong>MovieVerse</strong>, our mission is to provide an exceptional experience for movie enthusiasts to discover, save, and share their favorite films. Beyond just creating a favorite list, users can add reviews, create groups, and  members can share movie details. Additionally, users can explore movie showtimes for convenient viewing options. We aim to build an engaging platform where movie lovers can connect, explore cinematic masterpieces, and foster a community of shared interests.
         </p>
       </section>
 
