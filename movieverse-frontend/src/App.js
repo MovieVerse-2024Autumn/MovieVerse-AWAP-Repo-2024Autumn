@@ -14,7 +14,7 @@ import SharedFavorites from "./components/SharedFavorites";
 import Authentication from "./pages/Authentication";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-
+import DeleteAccountFlow from "./pages/delete-account";
 function App() {
   return (
     <BrowserRouter
@@ -34,7 +34,7 @@ function App() {
           <Route path="/favorites/shared/:account_id" element={<SharedFavorites />} />
          
           <Route path="/authentication" element={<Authentication />} />
-
+          <Route path="/delete-account" element={<DeleteAccountFlow />} />
         </Routes>
       <Footer />
       </div>

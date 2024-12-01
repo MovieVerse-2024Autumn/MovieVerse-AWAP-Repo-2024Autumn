@@ -31,8 +31,10 @@ const Navbar = () => {
     localStorage.removeItem('token');
     navigate('/'); // Redirect to home page after logout
   };
-
-  return (
+  const handleAccountClick = () => {
+    navigate('/delete-account');
+  };
+    return (
     <nav className="navbar">
       {/* Logo */}
       <div className="navbar-logo">
@@ -71,7 +73,7 @@ const Navbar = () => {
 
         {/* Account Icon and Sign In / Sign Out */}
         <div className="navbar-right">
-          <div className="account-icon">
+          <div className="account-icon" onClick={handleAccountClick}>
             <span className="account-letter">A</span>
           </div>
 

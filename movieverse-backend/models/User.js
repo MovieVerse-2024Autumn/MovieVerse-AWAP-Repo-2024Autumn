@@ -1,4 +1,4 @@
-import { pool } from '../middleware/db.js'; // Import pool correctly
+import { pool} from '../middleware/db.js'; // Import pool correctly
 import bcrypt from 'bcrypt';
 
 const createUser = async (email, password, firstName, lastName) => {
