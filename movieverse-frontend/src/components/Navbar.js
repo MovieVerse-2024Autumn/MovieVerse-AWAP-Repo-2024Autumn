@@ -1,35 +1,35 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import './Navbar.css';
-import logo from '../logo.png';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "../styles/Navbar.css";
+import logo from "../logo.png";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const isLoggedIn = !!token;
 
   const handleSearch = () => {
     if (query.trim()) {
       navigate(`/search-results?query=${encodeURIComponent(query)}`);
     } else {
-      alert('Please enter a search term!');
+      alert("Please enter a search term!");
     }
   };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleSearch();
     }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/'); // Redirect to home page after logout
+    localStorage.removeItem("token");
+    navigate("/"); // Redirect to home page after logout
   };
   const handleAccountClick = () => {
     navigate('/delete-account');
@@ -45,17 +45,27 @@ const Navbar = () => {
 
       {/* Hamburger Icon for Mobile */}
       <div className="hamburger-icon" onClick={toggleMenu}>
-        {isMenuOpen ? '✖' : '☰'}
+        {isMenuOpen ? "✖" : "☰"}
       </div>
 
       {/* Navbar Links */}
-      <div className={`navbar-links ${isMenuOpen ? 'open' : ''}`}>
+      <div className={`navbar-links ${isMenuOpen ? "open" : ""}`}>
         <div className="navbar-center">
-          <Link to="/" className="nav-link">HOME</Link>
-          <Link to="/select-movies" className="nav-link">EXPLORE</Link>
-          <Link to="/favorites" className="nav-link">FAVOURITE</Link>
-          <Link to="/show-time" className="nav-link">SHOWTIMES</Link>
-          <Link to="/groups" className="nav-link">GROUP</Link>
+          <Link to="/" className="nav-link">
+            HOME
+          </Link>
+          <Link to="/select-movies" className="nav-link">
+            EXPLORE
+          </Link>
+          <Link to="/favorites" className="nav-link">
+            FAVOURITE
+          </Link>
+          <Link to="/show-time" className="nav-link">
+            SHOWTIMES
+          </Link>
+          <Link to="/groups" className="nav-link">
+            GROUPS
+          </Link>
         </div>
 
         {/* Search Bar */}
@@ -68,7 +78,9 @@ const Navbar = () => {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
           />
-          <button className="search-button" onClick={handleSearch}>Search</button>
+          <button className="search-button" onClick={handleSearch}>
+            Search
+          </button>
         </div>
 
         {/* Account Icon and Sign In / Sign Out */}
@@ -78,9 +90,13 @@ const Navbar = () => {
           </div>
 
           {isLoggedIn ? (
-            <button className="signout-button" onClick={handleLogout}>Sign Out</button>
+            <button className="signout-button" onClick={handleLogout}>
+              Sign Out
+            </button>
           ) : (
-            <Link to="/Authentication" className="signin-link">Sign In</Link>
+            <Link to="/Authentication" className="signin-link">
+              Sign In
+            </Link>
           )}
         </div>
       </div>

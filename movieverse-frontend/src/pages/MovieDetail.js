@@ -1,89 +1,124 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import styles from "../styles/MovieDetail.module.css";
 
-
 const MovieDetail = () => {
-  const { id } = useParams(); // Get movie ID from the URL
+  const { id } = useParams();
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState([]);
-  const [isFavorite, setIsFavorite] = useState(false); // Favorite status
+  const [cast, setCast] = useState([]); // Added state for cast
+  const [isFavorite, setIsFavorite] = useState(false);
   const [newReview, setNewReview] = useState({
     title: "",
     rating: "",
     text: "",
   });
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [trailer, setTrailer] = useState(null);
 
-  // Fetch movie details and favorite status
+
+  const getAccountId = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = jwtDecode(token);
+      return decoded.id;
+    }
+    return null;
+  };
+
+  const accountId = getAccountId();
+
   useEffect(() => {
-    const fetchMovieDetails = async () => {
+    const fetchData = async () => {
+      setLoading(true);
       try {
-        const response = await fetch(
+        // Fetch movie details
+        const movieResponse = await fetch(
           `http://localhost:3001/api/movies-moviedetail/${id}`
         );
-        if (!response.ok) throw new Error("Failed to fetch");
-        const data = await response.json();
-        setMovie(data);
-        setReviews(data.reviews || []);
+        if (!movieResponse.ok) throw new Error("Failed to fetch movie details");
+        const movieData = await movieResponse.json();
+        setMovie(movieData);
+
+        // Fetch cast details
+        const castResponse = await fetch(
+          `http://localhost:3001/api/movies/${id}/cast` // Ensure this endpoint returns cast data
+        );
+        if (castResponse.ok) {
+          const castData = await castResponse.json();
+          setCast(castData || []);
+        }
+
+        // Fetch trailer details
+        const trailerResponse = await fetch(
+          `http://localhost:3001/api/movies/${id}/trailer`
+        );
+        if (trailerResponse.ok) {
+          const trailerData = await trailerResponse.json();
+          const youtubeTrailer = trailerData.find(
+            (video) => video.type === "Trailer" && video.site === "YouTube"
+          );
+          if (youtubeTrailer) {
+            setTrailer(`https://www.youtube.com/embed/${youtubeTrailer.key}`);
+          }
+        }
+
+        // Fetch reviews
+        const reviewsResponse = await fetch(
+          `http://localhost:3001/api/movies/${id}/reviews`
+        );
+        if (!reviewsResponse.ok) throw new Error("Failed to fetch reviews");
+        const reviewsData = await reviewsResponse.json();
+        setReviews(reviewsData || []);
+
+        // Check favorite status
+        if (accountId) {
+          const favoritesResponse = await fetch(
+            `http://localhost:3001/api/favorites/${accountId}`
+          );
+          const favoritesData = await favoritesResponse.json();
+          const isFav = favoritesData.some(
+            (fav) => fav.movie_id === parseInt(id)
+          );
+          setIsFavorite(isFav);
+        }
+
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching movie details:", error);
+        console.error("Error fetching data:", error);
         setLoading(false);
       }
     };
 
-    const checkFavoriteStatus = async () => {
-      try {
-        const response = await fetch(`http://localhost:3001/api/favorites/1`); // Replace `1` with dynamic account_id
-        const data = await response.json();
-        const isFav = data.some((fav) => fav.movie_id === parseInt(id));
-        setIsFavorite(isFav);
-      } catch (error) {
-        console.error("Error checking favorite status:", error);
-      }
-    };
+    fetchData();
+  }, [id, accountId]);
 
-    fetchMovieDetails();
-    checkFavoriteStatus();
-  }, [id]);
-
-  // Toggle favorite status
   const toggleFavorite = async () => {
+    if (!accountId) {
+      alert("You must be logged in to add or remove favorites.");
+      return;
+    }
+
     try {
-      if (isFavorite) {
-        // Remove from favorites
-        await fetch(`http://localhost:3001/api/favorites`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            account_id: 1, // Replace with dynamic account_id
-            movie_id: id,
-          }),
-        });
-        setIsFavorite(false); // Update the button state
-      } else {
-        // Add to favorites
-        await fetch(`http://localhost:3001/api/favorites`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            account_id: 1, // Replace with dynamic account_id
-            movie_id: id,
-          }),
-        });
-        setIsFavorite(true); // Update the button state
-      }
+      const method = isFavorite ? "DELETE" : "POST";
+      await fetch(`http://localhost:3001/api/favorites`, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          account_id: accountId,
+          movie_id: id,
+        }),
+      });
+      setIsFavorite(!isFavorite);
     } catch (error) {
       console.error("Error toggling favorite:", error);
     }
   };
 
-  // Handle new review input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewReview((prevReview) => ({
@@ -92,9 +127,13 @@ const MovieDetail = () => {
     }));
   };
 
-  // Submit a new review
   const handleSubmitReview = async (e) => {
     e.preventDefault();
+
+    if (!accountId) {
+      alert("You must be logged in to submit a review.");
+      return;
+    }
 
     if (!newReview.title || !newReview.rating || !newReview.text) {
       alert("Please provide a title, rating, and review text.");
@@ -110,7 +149,7 @@ const MovieDetail = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            account_id: 1, // Replace with dynamic account_id
+            account_id: accountId,
             movie_id: id,
             movie_poster_path: movie.poster_path,
             title: newReview.title,
@@ -135,7 +174,6 @@ const MovieDetail = () => {
   if (!movie) return <p>Error loading movie details</p>;
 
   return (
-    <>
     <div className={styles["movie-detail"]}>
       <div className={styles["movie-header"]}>
         <img
@@ -152,6 +190,9 @@ const MovieDetail = () => {
             {movie.genres.map((genre) => genre.name).join(", ")}
           </p>
           <div className={styles["movie-actions"]}>
+            <p className={styles["rating-number"]}>
+              {movie.vote_average.toFixed(1)}/10
+            </p>
             <button
               className={`${styles["favorite-button"]} ${
                 isFavorite ? styles["favorite-active"] : ""
@@ -167,9 +208,52 @@ const MovieDetail = () => {
           <p className={styles["movie-overview"]}>{movie.overview}</p>
         </div>
       </div>
-      
 
-      {/* Add Review Section */}
+      {trailer && (
+        <div className={styles["trailer-section"]}>
+          <h2>Official Trailer</h2>
+          <iframe
+            width="100%"
+            height="500px"
+            src={trailer}
+            frameBorder="0"
+            allowFullScreen
+            title="Official Trailer"
+          ></iframe>
+        </div>
+      )}
+
+      <div className={styles["cast-section"]}>
+  <h2>Featured Cast</h2>
+  <div className={`${styles["cast-grid"]} ${isExpanded ? styles["expanded"] : ""}`}>
+    {cast.slice(0, isExpanded ? cast.length : 6).map((member) => (
+      <div key={member.id} className={styles["cast-card"]}>
+        <img
+          src={
+            member.profile_path
+              ? `https://image.tmdb.org/t/p/w500${member.profile_path}`
+              : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+          }
+          alt={member.name}
+          className={styles["cast-image"]}
+        />
+        <div className={styles["cast-name"]}>{member.name}</div>
+        <div className={styles["cast-character"]}>as {member.character}</div>
+      </div>
+    ))}
+  </div>
+  {cast.length > 5 && (
+    <button
+      className={styles["show-more-button"]}
+      onClick={() => setIsExpanded(!isExpanded)}
+    >
+      {isExpanded ? "Show Less ▲" : "Show More ▼"}
+    </button>
+  )}
+</div>
+
+
+
       <div className={styles["add-review"]}>
         <h2>Add Your Review</h2>
         <form onSubmit={handleSubmitReview}>
@@ -219,27 +303,30 @@ const MovieDetail = () => {
         </form>
       </div>
 
-      {/* User Reviews Section */}
       <h2>User Reviews</h2>
       <div className={styles["movie-reviews"]}>
         {reviews.length > 0 ? (
           reviews.map((review, index) => (
-            <div key={index} className={styles["review"]}>
+            <div key={review.id} className={styles["review"]}>
               <p>
-                <strong>Title:</strong> {review.title}
-              </p>
-              <p>
-                <strong>Rating:</strong> {review.rating}/10
-              </p>
-              <p>{review.text}</p>
-            </div>
-          ))
+               {review.author} {new Date(review.review_date).toLocaleDateString()}
+            </p>
+            <p>
+              <strong>Rating:</strong> {review.rating}/5
+            </p>
+
+            <p>
+              <strong>Title:</strong> {review.title}
+            </p>
+            <p>{review.description}</p>
+          </div>
+        ))
+    
         ) : (
           <p>No reviews yet. Be the first to review!</p>
         )}
       </div>
     </div>
-    </>
   );
 };
 

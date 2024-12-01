@@ -1,0 +1,23 @@
+.group-card {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  width: 200px;
+
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.group-card:hover {
+  transform: scale(1.05);
+}
+
+.group-card h3 {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.group-card p {
+  font-size: 14px;
+  color: #666;
+}

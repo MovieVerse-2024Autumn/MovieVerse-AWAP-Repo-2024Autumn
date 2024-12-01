@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "../logo.png"; // Replace with the actual path to your logo file
-import './Footer.css';  // Import the footer-specific CSS
+import '../styles/Footer.css';  // Import the footer-specific CSS
 
 const Footer = () => {
   return (
@@ -31,14 +31,14 @@ const Footer = () => {
         <div className="footer-columns">
           <div className="footer-column">
             <h4>COMMUNITY</h4>
-            <a href="#privacy" className="footer-link">Privacy</a>
+            <a href="/privacy-policy" className="footer-link">Privacy</a>
             <a href="#terms" className="footer-link">Terms of Use</a>
             <a href="#support" className="footer-link">Support</a>
           </div>
 
           <div className="footer-column">
             <h4>ABOUT US</h4>
-            <a href="#about" className="footer-link">Our Story</a>
+            <a href="about-us" className="footer-link">Our Story</a>
             <a href="#news" className="footer-link">News</a>
             <a href="#careers" className="footer-link">Careers</a>
           </div>

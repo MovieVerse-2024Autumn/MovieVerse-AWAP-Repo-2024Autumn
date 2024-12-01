@@ -9,14 +9,12 @@ const getFavorites = async (req, res, next) => {
     const { account_id } = req.params;
 
     try {
-        // Fetch favorite movie IDs using the model
         const favoriteIds = await Favorite.getFavoritesByAccountId(account_id);
-
-        // Fetch movie details from TMDB for each movie ID
         const favoriteDetails = await Promise.all(
             favoriteIds.map(async (id) => {
                 const response = await fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`);
-                return response.json();
+                const movieData = await response.json();
+                return { ...movieData, movie_id: id }; 
             })
         );
 
@@ -26,6 +24,7 @@ const getFavorites = async (req, res, next) => {
         return next(error);
     }
 };
+
 
 // Add a movie to favorites
 const addFavorite = async (req, res, next) => {
@@ -45,30 +44,30 @@ const addFavorite = async (req, res, next) => {
     }
 };
 
-// Remove a movie from favorites
+
 const removeFavorite = async (req, res, next) => {
     const { account_id, movie_id } = req.body;
 
+    console.log("Received Account ID:", account_id);
+    console.log("Received Movie ID:", movie_id);
+
     if (!account_id || !movie_id) {
+        console.error("Missing account_id or movie_id in request body");
         return res.status(400).json({ error: "Both account_id and movie_id are required" });
     }
 
     try {
-        // Use the model to remove the favorite
         const wasRemoved = await Favorite.removeFavorite(account_id, movie_id);
         if (wasRemoved) {
             res.status(200).json({ message: "Movie removed from favorites" });
         } else {
-            res.status(404).json({ error: "Favorite not found" });
+            res.status(404).json({ error: "Favorite not found in database" });
         }
     } catch (error) {
         console.error("Error removing favorite:", error);
         next(error);
     }
-
 };
-
-   
 
 // Toggle sharing for a user's favorites
 const toggleSharing = async (req, res, next) => {
@@ -80,7 +79,7 @@ const toggleSharing = async (req, res, next) => {
 
     try {
         const shareUrl = share
-            ? `http://localhost:3000/favorites/shared/${account_id}` // Replace with your domain
+            ? `http://localhost:3000/favorites/shared/${account_id}` 
             : null;
 
         const updated = await Favorite.toggleShareUrl(account_id, shareUrl);
@@ -120,6 +119,8 @@ const getSharedFavorites = async (req, res, next) => {
         return next(error);
     }
 };
+
+
 
 export {
     getFavorites,

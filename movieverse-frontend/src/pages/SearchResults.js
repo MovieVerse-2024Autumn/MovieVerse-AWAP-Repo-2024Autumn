@@ -42,6 +42,7 @@ export default function SearchResults() {
           previousLabel="<"
           renderOnZeroPageCount={null}
           className="pagination"
+          activeClassName="active"
         />
       </div>
     </div>

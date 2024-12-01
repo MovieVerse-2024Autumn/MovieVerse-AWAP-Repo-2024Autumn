@@ -28,9 +28,11 @@ const Favorite = {
             DELETE FROM favourite
             WHERE account_id = $1 AND movie_id = $2;
         `;
+        console.log("Executing query with Account ID:", accountId, "and Movie ID:", movieId);
         const result = await pool.query(query, [accountId, movieId]);
         return result.rowCount > 0; // Return `true` if a row was deleted
     }
+    
 ,
     // Get the current sharing status for an account
     getFavoritesByAccountId: async (accountId) => {

@@ -8,8 +8,22 @@ ul {
   ul li {
     width: 2em;
   }
+
+  li a {
+    padding: 8px 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
   
-  li.selected {
-    color: red;
+  li a:hover {
+    background-color: #f5f5f5;
+    color: #000;
+  }
+
+  ul .active a {
+    background-color: #444;
+    color: white;
+    border-color: #444;
   }
   

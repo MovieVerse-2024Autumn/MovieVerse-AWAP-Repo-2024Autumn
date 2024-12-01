@@ -51,6 +51,11 @@
     border: 1px solid #444;
     background-color: #222;
   }
+
+  .search-container:focus-within {
+    border: 1px solid #e50914;
+    box-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
+  }
   
   .search-bar {
     padding: 10px 15px;
@@ -69,7 +74,6 @@
   
   .search-button {
     padding: 10px 15px;
-    margin-top: 0px !important;
     background-color: #5e5556;
     color: #f0f0f0;
     border: none;
@@ -82,10 +86,12 @@
   .search-button:hover {
     background-color: #b20810;
   }
-  button:focus, select:focus, input:focus {
-    outline: 2px solid #31363b;
-    outline-offset: 2px;
-}
+
+  .search-bar:focus, 
+  .search-button:focus {
+    outline: none;
+  }
+
   
   /* Account Icon */
   .account-icon {
