@@ -10,6 +10,7 @@ import {
   getAvailableGroupsController,
   requestJoinGroupController,
   handleJoinRequestController,
+  getGroupDetails
 } from "../controllers/localdbControllers/groupController.js";
 
 router.post("/groups/create", authenticate, createGroupController);
@@ -30,5 +31,7 @@ router.post(
   authenticate,
   handleJoinRequestController
 );
+router.get("/groups/:id", authenticate, getGroupDetails);
+
 
 export default router;

@@ -95,3 +95,18 @@ export const handleJoinRequestController = async (req, res, next) => {
     next(err);
   }
 };
+
+
+//group details
+
+export const getGroupDetails = async (req, res, next) => {
+  // const userId = req.user.id;
+  const { id } = req.params.id;
+
+  try {
+    const groups = await getGroupDetails(id);
+    res.json(groups);
+  } catch (err) {
+    next(err);
+  }
+};

@@ -60,3 +60,29 @@ export const getAvailableGroups = async (userId) => {
   const result = await pool.query(query, values);
   return result.rows;
 };
+
+
+// get more groups
+export const getGroupDetails = async (groupId) => {
+//   const query = `
+//     SELECT 
+//     g.*
+// FROM 
+//     movie_group g
+// JOIN 
+//     group_member gm 
+// ON 
+//     g.id = gm.group_id
+// WHERE 
+//     gm.account_id = $1
+//     AND g.id = $2;
+
+//   `;
+const query = `
+SELECT * FROM movie_group 
+WHERE id = $1;
+`;
+  const values = [groupId];
+  const result = await pool.query(query, values);
+  return result.rows;
+};

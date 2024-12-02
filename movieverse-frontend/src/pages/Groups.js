@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
+
 import GroupCard from "../components/GroupCard";
 import "../styles/Groups.css";
 
@@ -12,6 +14,8 @@ export default function Group() {
 
   const [joinedGroups, setJoinedGroups] = useState([]);
   const [availableGroups, setAvailableGroups] = useState([]);
+
+  const navigate = useNavigate(); // Initialize the navigate function
 
   // Fetch user-created groups
   const fetchYourGroups = async () => {
@@ -99,7 +103,7 @@ export default function Group() {
             <GroupCard
               key={group.id}
               group={group}
-              onClick={() => console.log(`Clicked on ${group.name}`)}
+              onClick={() => navigate(`/group/${group.id}`)}
             />
           ))}
           <button className="create-group-btn" onClick={handleCreateNewGroup}>

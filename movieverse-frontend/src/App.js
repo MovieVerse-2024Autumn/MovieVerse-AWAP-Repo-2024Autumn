@@ -39,7 +39,7 @@ function App() {
             element={<SharedFavorites />}
           />
           <Route path="/groups" element={<Groups />} />
-          <Route path="/group/:groupId" element={<GroupDetails />} />
+          <Route path="/group/:id" element={<GroupDetails />} />
 
           <Route path="/authentication" element={<Authentication />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
