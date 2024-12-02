@@ -117,7 +117,6 @@ export default function Group() {
       alert("Please fill in all fields.");
       return;
     }
-
     try {
       const response = await fetch(`${url}/create`, {
         method: "POST",
@@ -131,7 +130,6 @@ export default function Group() {
       if (!response.ok) {
         throw new Error("Failed to create group");
       }
-
       const createdGroup = await response.json();
       setYourGroups([...yourGroups, createdGroup]);
       setNewGroup({ name: "", description: "" });
@@ -157,7 +155,6 @@ export default function Group() {
       if (!response.ok) {
         throw new Error("Failed to send join request");
       }
-
       setAvailableGroups((prevGroups) =>
         prevGroups.map((group) =>
           group.id === groupId ? { ...group, status: "in process" } : group
@@ -216,11 +213,34 @@ export default function Group() {
           )
         );
       }
-
-      // alert(`Successfully handle the request!`);
     } catch (error) {
       console.error("Error handling admin decision:", error);
       alert("Failed to process the request. Please try again.");
+    }
+  };
+
+  // Handle deleting a group
+  const handleDeleteGroup = async (groupId) => {
+    try {
+      const response = await fetch(`${url}/delete`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ groupId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete group");
+      }
+
+      setYourGroups((prevGroups) =>
+        prevGroups.filter((group) => group.id !== groupId)
+      );
+    } catch (error) {
+      console.error("Error deleting group:", error);
+      alert("Failed to delete group. Please try again.");
     }
   };
 
@@ -245,7 +265,7 @@ export default function Group() {
       )}
 
       {/* Your Groups */}
-      <div className="section">
+      <div className="group-section">
         <h2>Your groups</h2>
         <div className="group-list">
           {yourGroups.map((group) => (
@@ -253,6 +273,8 @@ export default function Group() {
               key={group.id}
               group={group}
               onClick={() => console.log(`Clicked on ${group.name}`)}
+              showDeleteButton={true}
+              onDelete={handleDeleteGroup}
             />
           ))}
           <button className="create-group-btn" onClick={handleCreateNewGroup}>
@@ -295,33 +317,41 @@ export default function Group() {
       )}
 
       {/* Groups you joined */}
-      <div className="section">
+      <div className="group-section">
         <h2>Groups you joined</h2>
         <div className="group-list">
-          {joinedGroups.map((group, index) => (
-            <div className="group-card" key={index}>
-              <h3>{group.name}</h3>
-              <p>{group.description}</p>
-            </div>
+          {joinedGroups.map((group) => (
+            <GroupCard key={group.id} group={group} />
           ))}
         </div>
-        <p>More...</p>
       </div>
 
       {/* More groups */}
-      <div className="section">
+      <div className="group-section">
         <h2>More groups</h2>
         <div className="group-list">
-          {availableGroups.map((group, index) => (
-            <div className="group-card" key={index}>
-              <h3>{group.name}</h3>
-              <p>{group.description}</p>
-              {group.status === "in process" ? (
-                <button disabled>In Process</button>
-              ) : (
-                <button onClick={() => handleJoinGroup(group.id)}>Join</button>
-              )}
-            </div>
+          {availableGroups.map((group) => (
+            <GroupCard
+              key={group.id}
+              group={group}
+              actionButton={
+                group.status === "in process" ? (
+                  <button className="disabled-join-btn" disabled>
+                    In Process
+                  </button>
+                ) : (
+                  <button
+                    className="join-group-btn"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent triggering onClick for the card
+                      handleJoinGroup(group.id);
+                    }}
+                  >
+                    Join
+                  </button>
+                )
+              }
+            />
           ))}
           {availableGroups.length === 0 && <p>No more groups to join.</p>}
         </div>

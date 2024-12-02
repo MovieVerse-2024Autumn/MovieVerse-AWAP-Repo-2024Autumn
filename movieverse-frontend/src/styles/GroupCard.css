@@ -1,33 +1,65 @@
-.group-card-link {
-  text-decoration: none;
-  color: inherit;
-}
+.group-card-container {
+  width: 300px;
 
-.group-card-link:hover .group-card {
-  transform: scale(1.02);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.group-card {
-  padding: 15px;
-  border: 1px solid #ddd;
+  display: inline-block;
   border-radius: 10px;
-  width: 200px;
-
-  cursor: pointer;
-  transition: transform 0.2s;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.group-card:hover {
-  transform: scale(1.05);
+.group-card-container:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Inner card */
+.group-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 80%;
+  padding: 15px;
+  text-align: left;
+  flex-grow: 1;
 }
 
 .group-card h3 {
-  font-size: 18px;
-  margin: 10px 0;
+  font-size: 20px;
+  margin: 15px 0 8px 0;
+  color: #333;
 }
 
 .group-card p {
-  font-size: 14px;
+  font-size: 16px;
   color: #666;
+  margin: 10px 8px 10px 10px;
+  line-height: 18px;
+  flex-grow: 1;
+}
+
+.delete-group-btn {
+  align-self: flex-end;
+  background-color: #d2d2d2;
+  color: #333;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-top: auto;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-group-btn:hover {
+  background-color: #b5151d;
+  color: #fff;
+}
+
+/* Action button */
+.action-button {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-start;
 }

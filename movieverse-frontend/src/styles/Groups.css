@@ -1,105 +1,133 @@
+/* Overall container */
 .group-container {
   font-family: Arial, sans-serif;
   padding: 20px;
-  background-color: #f5f5f5;
+  background-color: #f9f9f9;
 }
 
-.section {
-  margin-bottom: 30px;
+/* Section container */
+.group-section {
+  margin-bottom: 40px;
 }
 
-h2 {
-  margin-bottom: 15px;
+.group-section h2 {
+  margin-top: 60px;
+  margin-bottom: 20px;
+  font-size: 35px;
+  color: #333;
+  text-align: left;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
 }
 
+/* List of group cards */
 .group-list {
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
-.group-card {
-  background-color: white;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  width: 300px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.group-card h3 {
-  margin-top: 0;
-  font-size: 18px;
-}
-
-.group-card p {
-  font-size: 14px;
-  color: #555;
-}
-
+/* Create group section */
 .create-group-btn {
-  padding: 10px 15px;
-  background-color: #4a90e2;
-  color: white;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #f9f9f9;
+  font-size: 20px;
+  font-weight: bold;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .create-group-btn:hover {
-  background-color: #357abd;
+  background-color: #006fe6;
 }
 
 .group-form-container {
+  max-width: 400px;
   margin-top: 20px;
   padding: 20px;
-  background-color: white;
+  background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
+}
+
+.group-form-container h3 {
+  margin-top: 0;
+  font-size: 20px;
+  color: #333;
 }
 
 .group-form input,
 .group-form textarea {
-  display: block;
-  width: 100%;
-  margin-bottom: 15px;
+  width: 380px;
   padding: 10px;
-  font-size: 14px;
+  margin-right: 15px;
+  margin-bottom: 15px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 5px;
 }
 
 .group-form textarea {
-  resize: none;
   height: 80px;
 }
 
-.submit-btn,
-.cancel-btn {
-  padding: 10px 15px;
-  font-size: 14px;
-  margin-right: 10px;
+.submit-btn {
+  background-color: #007bff;
+  color: #f9f9f9;
   border: none;
-  border-radius: 4px;
+  padding: 10px 20px;
+  border-radius: 5px;
   cursor: pointer;
 }
 
-.submit-btn {
-  background-color: #4a90e2;
-  color: white;
-}
-
 .submit-btn:hover {
-  background-color: #357abd;
+  background-color: #006fe6;
 }
 
 .cancel-btn {
-  background-color: #f5f5f5;
+  background-color: #d2d2d2;
   color: #333;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
 }
 
 .cancel-btn:hover {
-  background-color: #ddd;
+  background-color: #bebdbd;
+}
+
+/* More groups section */
+.join-group-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.join-group-btn:hover {
+  background-color: #006fe6;
+}
+
+.disabled-join-btn {
+  background-color: #d2d2d2;
+  color: #666;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: not-allowed;
+}
+
+.disabled-join-btn:hover {
+  background-color: #d2d2d2;
 }
