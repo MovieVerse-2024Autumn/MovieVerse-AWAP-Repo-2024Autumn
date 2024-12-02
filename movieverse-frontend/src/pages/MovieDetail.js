@@ -193,6 +193,7 @@ const MovieDetail = () => {
             <p className={styles["rating-number"]}>
               {movie.vote_average.toFixed(1)}/10
             </p>
+            
             <button
               className={`${styles["favorite-button"]} ${
                 isFavorite ? styles["favorite-active"] : ""
@@ -204,6 +205,7 @@ const MovieDetail = () => {
               </span>{" "}
               {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
             </button>
+
           </div>
           <p className={styles["movie-overview"]}>{movie.overview}</p>
         </div>

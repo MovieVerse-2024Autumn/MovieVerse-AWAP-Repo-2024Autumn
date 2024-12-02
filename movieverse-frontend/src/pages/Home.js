@@ -5,6 +5,7 @@ import SectionTitle from "../components/SectionTitle";
 import MovieList from "../components/MovieList";
 import ReviewList from "../components/ReviewList";
 import styles from "../styles/Home.module.css";
+import PosterImage from "../assest/Redone.jpg";
 
 const url = "http://localhost:3001/api";
 
@@ -17,8 +18,10 @@ export default function Home() {
   // Update the moviesPerPage whenever window is resized
   useEffect(() => {
     const updateMoviesPerPage = () => {
-      const movieCardWidth = 180; // Each movie card's width
-      const newMoviesPerPage = Math.floor(window.innerWidth / movieCardWidth); // Calculate how many movies fit in one row
+      const movieCardWidth = 180; 
+      const movieRowCount = 2;  
+      const newMoviesPerPage =
+        Math.floor(window.innerWidth / movieCardWidth) * movieRowCount;
       setMoviesPerPage(newMoviesPerPage || 1);
     };
 
@@ -48,6 +51,15 @@ export default function Home() {
 
   return (
     <div>
+
+      {/* Poster Section */}
+      <div className={styles.posterWrapper}>
+        <img src={PosterImage} alt="Featured Movie" className={styles.posterImage} />
+        <div className={styles.posterOverlay}>
+          <h1 className={styles.posterText}></h1>
+        </div>
+      </div>
+
       <div className={styles.contentWrapper}>
         <div className={styles.section}>
           <SectionTitle title="MOVIES" linkPath="/select-movies" />

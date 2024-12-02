@@ -1,7 +1,7 @@
 import { pool } from "../middleware/db.js";
 
 // create new group
-export const createGroup = async (name, description, adminId) => {
+const createGroup = async (name, description, adminId) => {
   const client = await pool.connect();
   try {
     // begin transaction
@@ -36,7 +36,7 @@ export const createGroup = async (name, description, adminId) => {
 };
 
 // get the groups created by user
-export const getUserCreatedGroups = async (adminId) => {
+const getUserCreatedGroups = async (adminId) => {
   const query = `
     SELECT * FROM movie_group 
     WHERE admin_id = $1;
@@ -47,23 +47,21 @@ export const getUserCreatedGroups = async (adminId) => {
 };
 
 // get more groups
-export const getAvailableGroups = async (userId) => {
+const getAvailableGroups = async (userId) => {
   const query = `
-    SELECT * FROM movie_group 
-    WHERE id NOT IN (
-      SELECT group_id 
-      FROM group_member 
-      WHERE account_id = $1
-    );
+    SELECT g.*, 
+           gm.member_status 
+    FROM movie_group g 
+    LEFT JOIN group_member gm 
+    ON g.id = gm.group_id AND gm.account_id = $1
+    WHERE (gm.account_id IS NULL OR gm.member_status = 'pending' OR gm.member_status = 'declined') 
   `;
   const values = [userId];
   const result = await pool.query(query, values);
   return result.rows;
 };
 
-
-// get more groups
-export const getGroupDetails = async (groupId) => {
+const getGroupDetails = async (groupId) => {
 //   const query = `
 //     SELECT 
 //     g.*
@@ -86,3 +84,5 @@ WHERE id = $1;
   const result = await pool.query(query, values);
   return result.rows;
 };
+
+export { createGroup, getUserCreatedGroups, getAvailableGroups, getGroupDetails };

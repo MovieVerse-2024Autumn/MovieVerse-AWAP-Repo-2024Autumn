@@ -11,7 +11,7 @@ const getCountryList = async (req, res) => {
     const response = await fetch(API_URL_Countries);
     const data = await response.json();
     res.json(data);
-    console.log("API Response:", data);
+    //console.log("API Response:", data);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch countries" });
@@ -19,15 +19,15 @@ const getCountryList = async (req, res) => {
 };
 
 const getGenreList = async (req, res) => {
-    try {
-      const response = await fetch(API_URL_Genre);
-      const data = await response.json();
-      res.json(data);
-      console.log("API Response:", data);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Failed to fetch Genre" });
-    }
-  };
+  try {
+    const response = await fetch(API_URL_Genre);
+    const data = await response.json();
+    res.json(data);
+    //console.log("API Response:", data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch Genre" });
+  }
+};
 
 export { getCountryList, getGenreList };

@@ -70,6 +70,10 @@ CREATE TABLE group_member (
 );
 ALTER TABLE group_member
 ADD COLUMN admin_id INTEGER NOT NULL;
+ALTER TABLE group_member
+ADD CONSTRAINT group_member_admin_fk FOREIGN KEY (admin_id) REFERENCES account(id);
+ALTER TABLE group_member
+DROP CONSTRAINT group_member_pkey;
 
 
 CREATE TABLE notification (
