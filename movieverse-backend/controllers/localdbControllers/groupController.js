@@ -48,7 +48,7 @@ const getAvailableGroupsController = async (req, res, next) => {
 
   try {
     const groups = await getAvailableGroups(userId);
-    res.json(groups);
+    res.status(200).json(groups);
   } catch (err) {
     next(err);
   }

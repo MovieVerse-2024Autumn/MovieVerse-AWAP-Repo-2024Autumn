@@ -1,3 +1,13 @@
+.group-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.group-card-link:hover .group-card {
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 .group-card {
   padding: 15px;
   border: 1px solid #ddd;

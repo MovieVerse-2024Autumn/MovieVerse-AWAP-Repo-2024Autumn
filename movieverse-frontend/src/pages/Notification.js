@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 const url = "http://localhost:3001/api/groups";
 
-export default function Notification({ setUnreadCount }) {
+export default function Notification({ setUnreadCount, handleAction }) {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
@@ -64,30 +64,16 @@ export default function Notification({ setUnreadCount }) {
     }
   };
 
-  const handleAction = async (notificationId, groupId, senderId, action) => {
+  const handleDecision = async (notificationId, groupId, senderId, action) => {
     try {
-      const response = await fetch(`${url}/notifications/handle-request`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          notificationId,
-          groupId,
-          userId: senderId,
-          action,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to handle request");
-      }
+      await handleAction(notificationId, groupId, senderId, action);
 
+      // Remove the notification from the list after action
       setNotifications((prevNotifications) =>
         prevNotifications.filter((n) => n.id !== notificationId)
       );
 
-      // After handling the action, update unread count， update unread notification count
+      // Update unread count
       const unreadResponse = await fetch(`${url}/notifications/unread-count`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -95,15 +81,8 @@ export default function Notification({ setUnreadCount }) {
       });
       const unreadData = await unreadResponse.json();
       setUnreadCount(unreadData.count);
-
-      alert(
-        `Successfully ${
-          action === "accept" ? "accepted" : "declined"
-        } the request!`
-      );
     } catch (error) {
-      console.error("Error handling request:", error);
-      alert("Failed to process the request. Please try again.");
+      console.error(`Error handling ${action}:`, error);
     }
   };
 
@@ -120,7 +99,7 @@ export default function Notification({ setUnreadCount }) {
               <div>
                 <button
                   onClick={() =>
-                    handleAction(
+                    handleDecision(
                       notification.id,
                       notification.group_id,
                       notification.sender_id,
@@ -132,7 +111,7 @@ export default function Notification({ setUnreadCount }) {
                 </button>
                 <button
                   onClick={() =>
-                    handleAction(
+                    handleDecision(
                       notification.id,
                       notification.group_id,
                       notification.sender_id,
@@ -145,7 +124,7 @@ export default function Notification({ setUnreadCount }) {
               </div>
             )}
 
-            {/* Join Request Response for Applicants */}
+            {/* Response for Applicants */}
             {notification.type === "join_request_response" && (
               <div>
                 <button onClick={() => markAsRead(notification.id)}>

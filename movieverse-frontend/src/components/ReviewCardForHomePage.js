@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiThumbsUp } from "react-icons/fi";
-import { TbShare3 } from "react-icons/tb";
+//import { TbShare3 } from "react-icons/tb";
 import styles from "../styles/Home.module.css";
 const API_IMG = "https://image.tmdb.org/t/p/w500";
 
@@ -88,17 +88,6 @@ export default function ReviewCardForHomePage({ review }) {
         <div className={styles.reviewActions}>
           <button className={styles.likeButton} onClick={handleLike}>
             <FiThumbsUp /> {likeCount > 0 && likeCount} Likes
-          </button>
-          <button
-            className={styles.shareButton}
-            onClick={() =>
-              navigator.clipboard.writeText(
-                window.location.origin + review_link
-              )
-            }
-          >
-            <TbShare3 />
-            Share
           </button>
         </div>
       </div>

@@ -68,34 +68,23 @@ const handleJoinRequestController = async (req, res, next) => {
     const groupQuery = `SELECT admin_id FROM movie_group WHERE id = $1`;
     const groupResult = await pool.query(groupQuery, [groupId]);
 
-    if (groupResult.rowCount === 0) {
-      return res.status(404).json({ message: "Group not found." });
-    }
-
-    if (groupResult.rows[0].admin_id !== adminId) {
+    if (
+      groupResult.rowCount === 0 ||
+      groupResult.rows[0].admin_id !== adminId
+    ) {
       return res.status(403).json({
         message: "Unauthorized: You are not the admin of this group.",
       });
     }
-    console.log("Request Body:", req.body, "in handleJoinRequestController");
-    console.log(
-      "groupId:",
-      groupId,
-      "userId:",
-      userId,
-      "action:",
-      action,
-      "notificationId:",
-      notificationId,
-      "in handleJoinRequestController"
-    );
 
     // Update the membership status in group_member table and send response notification
     const updatedStatus = await handleJoinRequest(groupId, userId, action);
 
     const updatedNotification = await updateNotificationStatus(
-      updatedStatus.member_status,
-      notificationId
+      // updatedStatus.member_status,
+      // notificationId
+      notificationId,
+      action
     );
     res.status(200).json({
       message: `Successfully ${updatedStatus.member_status} the join request.`,

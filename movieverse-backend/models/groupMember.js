@@ -6,7 +6,7 @@ const getUserJoinedGroups = async (userId) => {
     SELECT g.* 
     FROM movie_group g 
     INNER JOIN group_member gm ON g.id = gm.group_id 
-    WHERE gm.account_id = $1 AND gm.member_status = 'accepted';
+    WHERE gm.account_id = $1 AND gm.member_status = 'accepted' AND gm.admin_id != $1;
   `;
   const values = [userId];
   const result = await pool.query(query, values);

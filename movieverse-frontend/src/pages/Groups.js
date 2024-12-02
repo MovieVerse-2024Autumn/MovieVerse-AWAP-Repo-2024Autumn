@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 import GroupCard from "../components/GroupCard";
 import Notification from "./Notification";
 import "../styles/Groups.css";
@@ -7,15 +8,29 @@ const url = "http://localhost:3001/api/groups";
 
 export default function Group() {
   const [yourGroups, setYourGroups] = useState([]);
-
   const [showGroupForm, setShowGroupForm] = useState(false);
   const [newGroup, setNewGroup] = useState({ name: "", description: "" });
-
   const [joinedGroups, setJoinedGroups] = useState([]);
   const [availableGroups, setAvailableGroups] = useState([]);
-
   const [unreadCount, setUnreadCount] = useState(0);
   const [isNotificationsVisible, setIsNotificationsVisible] = useState(false);
+
+  const getAccountId = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = jwtDecode(token);
+      return decoded.id; // Assuming `id` is part of the decoded JWT payload
+    }
+    return null;
+  };
+  const accountId = getAccountId();
+
+  useEffect(() => {
+    fetchYourGroups();
+    fetchAailableGroups();
+    fetchUnreadCount();
+    fetchJoinedGroups();
+  }, []);
 
   // Fetch user-created groups
   const fetchYourGroups = async () => {
@@ -41,7 +56,14 @@ export default function Group() {
         },
       });
       const data = await response.json();
-      setAvailableGroups(data);
+
+      // update groups status
+      const updatedGroups = data.map((group) => ({
+        ...group,
+        status: group.status || "join", // Default status to "join"
+      }));
+
+      setAvailableGroups(updatedGroups);
     } catch (error) {
       console.error("Error fetching available groups:", error);
     }
@@ -62,11 +84,20 @@ export default function Group() {
     }
   };
 
-  useEffect(() => {
-    fetchYourGroups();
-    fetchAailableGroups();
-    fetchUnreadCount();
-  }, []);
+  // Fetch groups the user has joined
+  const fetchJoinedGroups = async () => {
+    try {
+      const response = await fetch(`${url}/joined-groups`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const data = await response.json();
+      setJoinedGroups(data);
+    } catch (error) {
+      console.error("Error fetching joined groups:", error);
+    }
+  };
 
   // Handle showing the form to create a new group
   const handleCreateNewGroup = () => {
@@ -127,10 +158,11 @@ export default function Group() {
         throw new Error("Failed to send join request");
       }
 
-      const updatedGroupList = availableGroups.filter(
-        (group) => group.id !== groupId
+      setAvailableGroups((prevGroups) =>
+        prevGroups.map((group) =>
+          group.id === groupId ? { ...group, status: "in process" } : group
+        )
       );
-      setAvailableGroups(updatedGroupList);
 
       alert("Your join request has been sent!");
     } catch (error) {
@@ -139,20 +171,77 @@ export default function Group() {
     }
   };
 
+  // Handle admin decision on join request
+  const handleAction = async (notificationId, groupId, senderId, action) => {
+    try {
+      const response = await fetch(`${url}/notifications/handle-request`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          notificationId,
+          groupId,
+          userId: senderId,
+          action,
+        }),
+      });
+
+      const data = await response.json();
+      console.log("Response from server:", data, "in Groups.js/handleAction");
+
+      if (!response.ok) {
+        throw new Error("Failed to handle request");
+      }
+
+      if (action === "accept") {
+        const groupToMove = availableGroups.find(
+          (group) => group.id === groupId
+        );
+        if (!groupToMove) {
+          console.error(
+            `Group with ID ${groupId} not found in availableGroups`
+          );
+          return; // if group not found, do not proceed
+        }
+        setJoinedGroups((prevGroups) => [...prevGroups, groupToMove]);
+        setAvailableGroups((prevGroups) =>
+          prevGroups.filter((group) => group.id !== groupId)
+        );
+      } else if (action === "decline") {
+        setAvailableGroups((prevGroups) =>
+          prevGroups.map((group) =>
+            group.id === groupId ? { ...group, status: "join" } : group
+          )
+        );
+      }
+
+      // alert(`Successfully handle the request!`);
+    } catch (error) {
+      console.error("Error handling admin decision:", error);
+      alert("Failed to process the request. Please try again.");
+    }
+  };
+
+  if (!accountId) {
+    return <p>Please Sign In to view your groups.</p>;
+  }
+
   return (
     <div className="group-container">
       {/* Notification Bell Icon */}
-      <div
-        className="notification-bell"
-        onClick={() => setIsNotificationsVisible(!isNotificationsVisible)}
-      >
-        <span className="bell-icon">🔔</span>
-        {unreadCount > 0 && <span className="unread-count">{unreadCount}</span>}
+      <div onClick={() => setIsNotificationsVisible(!isNotificationsVisible)}>
+        <span>🔔</span>
+        {unreadCount > 0 && <span>{unreadCount}</span>}
       </div>
 
       {/* Show Notification Component when bell is clicked */}
       {isNotificationsVisible && (
-        <Notification setUnreadCount={setUnreadCount} />
+        <Notification
+          setUnreadCount={setUnreadCount}
+          handleAction={handleAction}
+        />
       )}
 
       {/* Your Groups */}
@@ -205,6 +294,7 @@ export default function Group() {
         </div>
       )}
 
+      {/* Groups you joined */}
       <div className="section">
         <h2>Groups you joined</h2>
         <div className="group-list">
@@ -226,12 +316,11 @@ export default function Group() {
             <div className="group-card" key={index}>
               <h3>{group.name}</h3>
               <p>{group.description}</p>
-              <button
-                className="join-group-btn"
-                onClick={() => handleJoinGroup(group.id)}
-              >
-                Join
-              </button>
+              {group.status === "in process" ? (
+                <button disabled>In Process</button>
+              ) : (
+                <button onClick={() => handleJoinGroup(group.id)}>Join</button>
+              )}
             </div>
           ))}
           {availableGroups.length === 0 && <p>No more groups to join.</p>}

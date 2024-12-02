@@ -150,7 +150,7 @@ const updateNotificationStatus = async (notificationId, actionStatus) => {
         WHERE id = $1
         RETURNING *;
     `;
-  const values = [actionStatus, notificationId];
+  const values = [notificationId, actionStatus];
   const result = await pool.query(query, values);
   return result.rows[0];
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import './delete-account.css';
+import "../styles/delete-account.css";
 
 const DeleteAccountFlow = () => {
   const [step, setStep] = useState(0); // 0: Options view, 1: Reason selection, 2: Password confirmation
@@ -12,7 +12,7 @@ const DeleteAccountFlow = () => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
-        const decoded = JSON.parse(atob(token.split('.')[1])); // Decode the JWT token payload
+        const decoded = JSON.parse(atob(token.split(".")[1])); // Decode the JWT token payload
         if (decoded.id) {
           setIsAuthenticated(true); // User is authenticated
         } else {
@@ -30,7 +30,7 @@ const DeleteAccountFlow = () => {
   const getUserIdFromToken = () => {
     const token = localStorage.getItem("token");
     if (!token) return null;
-    const decoded = JSON.parse(atob(token.split('.')[1])); // Decode the JWT token payload
+    const decoded = JSON.parse(atob(token.split(".")[1])); // Decode the JWT token payload
     return decoded.id; // Assuming the token contains user ID as 'id'
   };
 
@@ -46,13 +46,12 @@ const DeleteAccountFlow = () => {
     setStep(2); // Move to password confirmation step
   };
 
-  
   const handleDelete = async () => {
     if (!password) {
       alert("Please enter your password.");
       return;
     }
-  
+
     try {
       const response = await fetch(`http://localhost:3001/api/auth/delete`, {
         method: "DELETE",
@@ -62,7 +61,7 @@ const DeleteAccountFlow = () => {
         },
         body: JSON.stringify({ reason, password }), // Send reason and password in the body
       });
-  
+
       if (response.ok) {
         alert("Account deleted successfully!");
         localStorage.removeItem("token");
@@ -76,7 +75,6 @@ const DeleteAccountFlow = () => {
       alert("An error occurred. Please try again later.");
     }
   };
-  
 
   const handleOptionSelect = (option) => {
     if (option === "profile") {
@@ -103,8 +101,12 @@ const DeleteAccountFlow = () => {
         <div>
           <h3>Select an option</h3>
           <div className="delete-account-options">
-            <button onClick={() => handleOptionSelect("profile")}>Profile</button>
-            <button onClick={() => handleOptionSelect("deleteAccount")}>Delete Account</button>
+            <button onClick={() => handleOptionSelect("profile")}>
+              Profile
+            </button>
+            <button onClick={() => handleOptionSelect("deleteAccount")}>
+              Delete Account
+            </button>
           </div>
         </div>
       )}
@@ -113,11 +115,19 @@ const DeleteAccountFlow = () => {
       {step === 1 && (
         <div>
           <h3>Why are you leaving?</h3>
-          <select value={reason} onChange={handleReasonChange} className="select">
+          <select
+            value={reason}
+            onChange={handleReasonChange}
+            className="select"
+          >
             <option value="">Select a reason</option>
-            <option value="I don't find it useful">I don't find it useful</option>
+            <option value="I don't find it useful">
+              I don't find it useful
+            </option>
             <option value="Privacy concerns">Privacy concerns</option>
-            <option value="Switching to a different service">Switching to a different service</option>
+            <option value="Switching to a different service">
+              Switching to a different service
+            </option>
             <option value="Other">Other</option>
           </select>
           <button onClick={handleNext}>Next</button>
