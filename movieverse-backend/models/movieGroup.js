@@ -61,28 +61,42 @@ const getAvailableGroups = async (userId) => {
   return result.rows;
 };
 
-const getGroupDetails = async (groupId) => {
-//   const query = `
-//     SELECT 
-//     g.*
-// FROM 
-//     movie_group g
-// JOIN 
-//     group_member gm 
-// ON 
-//     g.id = gm.group_id
-// WHERE 
-//     gm.account_id = $1
-//     AND g.id = $2;
+const getGroupDetails = async (groupId, userId) => {
+  const query = `
+    SELECT 
+    g.*
+FROM 
+    movie_group g
+JOIN 
+    group_member gm 
+ON 
+    g.id = gm.group_id
+WHERE 
+    gm.account_id = $1
+    AND g.id = $2;
 
-//   `;
-const query = `
-SELECT * FROM movie_group 
-WHERE id = $1;
-`;
-  const values = [groupId];
+  `;
+// const query = `
+// SELECT * FROM movie_group 
+// WHERE id = $1;
+// `;
+  const values = [userId,groupId];
   const result = await pool.query(query, values);
-  return result.rows;
+  if(result.rows.length===0){
+    return null;
+  }
+  const query2 = `
+    SELECT account_id as userId, concat(a.first_name,' ',a.last_name) as name
+    FROM group_member gm join account a on gm.account_id = a.id 
+    where gm.group_id = $1;
+  `;
+  const values2 = [groupId];
+  const result2 = await pool.query(query2, values2);
+  var data = {};
+  data.groupDetails = result.rows[0];
+  data.groupMembers = result2.rows;
+
+  return data;
 };
 
 export { createGroup, getUserCreatedGroups, getAvailableGroups, getGroupDetails };

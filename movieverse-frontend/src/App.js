@@ -39,12 +39,9 @@ function App() {
             element={<SharedFavorites />}
           />
           <Route path="/groups" element={<Groups />} />
-<<<<<<< HEAD
           <Route path="/group/:id" element={<GroupDetails />} />
 
-=======
           <Route path="/delete-account" element={<DeleteAccountFlow />} />
->>>>>>> 4652cbf5fe5f3b0994559400f282da434288f385
           <Route path="/authentication" element={<Authentication />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/about-us" element={<AboutUs />} />

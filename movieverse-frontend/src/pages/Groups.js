@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
-<<<<<<< HEAD
 import { useNavigate } from 'react-router-dom';
-
-=======
 import { jwtDecode } from "jwt-decode";
->>>>>>> 4652cbf5fe5f3b0994559400f282da434288f385
 import GroupCard from "../components/GroupCard";
 import Notification from "./Notification";
 import "../styles/Groups.css";
@@ -306,10 +302,16 @@ export default function Group() {
         <h2>Groups you joined</h2>
         <div className="group-list">
           {joinedGroups.map((group, index) => (
-            <div className="group-card" key={index}>
-              <h3>{group.name}</h3>
-              <p>{group.description}</p>
-            </div>
+            <GroupCard
+            key={group.id}
+            group={group}
+            onClick={() => navigate(`/group/${group.id}`)}
+          />
+            // <div className="group-card" key={index}
+            // onClick={() => navigate(`/group/${group.id}`)}>
+            //   <h3>{group.name}</h3>
+            //   <p>{group.description}</p>
+            // </div>
           ))}
         </div>
         <p>More...</p>

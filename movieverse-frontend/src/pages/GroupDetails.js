@@ -1,32 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import '../styles/GroupDetails.css';
+import { useParams } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+
+
+
+const url = "http://localhost:3001/api/groups";
 
 export default function GroupDetails() {
-  const [groupDetails, setGroupDetails] = useState({
-    name: 'Group name 1',
-    description:
-      'A fun group where movie lovers come together to share their favorite films, reviews, and more.',
-    users: ['Sandip', 'Shyam', 'Baburoa','salah'],
-    posts: [
-      {
-        postId: 1,
-        postData: 'Inception was a masterpiece! The plot twist blew my mind.',
-        movieId: 2,
-        moviePoster:
-          'https://image.tmdb.org/t/p/w500/spWV1eRzlDxvai8LbxwAWR0Vst4.jpg',
-      },
-      {
-        postId: 2,
-        postData: 'The Dark Knight is still one of the best superhero films ever.',
-        movieId: 4,
-        moviePoster:
-          'https://image.tmdb.org/t/p/w500/spWV1eRzlDxvai8LbxwAWR0Vst4.jpg',
-      },
-    ],
-  });
+  const { id } = useParams();
+
+
+  const [groupDetails, setGroupDetails] = useState({});
+  const [groupMembers, setGroupMembers] = useState([]);
 
   const [currentUser , setCurrentUser ] = useState('Ram'); // Example user
-  const [isAdmin, setIsAdmin] = useState(true); // Toggle for admin privileges
+  const [isAdmin, setIsAdmin] = useState(false); // Toggle for admin privileges
+
+  const getAccountId = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = jwtDecode(token);
+      return decoded.id; // Assuming `id` is part of the decoded JWT payload
+    }
+    return null;
+  };
+  const accountId = getAccountId();
+
+  useEffect(() => {
+    fetchGroupDetails();
+  }, []);
+
+  const fetchGroupDetails = async () => {
+    try {
+      const response = await fetch(`${url}/getdetails`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          groupId: id,
+      }),
+      });
+      const data = await response.json();
+      if(data!==null){
+        setGroupDetails(data.groupDetails);
+        setGroupMembers(data.groupMembers);
+        setIsAdmin (data.groupDetails.admin_id == accountId);
+      }
+      
+    } catch (error) {
+      console.error("Error fetching group info:", error);
+    }
+  };
+
+  
 
   const handleLeaveGroup = () => {
     alert('You have successfully left the group.');
@@ -36,13 +65,16 @@ export default function GroupDetails() {
   const handleRemoveUser  = (user) => {
     if (isAdmin) {
       const updatedUsers = groupDetails.users.filter((u) => u !== user);
-      setGroupDetails({ ...groupDetails, users: updatedUsers });
+      setGroupDetails({});
       alert(`${user} has been removed from the group.`);
     } else {
       alert('Only the admin can remove members.');
     }
   };
 
+  if (Object.keys(groupDetails).length === 0) {
+    return <p>Unauthorized.</p>;
+  }
   return (
     <div className="group-details-container">
       {/* Group Header */}
@@ -54,9 +86,9 @@ export default function GroupDetails() {
       {/* Group Content */}
       <div className="group-content">
         {/* Posts Section */}
-        {/* <div className="posts-section">
+        <div className="posts-section">
           <h3>Latest Posts</h3>
-          {groupDetails.posts.map((post) => (
+          {/* {groupDetails.posts.map((post) => (
             <div className="post-card" key={post.postId}>
               <div className="post-text">
                 <p>{post.postData}</p>
@@ -69,51 +101,20 @@ export default function GroupDetails() {
                 />
               </div>
             </div>
-          ))}
-        </div> */}
+          ))} */}
+        </div>
 
-<div className="posts-section">
-  <h3>Latest Posts</h3>
-  {groupDetails.posts.map((post) => (
-    <div className="post-card" key={post.postId}>
-      {/* Header: Optional (Could include user info or date) */}
-      <div className="post-header">
-        <p>Post #{post.postId}</p>
-        <p>Movie ID: {post.movieId}</p>
-      </div>
 
-      {/* Post Text */}
-      <div className="post-text">
-        <p>{post.postData}</p>
-      </div>
-
-      {/* Movie Poster */}
-      <div className="post-image">
-        <img
-          src={post.moviePoster}
-          alt="Movie Poster"
-          className="movie-image"
-        />
-      </div>
-
-      {/* Post Actions */}
-      <div className="post-actions">
-        <button className="action-btn view-btn">View Movie</button>
-        <button className="action-btn like-btn">Like</button>
-      </div>
-    </div>
-  ))}
-</div>
 
 
         {/* Members Section */}
         <div className="members-section">
           <h3>Group Members</h3>
           <ol className="members-list">
-            {groupDetails.users.map((user) => (
-              <li key={user} className="member-item">
-                <span>{user}</span>
-                {isAdmin && user !== currentUser  && (
+            {groupMembers.map((user) => (
+              <li key={user.name} className="member-item">
+                <span>{user.name} {groupDetails.admin_id == user.userid && '(Admin)'} </span>
+                {isAdmin && user.userid !== accountId  && (
                   <button
                     className="remove-btn"
                     onClick={() => handleRemoveUser (user)}

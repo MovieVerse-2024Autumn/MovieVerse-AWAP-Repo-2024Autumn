@@ -2,6 +2,7 @@ import {
   createGroup,
   getUserCreatedGroups,
   getAvailableGroups,
+  getGroupDetails
 } from "../../models/movieGroup.js";
 import { getUserJoinedGroups } from "../../models/groupMember.js";
 
@@ -54,24 +55,21 @@ const getAvailableGroupsController = async (req, res, next) => {
   }
 };
 
+const getGroupDetailsController = async (req, res, next) => {
+  const { groupId } = req.body;
+  const userId = req.user.id;
+  try {
+    const groups = await getGroupDetails(groupId,userId);
+    res.json(groups);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export {
   createGroupController,
   getUserCreatedGroupsController,
   getUserJoinedGroupsController,
   getAvailableGroupsController,
-};
-
-
-//group details
-
-export const getGroupDetails = async (req, res, next) => {
-  // const userId = req.user.id;
-  const { id } = req.params.id;
-
-  try {
-    const groups = await getGroupDetails(id);
-    res.json(groups);
-  } catch (err) {
-    next(err);
-  }
+  getGroupDetailsController
 };

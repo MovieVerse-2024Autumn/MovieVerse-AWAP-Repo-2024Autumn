@@ -8,6 +8,7 @@ import {
   getUserCreatedGroupsController,
   getUserJoinedGroupsController,
   getAvailableGroupsController,
+  getGroupDetailsController
 } from "../controllers/localdbControllers/groupController.js";
 
 import {
@@ -18,9 +19,6 @@ import {
   getJoinResponseNotificationController,
   markNotificationAsReadController,
 } from "../controllers/localdbControllers/notificationController.js";
-  getGroupDetails
-} from "../controllers/localdbControllers/groupController.js";
-
 /**** Groups Page ******/
 // create groups
 router.post("/groups/create", authenticate, createGroupController);
@@ -76,7 +74,8 @@ router.patch(
   authenticate,
   markNotificationAsReadController
 );
-router.get("/groups/:id", authenticate, getGroupDetails);
+router.post("/groups/getdetails", authenticate,  getGroupDetailsController);
+
 
 
 export default router;
