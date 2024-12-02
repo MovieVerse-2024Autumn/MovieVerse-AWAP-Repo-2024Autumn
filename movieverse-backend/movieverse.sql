@@ -74,6 +74,13 @@ ALTER TABLE group_member
 ADD CONSTRAINT group_member_admin_fk FOREIGN KEY (admin_id) REFERENCES account(id);
 ALTER TABLE group_member
 DROP CONSTRAINT group_member_pkey;
+ALTER TABLE group_member
+DROP CONSTRAINT group_member_movie_group_fk;
+ALTER TABLE group_member
+ADD CONSTRAINT group_member_movie_group_fk
+FOREIGN KEY (group_id) REFERENCES movie_group(id) ON DELETE CASCADE;
+
+
 
 
 CREATE TABLE notification (
@@ -93,3 +100,8 @@ CREATE TABLE notification (
 
 ALTER TABLE notification
 RENAME COLUMN status TO is_read;
+ALTER TABLE notification
+DROP CONSTRAINT notification_group_fk;
+ALTER TABLE notification
+ADD CONSTRAINT notification_group_fk
+FOREIGN KEY (group_id) REFERENCES movie_group(id) ON DELETE CASCADE;

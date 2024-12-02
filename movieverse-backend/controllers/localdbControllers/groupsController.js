@@ -2,6 +2,7 @@ import {
   createGroup,
   getUserCreatedGroups,
   getAvailableGroups,
+  deleteGroup,
 } from "../../models/movieGroup.js";
 import { getUserJoinedGroups } from "../../models/groupMember.js";
 
@@ -54,9 +55,22 @@ const getAvailableGroupsController = async (req, res, next) => {
   }
 };
 
+// delete group
+const deleteGroupController = async (req, res, next) => {
+  const { id: groupId } = req.params;
+
+  try {
+    await deleteGroup(groupId);
+    res.status(204).end();
+  } catch (err) {
+    next(err);
+  }
+};
+
 export {
   createGroupController,
   getUserCreatedGroupsController,
   getUserJoinedGroupsController,
   getAvailableGroupsController,
+  deleteGroupController,
 };

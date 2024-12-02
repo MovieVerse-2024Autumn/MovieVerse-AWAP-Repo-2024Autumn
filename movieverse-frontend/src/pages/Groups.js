@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import GroupCard from "../components/GroupCard";
 import Notification from "./Notification";
 import "../styles/Groups.css";
+import "../styles/Notification.css";
 
 const url = "http://localhost:3001/api/groups";
 
@@ -57,8 +58,13 @@ export default function Group() {
       });
       const data = await response.json();
 
+      // Filter out duplicate groups by group id
+      const uniqueGroups = Array.from(
+        new Set(data.map((group) => group.id))
+      ).map((id) => data.find((group) => group.id === id));
+
       // update groups status
-      const updatedGroups = data.map((group) => ({
+      const updatedGroups = uniqueGroups.map((group) => ({
         ...group,
         status: group.status || "join", // Default status to "join"
       }));
@@ -222,13 +228,12 @@ export default function Group() {
   // Handle deleting a group
   const handleDeleteGroup = async (groupId) => {
     try {
-      const response = await fetch(`${url}/delete`, {
+      const response = await fetch(`${url}/delete/${groupId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({ groupId }),
       });
 
       if (!response.ok) {
@@ -251,7 +256,10 @@ export default function Group() {
   return (
     <div className="group-container">
       {/* Notification Bell Icon */}
-      <div onClick={() => setIsNotificationsVisible(!isNotificationsVisible)}>
+      <div
+        className="notification-reminder"
+        onClick={() => setIsNotificationsVisible(!isNotificationsVisible)}
+      >
         <span>🔔</span>
         {unreadCount > 0 && <span>{unreadCount}</span>}
       </div>

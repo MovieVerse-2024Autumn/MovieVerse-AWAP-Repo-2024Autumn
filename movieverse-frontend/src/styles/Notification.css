@@ -1,14 +1,120 @@
-/* Notification icon */
-.group-container > div {
+/* Notification icon and count section */
+.group-container .notification-reminder {
+  display: flex;
+  align-items: center;
   margin-bottom: 20px;
   cursor: pointer;
+  font-size: 20px;
+  color: #333;
+  padding: 10px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  position: relative;
 }
 
-.group-container > div span:last-child {
-  top: -10px;
-  right: -10px;
-  font-size: 30px;
-  color: #f9f9f9;
+.group-container .notification-reminder span {
+  font-size: 14px;
+  color: white;
+  background-color: #e74c3c; /* Red badge */
   border-radius: 50%;
   padding: 2px 6px;
+  font-weight: bold;
+  position: absolute;
+  bottom: -5px;
+  left: -5px;
+}
+
+.group-container .notification-reminder span:first-child {
+  font-size: 25px;
+}
+
+/* Notification Container section */
+.notification-container {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+/* No Notifications Message */
+.notification-container p {
+  font-size: 16px;
+  color: #555;
+  margin-top: 20px;
+}
+
+/* Individual Notification Item */
+.notification {
+  background-color: #f9f9f9;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.notification p {
+  font-size: 14px;
+  color: #333;
+  margin: 0;
+}
+
+/* Notification Buttons (Accept, Decline, Mark as Read) */
+.notification button {
+  padding: 8px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+/* Accept Button */
+.notification button:first-child {
+  background-color: #4caf50;
+  color: white;
+}
+
+.notification button:first-child:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+/* Decline Button */
+.notification button:last-child {
+  background-color: #f44336;
+  color: white;
+}
+
+.notification button:last-child:hover {
+  background-color: #e53935;
+  transform: scale(1.05);
+}
+
+/* Mark as Read Button */
+.notification button.mark-read {
+  background-color: #e53935;
+  color: white;
+}
+
+.notification button.mark-read:hover {
+  background-color: #e53935;
+  transform: scale(1.05);
+}
+
+/* Styling for buttons container */
+.notification div {
+  display: flex;
+  gap: 10px;
+}
+
+/* Add some space between notifications */
+.notification + .notification {
+  margin-top: 15px;
 }

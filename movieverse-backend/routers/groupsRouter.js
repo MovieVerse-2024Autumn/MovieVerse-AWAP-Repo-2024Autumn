@@ -8,7 +8,8 @@ import {
   getUserCreatedGroupsController,
   getUserJoinedGroupsController,
   getAvailableGroupsController,
-} from "../controllers/localdbControllers/groupController.js";
+  deleteGroupController,
+} from "../controllers/localdbControllers/groupsController.js";
 
 import {
   getUnreadNotificationCountController,
@@ -35,6 +36,8 @@ router.get(
   authenticate,
   getUserJoinedGroupsController
 );
+// delete group
+router.delete("/groups/delete/:id", authenticate, deleteGroupController);
 
 /**** Notification ******/
 // requests to join groups to admins

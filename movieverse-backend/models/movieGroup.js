@@ -61,4 +61,35 @@ const getAvailableGroups = async (userId) => {
   return result.rows;
 };
 
-export { createGroup, getUserCreatedGroups, getAvailableGroups };
+// delete group
+const deleteGroup = async (groupId) => {
+  const client = await pool.connect();
+  try {
+    // begin transaction
+    await client.query("BEGIN");
+
+    // Delete the group from the movie_group table
+    const query = `
+      DELETE FROM movie_group 
+      WHERE id = $1
+      RETURNING *;
+    `;
+    const values = [groupId];
+    const result = await client.query(query, values);
+
+    if (result.rows.length === 0) {
+      throw new Error("Group not found");
+    }
+
+    await client.query("COMMIT");
+    return result.rows[0]; // Return the deleted group information
+  } catch (err) {
+    // rollback transaction in case of error
+    await client.query("ROLLBACK");
+    throw err;
+  } finally {
+    client.release();
+  }
+};
+
+export { createGroup, getUserCreatedGroups, getAvailableGroups, deleteGroup };
