@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./utils/ProtectedRoute";
 
 import Home from "./pages/Home";
 import MoreReviews from "./pages/MoreReviews";
@@ -26,22 +27,50 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/groups" element={<Groups />} />
           <Route path="/show-time" element={<ShowTime />} />
           <Route path="/more-reviews" element={<MoreReviews />} />
           <Route path="/select-movies" element={<Select />} />
+          <Route path="/search-results" element={<SearchResults />} />
           <Route path="/movies/:id" element={<MovieDetail />} />
           <Route path="/reviews/:reviewId" element={<ReviewDetail />} />
-          <Route path="/favorites" element={<Favorites />} />
-          <Route path="/search-results" element={<SearchResults />} />
           <Route
             path="/favorites/shared/:account_id"
             element={<SharedFavorites />}
           />
-          <Route path="/groups" element={<Groups />} />
-          <Route path="/delete-account" element={<DeleteAccountFlow />} />
           <Route path="/authentication" element={<Authentication />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/about-us" element={<AboutUs />} />
+
+          {/* Dynamic url */}
+          <Route path="/:profileUrl" element={<Home />} />
+
+          {/* Protected Routes */}
+          <Route
+            path="/:profileUrl/favorites"
+            element={
+              <ProtectedRoute>
+                <Favorites />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/:profileUrl/groups"
+            element={
+              <ProtectedRoute>
+                <Groups />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/:profileUrl/delete-account"
+            element={
+              <ProtectedRoute>
+                <DeleteAccountFlow />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
         <Footer />
       </div>
