@@ -9,6 +9,7 @@ import reviewRouter from "./routers/reviewRouter.js";
 import favoriteRouter from "./routers/favoriteRouter.js";
 import selectRouter from "./routers/selectRouter.js";
 import groupRouter from "./routers/groupsRouter.js";
+import profileRouter from "./routers/profileRouter.js";
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -23,7 +24,8 @@ app.use(
   reviewRouter,
   favoriteRouter,
   selectRouter,
-  groupRouter
+  groupRouter,
+  profileRouter
 );
 
 app.use((err, req, res, next) => {

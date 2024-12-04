@@ -26,4 +26,34 @@ const findUserByEmail = async (email) => {
   return result.rows[0]; // Return the user if found
 };
 
-export default { createUser, findUserByEmail };
+const deleteUserAccount = async (accountId) => {
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    await client.query("DELETE FROM reviews WHERE account_id = $1", [
+      accountId,
+    ]);
+
+    await client.query("DELETE FROM movie_group WHERE admin_id = $1", [
+      accountId,
+    ]);
+
+    await client.query("DELETE FROM group_member WHERE account_id = $1", [
+      accountId,
+    ]);
+
+    await client.query("DELETE FROM account WHERE id = $1", [accountId]);
+
+    await client.query("COMMIT");
+  } catch (err) {
+    await client.query("ROLLBACK");
+    console.error("Error deleting user account and related data:", err);
+    throw err;
+  } finally {
+    client.release();
+  }
+};
+
+export default { createUser, findUserByEmail, deleteUserAccount };

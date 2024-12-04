@@ -67,7 +67,7 @@ const login = async (req, res, next) => {
 };
 
 export const deleteAccount = async (req, res) => {
-  const userId = req.user.id; // Extract user ID from authenticated token
+  const userId = req.user.id;
   const { reason, password } = req.body;
 
   try {
@@ -87,7 +87,7 @@ export const deleteAccount = async (req, res) => {
     }
 
     // Delete the user
-    await pool.query("DELETE FROM account WHERE id = $1", [userId]);
+    await userModel.deleteUserAccount(userId);
 
     res.status(200).json({ message: "Account deleted successfully" });
   } catch (error) {
@@ -96,4 +96,4 @@ export const deleteAccount = async (req, res) => {
   }
 };
 
-export default { register, login };
+export default { register, login, deleteAccount };

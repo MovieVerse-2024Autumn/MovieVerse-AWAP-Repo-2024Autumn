@@ -4,7 +4,7 @@ import {
   selectAllReviews,
   selectOneReview,
   insertReviewLikeCount,
-} from "../../models/Review.js";
+} from "../../models/review.js";
 
 const getReviews = async (req, res, next) => {
   try {
@@ -97,7 +97,9 @@ const getReviewsForMovie = async (req, res, next) => {
     const result = await pool.query(query, [movieId]);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "No reviews found for this movie." });
+      return res
+        .status(404)
+        .json({ message: "No reviews found for this movie." });
     }
 
     res.status(200).json(result.rows);
@@ -107,7 +109,10 @@ const getReviewsForMovie = async (req, res, next) => {
   }
 };
 
-
-
-
-export { getReviews, addReview, getOneReview,getReviewsForMovie,updateReviewLikeCount };
+export {
+  getReviews,
+  addReview,
+  getOneReview,
+  getReviewsForMovie,
+  updateReviewLikeCount,
+};
