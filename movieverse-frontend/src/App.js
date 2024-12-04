@@ -11,6 +11,7 @@ import ShowTime from "./pages/ShowTime";
 import SearchResults from "./pages/SearchResults";
 import Favorites from "./pages/Favorites";
 import Groups from "./pages/Groups";
+import GroupDetails from "./pages/GroupDetails";
 import SharedFavorites from "./components/SharedFavorites";
 import Authentication from "./pages/Authentication";
 import Navbar from "./components/Navbar";
@@ -31,6 +32,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/groups" element={<Groups />} />
+          <Route path="/group/:id" element={<GroupDetails />} />
           <Route path="/show-time" element={<ShowTime />} />
           <Route path="/more-reviews" element={<MoreReviews />} />
           <Route path="/select-movies" element={<Select />} />

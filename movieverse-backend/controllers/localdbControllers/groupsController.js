@@ -3,6 +3,7 @@ import {
   getUserCreatedGroups,
   getAvailableGroups,
   deleteGroup,
+  getGroupDetails,
   createPost,
   getPostsByGroupId,
   deleteMemberFromGroup
