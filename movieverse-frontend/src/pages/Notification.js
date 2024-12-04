@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "../styles/Notification.css";
 
 const url = "http://localhost:3001/api/groups";
 

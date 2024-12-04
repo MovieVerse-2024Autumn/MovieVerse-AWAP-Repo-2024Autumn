@@ -13,13 +13,11 @@ CREATE TABLE account (
 );
 ALTER TABLE account
 ALTER COLUMN password TYPE VARCHAR(255);
+ALTER TABLE account
+ADD COLUMN unique_profile_link VARCHAR(255);
+ALTER TABLE account
+RENAME COLUMN unique_profile_link TO unique_profile_url;
 
-
-INSERT INTO account (email, password, is_active, first_name, last_name, link)
-VALUES
-    ('user1@example.com', 'password123', TRUE, 'John', 'Doe', 'http://example.com/user1'),
-    ('user2@example.com', 'password456', FALSE, 'Jane', 'Smith', 'http://example.com/user2'),
-    ('user3@example.com', 'password789', TRUE, 'Alice', 'Johnson', 'http://example.com/user3');
 
 
 CREATE TABLE review (
@@ -74,6 +72,13 @@ ALTER TABLE group_member
 ADD CONSTRAINT group_member_admin_fk FOREIGN KEY (admin_id) REFERENCES account(id);
 ALTER TABLE group_member
 DROP CONSTRAINT group_member_pkey;
+ALTER TABLE group_member
+DROP CONSTRAINT group_member_movie_group_fk;
+ALTER TABLE group_member
+ADD CONSTRAINT group_member_movie_group_fk
+FOREIGN KEY (group_id) REFERENCES movie_group(id) ON DELETE CASCADE;
+
+
 
 
 CREATE TABLE notification (
@@ -93,3 +98,8 @@ CREATE TABLE notification (
 
 ALTER TABLE notification
 RENAME COLUMN status TO is_read;
+ALTER TABLE notification
+DROP CONSTRAINT notification_group_fk;
+ALTER TABLE notification
+ADD CONSTRAINT notification_group_fk
+FOREIGN KEY (group_id) REFERENCES movie_group(id) ON DELETE CASCADE;

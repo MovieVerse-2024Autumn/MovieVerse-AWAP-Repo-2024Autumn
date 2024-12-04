@@ -8,7 +8,7 @@ import movieRouter from "./routers/movieRouter.js";
 import reviewRouter from "./routers/reviewRouter.js";
 import favoriteRouter from "./routers/favoriteRouter.js";
 import selectRouter from "./routers/selectRouter.js";
-import groupRouter from "./routers/groupRouter.js";
+import groupRouter from "./routers/groupsRouter.js";
 
 const app = express();
 const port = process.env.PORT || 3001;

@@ -89,7 +89,7 @@ const DeleteAccountFlow = () => {
   };
 
   if (!isAuthenticated) {
-    return <p>Please sign in to access account deletion.</p>; // Redirect or block access if not signed in
+    return <p>Please sign in to access account.</p>; // Redirect or block access if not signed in
   }
 
   return (

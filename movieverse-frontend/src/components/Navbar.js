@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useUser } from "../utils/UserProvider";
 import "../styles/Navbar.css";
 import logo from "../logo.png";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const { user, logout } = useUser();
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
@@ -28,15 +30,15 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/"); // Redirect to home page after logout
+    logout();
+    navigate("/");
   };
   const handleAccountClick = () => {
-    navigate('/delete-account');
+    navigate(`/${user.profileUrl}/delete-account`);
   };
-    return (
+
+  return (
     <nav className="navbar">
-      {/* Logo */}
       <div className="navbar-logo">
         <Link to="/">
           <img src={logo} alt="MovieVerse Logo" className="logo-image" />
@@ -57,15 +59,30 @@ const Navbar = () => {
           <Link to="/select-movies" className="nav-link">
             EXPLORE
           </Link>
-          <Link to="/favorites" className="nav-link">
-            FAVOURITE
-          </Link>
           <Link to="/show-time" className="nav-link">
             SHOWTIMES
           </Link>
-          <Link to="/groups" className="nav-link">
-            GROUPS
-          </Link>
+          {!user.isAuthenticated && (
+            <>
+              <Link to="/favorites" className="nav-link">
+                FAVOURITE
+              </Link>
+              <Link to="/groups" className="nav-link">
+                GROUPS
+              </Link>
+            </>
+          )}
+
+          {user.isAuthenticated && (
+            <>
+              <Link to={`/${user.profileUrl}/favorites`} className="nav-link">
+                FAVOURITE
+              </Link>
+              <Link to={`/${user.profileUrl}/groups`} className="nav-link">
+                GROUPS
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Search Bar */}
@@ -86,7 +103,13 @@ const Navbar = () => {
         {/* Account Icon and Sign In / Sign Out */}
         <div className="navbar-right">
           <div className="account-icon" onClick={handleAccountClick}>
-            <span className="account-letter">A</span>
+            <span className="account-letter">
+              {user.isAuthenticated
+                ? `${user.firstName?.charAt(0).toUpperCase()}${user.lastName
+                    ?.charAt(0)
+                    .toUpperCase()}`
+                : "A"}
+            </span>
           </div>
 
           {isLoggedIn ? (
@@ -94,7 +117,7 @@ const Navbar = () => {
               Sign Out
             </button>
           ) : (
-            <Link to="/Authentication" className="signin-link">
+            <Link to="/authentication" className="signin-link">
               Sign In
             </Link>
           )}

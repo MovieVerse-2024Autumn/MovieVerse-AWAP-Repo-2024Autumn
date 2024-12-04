@@ -1,34 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../utils/axiosInstance"; // Import your axios instance
+import { useUser } from "../utils/UserProvider";
+import axiosInstance from "../utils/axiosInstance";
 import "../styles/Authentication.css";
-import logo from "../logo.png"; // Import your logo
+import logo from "../logo.png";
 
 const Authentication = () => {
-  const [isSignIn, setIsSignIn] = useState(true); // Toggle between Sign In and Sign Up
-  const [passwordVisible, setPasswordVisible] = useState(false); // Toggle password visibility
-  const [errorMessage, setErrorMessage] = useState(""); // Error messages
-  const [successMessage, setSuccessMessage] = useState(""); // Success messages
-  const [token, setToken] = useState(localStorage.getItem("token") || ""); // Store token
+  const [isSignIn, setIsSignIn] = useState(true);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  //const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const { user, login, logout } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Redirect to home if already logged in
-    if (token) {
-      navigate("/");
+    if (user.isAuthenticated) {
+      navigate(`/${user.profileUrl}`);
     }
-  }, [token, navigate]);
+  }, [user.isAuthenticated, navigate]);
 
   const handleToggle = () => {
-    setIsSignIn(!isSignIn); // Switch between Sign In and Sign Up
-    setErrorMessage(""); // Clear error messages
-    setSuccessMessage(""); // Clear success messages
+    setIsSignIn(!isSignIn);
+    setErrorMessage("");
+    setSuccessMessage("");
   };
 
   const handleSignOut = () => {
-    setToken("");
-    localStorage.removeItem("token"); // Clear token from localStorage
-    navigate("/auth"); // Redirect to authentication page
+    logout();
+    navigate("/auth");
   };
 
   // Handle Registration
@@ -52,9 +52,14 @@ const Authentication = () => {
         lastName,
       });
       console.log("Registration Response:", response.data);
+      const { profileUrl } = response.data.user;
+      if (!profileUrl) {
+        throw new Error("Profile URL not generated");
+      }
+
       setSuccessMessage("Registration successful!");
       setErrorMessage("");
-      setIsSignIn(true); // Switch to Sign In after successful registration
+      setIsSignIn(true);
     } catch (error) {
       setErrorMessage(error.response?.data?.message || "Registration failed.");
       setSuccessMessage("");
@@ -72,15 +77,19 @@ const Authentication = () => {
         email,
         password,
       });
-      const receivedToken = response.data.token;
-      setToken(receivedToken); // Store token
-      localStorage.setItem("token", receivedToken); // Persist token in localStorage
+      const { token, profileUrl, firstName, lastName } = response.data;
+      console.log("Login Response:", response.data, "in Authentication.js");
+
+      if (!token || !profileUrl) {
+        throw new Error("Invalid server response");
+      }
+      login(token, profileUrl, firstName, lastName);
+
       setErrorMessage("");
       setSuccessMessage("Login successful!");
-      navigate("/"); // Redirect to home page
+      navigate(`/${profileUrl}`);
     } catch (error) {
       setErrorMessage(error.response?.data?.message || "Login failed.");
-      setToken("");
       setSuccessMessage("");
     }
   };
@@ -116,7 +125,9 @@ const Authentication = () => {
                   </span>
                 </div>
                 <button type="submit">Sign In</button>
-                {errorMessage && <p className="error-message">{errorMessage}</p>}
+                {errorMessage && (
+                  <p className="error-message">{errorMessage}</p>
+                )}
                 {successMessage && (
                   <p className="success-message">{successMessage}</p>
                 )}
@@ -169,7 +180,9 @@ const Authentication = () => {
                   </span>
                 </div>
                 <button type="submit">Sign Up</button>
-                {errorMessage && <p className="error-message">{errorMessage}</p>}
+                {errorMessage && (
+                  <p className="error-message">{errorMessage}</p>
+                )}
                 {successMessage && (
                   <p className="success-message">{successMessage}</p>
                 )}
@@ -191,7 +204,6 @@ const Authentication = () => {
           )}
         </div>
       </div>
-      
     </>
   );
 };

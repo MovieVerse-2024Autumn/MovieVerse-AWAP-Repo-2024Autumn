@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import GroupCard from "../components/GroupCard";
 import Notification from "./Notification";
 import "../styles/Groups.css";
+import "../styles/Notification.css";
 
 const url = "http://localhost:3001/api/groups";
 
@@ -60,8 +61,13 @@ export default function Group() {
       });
       const data = await response.json();
 
+      // Filter out duplicate groups by group id
+      const uniqueGroups = Array.from(
+        new Set(data.map((group) => group.id))
+      ).map((id) => data.find((group) => group.id === id));
+
       // update groups status
-      const updatedGroups = data.map((group) => ({
+      const updatedGroups = uniqueGroups.map((group) => ({
         ...group,
         status: group.status || "join", // Default status to "join"
       }));
@@ -120,7 +126,6 @@ export default function Group() {
       alert("Please fill in all fields.");
       return;
     }
-
     try {
       const response = await fetch(`${url}/create`, {
         method: "POST",
@@ -134,7 +139,6 @@ export default function Group() {
       if (!response.ok) {
         throw new Error("Failed to create group");
       }
-
       const createdGroup = await response.json();
       setYourGroups([...yourGroups, createdGroup]);
       setNewGroup({ name: "", description: "" });
@@ -160,7 +164,6 @@ export default function Group() {
       if (!response.ok) {
         throw new Error("Failed to send join request");
       }
-
       setAvailableGroups((prevGroups) =>
         prevGroups.map((group) =>
           group.id === groupId ? { ...group, status: "in process" } : group
@@ -219,11 +222,33 @@ export default function Group() {
           )
         );
       }
-
-      // alert(`Successfully handle the request!`);
     } catch (error) {
       console.error("Error handling admin decision:", error);
       alert("Failed to process the request. Please try again.");
+    }
+  };
+
+  // Handle deleting a group
+  const handleDeleteGroup = async (groupId) => {
+    try {
+      const response = await fetch(`${url}/delete/${groupId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete group");
+      }
+
+      setYourGroups((prevGroups) =>
+        prevGroups.filter((group) => group.id !== groupId)
+      );
+    } catch (error) {
+      console.error("Error deleting group:", error);
+      alert("Failed to delete group. Please try again.");
     }
   };
 
@@ -234,7 +259,10 @@ export default function Group() {
   return (
     <div className="group-container">
       {/* Notification Bell Icon */}
-      <div onClick={() => setIsNotificationsVisible(!isNotificationsVisible)}>
+      <div
+        className="notification-reminder"
+        onClick={() => setIsNotificationsVisible(!isNotificationsVisible)}
+      >
         <span>🔔</span>
         {unreadCount > 0 && <span>{unreadCount}</span>}
       </div>
@@ -248,7 +276,7 @@ export default function Group() {
       )}
 
       {/* Your Groups */}
-      <div className="section">
+      <div className="group-section">
         <h2>Your groups</h2>
         <div className="group-list">
           {yourGroups.map((group) => (
@@ -298,39 +326,45 @@ export default function Group() {
       )}
 
       {/* Groups you joined */}
-      <div className="section">
+      <div className="group-section">
         <h2>Groups you joined</h2>
         <div className="group-list">
-          {joinedGroups.map((group, index) => (
+          {joinedGroups.map((group) => (
             <GroupCard
             key={group.id}
             group={group}
             onClick={() => navigate(`/group/${group.id}`)}
           />
-            // <div className="group-card" key={index}
-            // onClick={() => navigate(`/group/${group.id}`)}>
-            //   <h3>{group.name}</h3>
-            //   <p>{group.description}</p>
-            // </div>
           ))}
         </div>
-        <p>More...</p>
       </div>
 
       {/* More groups */}
-      <div className="section">
+      <div className="group-section">
         <h2>More groups</h2>
         <div className="group-list">
-          {availableGroups.map((group, index) => (
-            <div className="group-card" key={index}>
-              <h3>{group.name}</h3>
-              <p>{group.description}</p>
-              {group.status === "in process" ? (
-                <button disabled>In Process</button>
-              ) : (
-                <button onClick={() => handleJoinGroup(group.id)}>Join</button>
-              )}
-            </div>
+          {availableGroups.map((group) => (
+            <GroupCard
+              key={group.id}
+              group={group}
+              actionButton={
+                group.status === "in process" ? (
+                  <button className="disabled-join-btn" disabled>
+                    In Process
+                  </button>
+                ) : (
+                  <button
+                    className="join-group-btn"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent triggering onClick for the card
+                      handleJoinGroup(group.id);
+                    }}
+                  >
+                    Join
+                  </button>
+                )
+              }
+            />
           ))}
           {availableGroups.length === 0 && <p>No more groups to join.</p>}
         </div>
