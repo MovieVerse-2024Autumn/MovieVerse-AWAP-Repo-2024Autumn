@@ -67,7 +67,7 @@
 @media (max-width: 768px) {
     .movie-actions {
         justify-content: center; /* Center horizontally */
-        margin-top: 10px; 
+        margin-top: 10px; /* Optional: Add some spacing */
     }
 }
 

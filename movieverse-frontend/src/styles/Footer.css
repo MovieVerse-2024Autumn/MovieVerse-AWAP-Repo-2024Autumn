@@ -103,7 +103,7 @@
   }
 
   .footer-logo {
-    height: 50px; 
+    height: 50px; /* Further reduce logo size for smaller screens */
   }
 
   .footer-columns {
