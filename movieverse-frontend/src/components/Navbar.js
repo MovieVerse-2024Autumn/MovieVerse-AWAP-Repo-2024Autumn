@@ -1,17 +1,23 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../utils/UserProvider";
+import AccountDisplay from "../pages/AccountDisplay";
 import "../styles/Navbar.css";
 import logo from "../logo.png";
 
-const Navbar = () => {
+const Navbar = ({
+  handleAction,
+  availableGroups,
+  setAvailableGroups,
+  joinedGroups,
+  setJoinedGroups,
+  hadleLogout,
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const { user, logout } = useUser();
+  const { user } = useUser();
   const navigate = useNavigate();
-
-  const token = localStorage.getItem("token");
-  const isLoggedIn = !!token;
+  const url = "http://localhost:3001/api/groups";
 
   const handleSearch = () => {
     if (query.trim()) {
@@ -28,17 +34,6 @@ const Navbar = () => {
     if (event.key === "Enter") {
       handleSearch();
     }
-  };
-
-  const handleLogout = () => {
-    logout();
-    setIsMenuOpen(false); // Close menu after logout
-    navigate("/");
-  };
-
-  const handleAccountClick = () => {
-    setIsMenuOpen(false); // Close menu after navigating
-    navigate(`/${user.profileUrl}/delete-account`);
   };
 
   const handleLinkClick = () => {
@@ -65,18 +60,41 @@ const Navbar = () => {
           <Link to="/" className="nav-link" onClick={handleLinkClick}>
             HOME
           </Link>
-          <Link to="/select-movies" className="nav-link" onClick={handleLinkClick}>
+          <Link
+            to="/select-movies"
+            className="nav-link"
+            onClick={handleLinkClick}
+          >
             EXPLORE
           </Link>
           <Link to="/show-time" className="nav-link" onClick={handleLinkClick}>
             SHOWTIMES
           </Link>
-          <Link to="/favorites" className="nav-link" onClick={handleLinkClick}>
-            FAVOURITE
-          </Link>
-          <Link to="/groups" className="nav-link" onClick={handleLinkClick}>
-            GROUPS
-          </Link>
+          {!user.isAuthenticated && (
+            <>
+              <Link
+                to="/favorites"
+                className="nav-link"
+                onClick={handleLinkClick}
+              >
+                FAVOURITE
+              </Link>
+              <Link to="/groups" className="nav-link" onClick={handleLinkClick}>
+                GROUPS
+              </Link>
+            </>
+          )}
+
+          {user.isAuthenticated && (
+            <>
+              <Link to={`/${user.profileUrl}/favorites`} className="nav-link">
+                FAVOURITE
+              </Link>
+              <Link to={`/${user.profileUrl}/groups`} className="nav-link">
+                GROUPS
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Search Bar */}
@@ -94,22 +112,22 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Account Section */}
+        {/* Account Icon and Dropdown */}
         <div className="navbar-right">
-          <div className="account-icon" onClick={handleAccountClick}>
-            {isLoggedIn
-              ? `${user.firstName.charAt(0).toUpperCase()}${user.lastName.charAt(0).toUpperCase()}`
-              : "A"}
-          </div>
-          {!isLoggedIn && (
-            <Link to="/authentication" className="signin-link" onClick={handleLinkClick}>
+          {user.isAuthenticated ? (
+            <AccountDisplay
+              handleAction={handleAction}
+              url={url}
+              availableGroups={availableGroups}
+              setAvailableGroups={setAvailableGroups}
+              joinedGroups={joinedGroups}
+              setJoinedGroups={setJoinedGroups}
+              hadleLogout={hadleLogout}
+            />
+          ) : (
+            <Link to="/authentication" className="signin-link">
               Sign In
             </Link>
-          )}
-          {isLoggedIn && (
-            <button className="signout-button" onClick={handleLogout}>
-              Sign Out
-            </button>
           )}
         </div>
       </div>

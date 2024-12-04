@@ -191,23 +191,20 @@ export default function Group() {
         }),
       });
 
-      const data = await response.json();
-      console.log("Response from server:", data, "in Groups.js/handleAction");
-
       if (!response.ok) {
         throw new Error("Failed to handle request");
       }
+
+      const data = await response.json();
+      console.log("Response from server:", data, "in Groups.js/handleAction");
 
       if (action === "accept") {
         const groupToMove = availableGroups.find(
           (group) => group.id === groupId
         );
-        if (!groupToMove) {
-          console.error(
-            `Group with ID ${groupId} not found in availableGroups`
-          );
-          return; // if group not found, do not proceed
-        }
+
+        if (!groupToMove) return; // if group not found, do not proceed
+
         setJoinedGroups((prevGroups) => [...prevGroups, groupToMove]);
         setAvailableGroups((prevGroups) =>
           prevGroups.filter((group) => group.id !== groupId)
