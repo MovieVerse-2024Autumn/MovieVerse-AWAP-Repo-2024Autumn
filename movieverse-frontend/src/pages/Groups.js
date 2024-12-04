@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import GroupCard from "../components/GroupCard";
 import Notification from "./Notification";
@@ -33,8 +32,6 @@ export default function Group() {
     fetchUnreadCount();
     fetchJoinedGroups();
   }, []);
-
-  const navigate = useNavigate(); // Initialize the navigate function
 
   // Fetch user-created groups
   const fetchYourGroups = async () => {
@@ -194,23 +191,20 @@ export default function Group() {
         }),
       });
 
-      const data = await response.json();
-      console.log("Response from server:", data, "in Groups.js/handleAction");
-
       if (!response.ok) {
         throw new Error("Failed to handle request");
       }
+
+      const data = await response.json();
+      console.log("Response from server:", data, "in Groups.js/handleAction");
 
       if (action === "accept") {
         const groupToMove = availableGroups.find(
           (group) => group.id === groupId
         );
-        if (!groupToMove) {
-          console.error(
-            `Group with ID ${groupId} not found in availableGroups`
-          );
-          return; // if group not found, do not proceed
-        }
+
+        if (!groupToMove) return; // if group not found, do not proceed
+
         setJoinedGroups((prevGroups) => [...prevGroups, groupToMove]);
         setAvailableGroups((prevGroups) =>
           prevGroups.filter((group) => group.id !== groupId)
@@ -283,7 +277,9 @@ export default function Group() {
             <GroupCard
               key={group.id}
               group={group}
-              onClick={() => navigate(`/group/${group.id}`)}
+              onClick={() => console.log(`Clicked on ${group.name}`)}
+              showDeleteButton={true}
+              onDelete={handleDeleteGroup}
             />
           ))}
           <button className="create-group-btn" onClick={handleCreateNewGroup}>
@@ -330,11 +326,7 @@ export default function Group() {
         <h2>Groups you joined</h2>
         <div className="group-list">
           {joinedGroups.map((group) => (
-            <GroupCard
-            key={group.id}
-            group={group}
-            onClick={() => navigate(`/group/${group.id}`)}
-          />
+            <GroupCard key={group.id} group={group} />
           ))}
         </div>
       </div>

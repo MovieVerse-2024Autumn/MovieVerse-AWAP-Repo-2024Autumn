@@ -231,6 +231,3 @@ const deleteMemberFromGroup = async (accountId, groupId) => {
 
 export { createGroup, getUserCreatedGroups, getAvailableGroups,deleteGroup, getGroupDetails, createPost, getPostsByGroupId ,deleteMemberFromGroup };
 
-
-
-

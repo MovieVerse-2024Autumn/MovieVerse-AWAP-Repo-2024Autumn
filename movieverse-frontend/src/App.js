@@ -5,7 +5,7 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import Home from "./pages/Home";
 import MoreReviews from "./pages/MoreReviews";
 import Select from "./pages/Select";
-import MovieDetail from "./pages/MovieDetail"; // Import the MovieDetail component
+import MovieDetail from "./pages/MovieDetail";
 import ReviewDetail from "./pages/ReviewDetail";
 import ShowTime from "./pages/ShowTime";
 import SearchResults from "./pages/SearchResults";
@@ -13,12 +13,13 @@ import Favorites from "./pages/Favorites";
 import Groups from "./pages/Groups";
 import SharedFavorites from "./components/SharedFavorites";
 import Authentication from "./pages/Authentication";
-import GroupDetails from "./pages/GroupDetails";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import AboutUs from "./pages/AboutUs";
+import Profile from "./pages/Profile";
 import DeleteAccountFlow from "./pages/delete-account";
+
 function App() {
   return (
     <BrowserRouter
@@ -40,10 +41,6 @@ function App() {
             path="/favorites/shared/:account_id"
             element={<SharedFavorites />}
           />
-          <Route path="/groups" element={<Groups />} />
-          <Route path="/group/:id" element={<GroupDetails />} />
-
-          <Route path="/delete-account" element={<DeleteAccountFlow />} />
           <Route path="/authentication" element={<Authentication />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/about-us" element={<AboutUs />} />
@@ -65,6 +62,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Groups />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/:profileUrl/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
               </ProtectedRoute>
             }
           />

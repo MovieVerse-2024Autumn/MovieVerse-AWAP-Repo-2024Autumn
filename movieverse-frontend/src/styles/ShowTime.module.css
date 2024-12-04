@@ -1,41 +1,45 @@
-/* Container for the entire component */
+/* General Container */
 .homeContainer {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
   font-family: Arial, sans-serif;
-  background-color: #f0f2f5; /* Light gray background */
+  background-color: #f0f2f5;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
 
+/* Showtime Page */
 .showtimePage {
-  background-color: #f9f9f9;
+  background-color: #ffffff;
   border-radius: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  max-width: 1200px;
-  margin: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
+  margin: 20px auto;
 }
 
-/* Section heading */
+/* Heading */
 .heading {
-  font-size: 1.5em;
-  margin-bottom: 15px;
+  font-size: 1.8em;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
   color: #333;
 }
 
+/* Selection Container */
 .selectionContainer {
-  display: flex; /* Use flexbox to align items in a row */
-  justify-content: center; /* Center the elements horizontally */
-  gap: 20px; /* Add space between the two elements */
-  align-items: center; /* Vertically center the elements */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
-/* Dropdown and date picker */
 .selectRow {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   width: 250px;
 }
 
@@ -43,120 +47,179 @@
   font-size: 1em;
   font-weight: bold;
   color: #555;
+  margin-bottom: 8px;
 }
 
 select,
 input[type="date"] {
   width: 100%;
-  padding: 8px;
-  font-size: 15px;
+  padding: 10px;
+  font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  margin-left: 10px;
   text-align: center;
+  background-color: #fff;
+  transition: border 0.3s ease;
 }
 
-/* Loading spinner text */
+select:focus,
+input:focus {
+  border: 1px solid #007bff;
+  outline: none;
+}
+
+/* Loading Indicator */
 .loading {
   text-align: center;
   font-size: 1.2em;
   color: #007bff;
-}
-
-/* No showings message */
-.noShowings {
-  text-align: center;
-  font-size: 1.2em;
-  color: #666;
   margin-top: 20px;
 }
 
-/* Movie card container */
+/* No Showings Message */
+.noShowings {
+  text-align: center;
+  font-size: 1.2em;
+  color: #888;
+  margin-top: 20px;
+}
+
+/* Movie Card */
 .movieCard {
-  margin-bottom: 20px;
   border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
   background-color: #fff;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
+  flex-direction: row;
+  gap: 15px;
   padding: 15px;
+  margin-bottom: 20px;
+  align-items: center;
 }
 
 .movieDetails {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  gap: 15px;
 }
 
 .posterContainer {
-  margin-right: 15px;
+  flex-shrink: 0;
 }
 
 .moviePoster {
-  max-width: 120px;
-  max-height: 180px;
+  width: 120px;
+  height: 180px;
   object-fit: cover;
-  margin-right: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .movieInfo {
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
 }
 
-.movieInfo p {
-  margin: 5px 0;
-  color: #555;
-  font-size: 0.9em;
-}
-
 .movieTitle {
-  font-size: 1.4em;
+  font-size: 1.5em;
   font-weight: bold;
-  margin-bottom: 10px;
   color: #333;
-}
-
-.detailsColumn {
-  margin-left: 20px;
+  margin-bottom: 10px;
 }
 
 .movieLanguage {
-  display: flex;
-  justify-content: space-between;
+  font-size: 0.9em;
   color: #555;
+  margin-bottom: 8px;
 }
 
 .durationMethod {
-  display: flex;
-
-  align-items: center;
+  font-size: 0.9em;
   color: #555;
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .movieMethod {
-  background-color: #d3d3d3;
-  padding: 3px;
-  margin-left: 8px;
+  background-color: #f0f0f0;
+  padding: 3px 6px;
   border-radius: 4px;
+  font-size: 0.8em;
   font-weight: bold;
   color: #333;
 }
 
 .showTimings {
-  margin-top: 15px;
-  color: #555;
+  margin-top: 10px;
 }
 
 .showTimings p {
-  margin: 5px 0;
   font-size: 0.9em;
+  color: #333;
+  margin-bottom: 5px;
 }
 
-/* Accessibility styles */
-button:focus,
-select:focus,
-input:focus {
-  outline: 2px solid #007bff;
-  outline-offset: 2px;
+/* Responsive Design */
+@media (max-width: 768px) {
+  .movieCard {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .movieDetails {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .posterContainer {
+    text-align: center;
+  }
+
+  .moviePoster {
+    width: 150px;
+    height: auto;
+  }
+
+  .movieInfo {
+    align-items: center;
+    text-align: center;
+  }
+
+  .selectionContainer {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .selectRow {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .moviePoster {
+    width: 120px;
+  }
+
+  .movieTitle {
+    font-size: 1.2em;
+  }
+
+  .showTimings p {
+    font-size: 0.8em;
+  }
+
+  .selectRow label {
+    font-size: 0.9em;
+  }
+
+  select,
+  input[type="date"] {
+    font-size: 13px;
+    padding: 8px;
+  }
 }

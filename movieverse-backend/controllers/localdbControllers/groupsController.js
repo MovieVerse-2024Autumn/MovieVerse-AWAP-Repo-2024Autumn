@@ -2,7 +2,6 @@ import {
   createGroup,
   getUserCreatedGroups,
   getAvailableGroups,
-  getGroupDetails,
   deleteGroup,
   createPost,
   getPostsByGroupId,
@@ -70,6 +69,7 @@ const getGroupDetailsController = async (req, res, next) => {
   }
 };
 
+// delete group
 const deleteGroupController = async (req, res, next) => {
   const { id: groupId } = req.params;
 

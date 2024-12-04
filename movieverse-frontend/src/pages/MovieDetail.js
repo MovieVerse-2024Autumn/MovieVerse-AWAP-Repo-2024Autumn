@@ -256,7 +256,7 @@ const MovieDetail = () => {
 
 
 
-      <div className={styles["add-review"]}>
+      <div className={styles["add-review"]}>  
         <h2>Add Your Review</h2>
         <form onSubmit={handleSubmitReview}>
           <label>
@@ -307,27 +307,40 @@ const MovieDetail = () => {
 
       <h2>User Reviews</h2>
       <div className={styles["movie-reviews"]}>
-        {reviews.length > 0 ? (
-          reviews.map((review, index) => (
-            <div key={review.id} className={styles["review"]}>
-              <p>
-               {review.author} {new Date(review.review_date).toLocaleDateString()}
-            </p>
-            <p>
-              <strong>Rating:</strong> {review.rating}/5
-            </p>
-
-            <p>
-              <strong>Title:</strong> {review.title}
-            </p>
-            <p>{review.description}</p>
-          </div>
-        ))
-    
-        ) : (
-          <p>No reviews yet. Be the first to review!</p>
-        )}
+  {reviews.length > 0 ? (
+    reviews.map((review) => (
+      <div key={review.id} className={styles["review"]}>
+        <p>
+          {review.author || "Anonymous"} {" "}
+          {new Date(review.review_date).toLocaleDateString()}
+        </p>
+        <div className={styles["star-display"]}>
+          {[...Array(5)].map((_, index) => (
+            <span
+              key={index}
+              className={
+                index < review.rating
+                  ? styles["star-filled"]
+                  : styles["star-empty"]
+              }
+            >
+              ★
+            </span>
+          ))}
+        </div>
+        <p>
+          <strong>{review.title}</strong> 
+        </p>
+        <p>{review.description}</p>
       </div>
+    ))
+  ) : (
+    <p>No reviews yet. Be the first to review!</p>
+  )}
+</div>
+
+
+      
     </div>
   );
 };

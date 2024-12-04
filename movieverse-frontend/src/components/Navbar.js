@@ -1,21 +1,28 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../utils/UserProvider";
+import AccountDisplay from "../pages/AccountDisplay";
 import "../styles/Navbar.css";
 import logo from "../logo.png";
 
-const Navbar = () => {
+const Navbar = ({
+  handleAction,
+  availableGroups,
+  setAvailableGroups,
+  joinedGroups,
+  setJoinedGroups,
+  hadleLogout,
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const { user, logout } = useUser();
+  const { user } = useUser();
   const navigate = useNavigate();
-
-  const token = localStorage.getItem("token");
-  const isLoggedIn = !!token;
+  const url = "http://localhost:3001/api/groups";
 
   const handleSearch = () => {
     if (query.trim()) {
       navigate(`/search-results?query=${encodeURIComponent(query)}`);
+      setIsMenuOpen(false); // Close menu after search
     } else {
       alert("Please enter a search term!");
     }
@@ -29,18 +36,15 @@ const Navbar = () => {
     }
   };
 
-  const handleLogout = () => {
-    logout();
-    navigate("/");
-  };
-  const handleAccountClick = () => {
-    navigate(`/${user.profileUrl}/delete-account`);
+  const handleLinkClick = () => {
+    setIsMenuOpen(false); // Close menu after any link is clicked
   };
 
   return (
     <nav className="navbar">
+      {/* Logo */}
       <div className="navbar-logo">
-        <Link to="/">
+        <Link to="/" onClick={handleLinkClick}>
           <img src={logo} alt="MovieVerse Logo" className="logo-image" />
         </Link>
       </div>
@@ -53,21 +57,29 @@ const Navbar = () => {
       {/* Navbar Links */}
       <div className={`navbar-links ${isMenuOpen ? "open" : ""}`}>
         <div className="navbar-center">
-          <Link to="/" className="nav-link">
+          <Link to="/" className="nav-link" onClick={handleLinkClick}>
             HOME
           </Link>
-          <Link to="/select-movies" className="nav-link">
+          <Link
+            to="/select-movies"
+            className="nav-link"
+            onClick={handleLinkClick}
+          >
             EXPLORE
           </Link>
-          <Link to="/show-time" className="nav-link">
+          <Link to="/show-time" className="nav-link" onClick={handleLinkClick}>
             SHOWTIMES
           </Link>
           {!user.isAuthenticated && (
             <>
-              <Link to="/favorites" className="nav-link">
+              <Link
+                to="/favorites"
+                className="nav-link"
+                onClick={handleLinkClick}
+              >
                 FAVOURITE
               </Link>
-              <Link to="/groups" className="nav-link">
+              <Link to="/groups" className="nav-link" onClick={handleLinkClick}>
                 GROUPS
               </Link>
             </>
@@ -100,22 +112,18 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Account Icon and Sign In / Sign Out */}
+        {/* Account Icon and Dropdown */}
         <div className="navbar-right">
-          <div className="account-icon" onClick={handleAccountClick}>
-            <span className="account-letter">
-              {user.isAuthenticated
-                ? `${user.firstName?.charAt(0).toUpperCase()}${user.lastName
-                    ?.charAt(0)
-                    .toUpperCase()}`
-                : "A"}
-            </span>
-          </div>
-
-          {isLoggedIn ? (
-            <button className="signout-button" onClick={handleLogout}>
-              Sign Out
-            </button>
+          {user.isAuthenticated ? (
+            <AccountDisplay
+              handleAction={handleAction}
+              url={url}
+              availableGroups={availableGroups}
+              setAvailableGroups={setAvailableGroups}
+              joinedGroups={joinedGroups}
+              setJoinedGroups={setJoinedGroups}
+              hadleLogout={hadleLogout}
+            />
           ) : (
             <Link to="/authentication" className="signin-link">
               Sign In
