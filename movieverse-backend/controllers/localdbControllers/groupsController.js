@@ -4,8 +4,11 @@ import {
   getAvailableGroups,
   getGroupDetails,
   deleteGroup,
-} from "../../models/movieGroup.js";
-import { getUserJoinedGroups } from "../../models/groupMember.js";
+  createPost,
+  getPostsByGroupId,
+  deleteMemberFromGroup
+} from '../../models/movieGroup.js';
+import { getUserJoinedGroups } from '../../models/groupMember.js';
 
 // create group
 const createGroupController = async (req, res, next) => {
@@ -60,9 +63,9 @@ const getGroupDetailsController = async (req, res, next) => {
   const { groupId } = req.body;
   const userId = req.user.id;
   try {
-    const groups = await getGroupDetails(groupId,userId);
+    const groups = await getGroupDetails(groupId, userId);
     res.json(groups);
-} catch (err) {
+  } catch (err) {
     next(err);
   }
 };
@@ -73,12 +76,54 @@ const deleteGroupController = async (req, res, next) => {
   try {
     await deleteGroup(groupId);
     res.status(204).end();
-} catch (err) {
+  } catch (err) {
     next(err);
   }
 };
 
+// Create a post
+const createPostController = async (req, res, next) => {
+  const { groupid, content, movieid, movietitle, movieposter } = req.body;
+  const postedBy = req.user.id;
+  // Validate required fields
+  if (!groupid || !content || !postedBy) {
+    return res
+      .status(400)
+      .json({ error: 'GroupId, Content, and PostedBy are required.' });
+  }
+  try {
+    const post = await createPost(
+      postedBy, groupid, content, movieid, movietitle, movieposter
+    );
+    res.status(201).json(post);
+  } catch (err) {
+    next(err);
+  }
+};
 
+// Get all posts for a specific group ID
+const getPostsByGroupIdController = async (req, res, next) => {
+  const { id: groupId } = req.params;
+
+  try {
+    const posts = await getPostsByGroupId(groupId);
+    res.status(200).json(posts);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Get all posts for a specific group ID
+const deleteMemberFromGroupController = async (req, res, next) => {
+  const { accountId, groupId} = req.body;
+
+  try {
+    const posts = await deleteMemberFromGroup(accountId, groupId);
+    res.status(200).json(posts);
+  } catch (err) {
+    next(err);
+  }
+};
 
 export {
   createGroupController,
@@ -86,5 +131,8 @@ export {
   getUserJoinedGroupsController,
   getAvailableGroupsController,
   deleteGroupController,
-  getGroupDetailsController
+  getGroupDetailsController,
+  createPostController,
+  getPostsByGroupIdController,
+  deleteMemberFromGroupController
 };

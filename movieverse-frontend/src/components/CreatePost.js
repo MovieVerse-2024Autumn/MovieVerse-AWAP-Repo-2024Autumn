@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from 'react';
 import '../styles/GroupDetails.css';
 
-
-    const PostCreationSection = ({ onAddPost }) => {
-  const [postContent, setPostContent] = useState("");
-  const [movieSearch, setMovieSearch] = useState("");
+const url = 'http://localhost:3001/api/groups';
+const PostCreationSection = ({ onAddPost, groupId  }) => {
+  const [postContent, setPostContent] = useState('');
+  const [movieSearch, setMovieSearch] = useState('');
   const [movies, setMovies] = useState([]);
-  const [filteredMovies, setFilteredMovies] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedMovieId, setSelectedMovieId] = useState("");
+  const [selectedMovieId, setSelectedMovieId] = useState('');
   const [selectedMovie, setSelectedMovie] = useState(null);
-
 
   const handlePostChange = (e) => {
     setPostContent(e.target.value);
@@ -38,43 +36,65 @@ import '../styles/GroupDetails.css';
       const data = await response.json();
       setMovies((data.movies || []).slice(0, 20));
     } catch (error) {
-      console.error("Error fetching movies:", error);
+      console.error('Error fetching movies:', error);
     }
   };
 
-
   const handleMovieSelect = (movieId) => {
     setSelectedMovieId(movieId);
-    const selectedMovie = movies.find((movie) => movie.id === parseInt(movieId));
+    const selectedMovie = movies.find(
+      (movie) => movie.id === parseInt(movieId)
+    );
     setSelectedMovie(selectedMovie);
-    console.log("Selected Movie:", selectedMovie);
+    console.log('Selected Movie:', selectedMovie);
     // You can now use `selectedMovie` for your logic
-    setMovieSearch("");
+    setMovieSearch('');
     setShowDropdown(false);
   };
-  
 
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const newPost = {
+    if (!postContent || !selectedMovie) {
+      alert("Please provide both post content and select a movie.");
+      return;
+    }
+
+    const createPost = {
+        groupid: groupId,
         content: postContent,
-        movie: selectedMovie,
-      };
-  
-      // Call parent callback to add post
-      onAddPost(newPost);
-  
-      // Clear input fields
+        movieid: selectedMovie?.id || null,
+        movietitle: selectedMovie?.title || null,
+        movieposter: selectedMovie?.poster_path || null,
+    };
+
+    try {
+      const response = await fetch(`${url}/createpost`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(createPost),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create post");
+      }
+      onAddPost(createPost);
+
+      // Clear inputs after successful post creation
       setPostContent("");
       setSelectedMovie(null);
       setMovies([]);
-
-
-    console.log("Post Content:", postContent);
-    console.log("Selected Movies:", filteredMovies);
-    // Submit postContent and filteredMovies to the backend
+      setShowDropdown(false);
+    } catch (error) {
+      console.error("Error creating post:", error);
+      alert("Failed to create post. Please try again.");
+    }
   };
+
 
   return (
     <div className="post-creation-section">
@@ -88,7 +108,7 @@ import '../styles/GroupDetails.css';
           className="post-textarea"
           rows="4"
         ></textarea>
-  
+
         {/* Movie Search Input */}
         <input
           type="text"
@@ -97,7 +117,7 @@ import '../styles/GroupDetails.css';
           placeholder="Search for a movie"
           className="movie-search-input"
         />
-  
+
         {/* Movie Dropdown */}
         {showDropdown && (
           <div className="movie-dropdown-container">
@@ -117,7 +137,7 @@ import '../styles/GroupDetails.css';
             </select>
           </div>
         )}
-  
+
         {/* Selected Movie Preview */}
         {selectedMovie && (
           <div className="selected-movie-preview">
@@ -136,7 +156,7 @@ import '../styles/GroupDetails.css';
             </div>
           </div>
         )}
-  
+
         {/* Submit Button */}
         <button type="submit" className="post-submit-btn">
           Post
@@ -144,7 +164,6 @@ import '../styles/GroupDetails.css';
       </form>
     </div>
   );
-  
 };
 
 export default PostCreationSection;

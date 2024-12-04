@@ -104,6 +104,7 @@ ON
     g.id = gm.group_id
 WHERE 
     gm.account_id = $1
+    AND gm.member_status = 'accepted'
     AND g.id = $2;
 
   `;
@@ -130,7 +131,105 @@ WHERE
   return data;
 };
 
-export { createGroup, getUserCreatedGroups, getAvailableGroups,deleteGroup, getGroupDetails };
+
+// Create a new post
+const createPost = async ( postedBy, groupid, content, movieid, movietitle, movieposter) => {
+  const client = await pool.connect();
+  try {
+    // Begin transaction
+    await client.query("BEGIN");
+
+    const query = `
+    INSERT INTO groupposts(
+      postedby, 
+      groupid, 
+      content, 
+      movieid, 
+      movietitle, 
+      movieposter, 
+      postedon
+    ) 
+    VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP)
+    RETURNING *;  -- Optionally, return the newly created post
+  `;
+  const values = [postedBy, groupid, content, movieid, movietitle, movieposter];
+  const result = await client.query(query, values);
+    
+    // Commit transaction
+    await client.query("COMMIT");
+
+    // Return the newly created post
+    return result.rows[0];
+  } catch (err) {
+    // Rollback transaction in case of an error
+    await client.query("ROLLBACK");
+    throw err;
+  } finally {
+    client.release();
+  }
+};
+
+// Get posts by groupId
+const getPostsByGroupId = async (groupId) => {
+  try {
+    const query = `
+      SELECT 
+        gp.id,
+        gp.groupid,
+        gp.content,
+        gp.movieid,
+        gp.movietitle,
+        gp.movieposter,
+        gp.postedby,
+        gp.postedon,
+        CONCAT(a.first_name, ' ', a.last_name) AS posted_by_name
+      FROM 
+        GroupPosts gp
+      JOIN 
+        account a 
+      ON 
+        gp.postedby = a.id
+      WHERE 
+        gp.groupid = $1
+      ORDER BY 
+        gp.postedon DESC;
+    `;
+    const values = [groupId];
+    const result = await pool.query(query, values);
+
+    // Return the list of posts
+    return result.rows;
+  } catch (err) {
+    throw err;
+  }
+};
+
+// Delete member from group by account_id and group_id
+const deleteMemberFromGroup = async (accountId, groupId) => {
+  console.log(`Attempting to delete member with accountId: ${accountId} and groupId: ${groupId}`);
+
+  try {
+    const query = `
+      DELETE FROM group_member
+      WHERE account_id = $1 AND group_id = $2;
+    `;
+    const values = [accountId, groupId];
+    const result = await pool.query(query, values);
+
+    // Check if any rows were deleted (result.rowCount will be 0 if no rows were deleted)
+    if (result.rowCount === 0) {
+      throw new Error('Member not found in the specified group.acc:'+accountId + 'grp:'+groupId);
+    }
+
+    // If the member was deleted, return a success message
+    return { message: 'Member successfully deleted from the group.' };
+  } catch (err) {
+    throw err;
+  }
+};
+
+
+export { createGroup, getUserCreatedGroups, getAvailableGroups,deleteGroup, getGroupDetails, createPost, getPostsByGroupId ,deleteMemberFromGroup };
 
 
 

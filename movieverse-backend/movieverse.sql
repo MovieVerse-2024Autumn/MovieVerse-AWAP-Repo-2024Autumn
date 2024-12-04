@@ -103,3 +103,18 @@ DROP CONSTRAINT notification_group_fk;
 ALTER TABLE notification
 ADD CONSTRAINT notification_group_fk
 FOREIGN KEY (group_id) REFERENCES movie_group(id) ON DELETE CASCADE;
+
+
+--To create group post table (04.12.24)
+CREATE TABLE GroupPosts (
+    Id SERIAL PRIMARY KEY, 
+    PostedBy INT NOT NULL,                
+    GroupId INT NOT NULL,                
+    Content TEXT NOT NULL,               
+    MovieId INT,                         
+    MovieTitle VARCHAR(255),             
+    MoviePoster VARCHAR(255),                    
+    PostedOn TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT post_createdby_fk FOREIGN KEY (PostedBy) REFERENCES account(id),
+    CONSTRAINT group_id_fk FOREIGN KEY (GroupId) REFERENCES movie_group(id)
+);

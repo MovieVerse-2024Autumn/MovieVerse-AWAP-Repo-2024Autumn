@@ -9,7 +9,10 @@ import {
   getUserJoinedGroupsController,
   getAvailableGroupsController,
   getGroupDetailsController,
-  deleteGroupController
+  deleteGroupController,
+  createPostController,
+  getPostsByGroupIdController,
+  deleteMemberFromGroupController
 } from "../controllers/localdbControllers/groupsController.js";
 
 import {
@@ -79,6 +82,14 @@ router.patch(
 );
 router.post("/groups/getdetails", authenticate,  getGroupDetailsController);
 
+router.post("/groups/createpost", authenticate, createPostController);
 
+router.get(
+  "/groups/getgrouppost/:id",
+  authenticate,
+  getPostsByGroupIdController
+);
+
+router.delete('/groups/removegroupmember', authenticate, deleteMemberFromGroupController)
 
 export default router;
