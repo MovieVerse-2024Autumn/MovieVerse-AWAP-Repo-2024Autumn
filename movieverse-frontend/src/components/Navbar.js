@@ -16,6 +16,7 @@ const Navbar = () => {
   const handleSearch = () => {
     if (query.trim()) {
       navigate(`/search-results?query=${encodeURIComponent(query)}`);
+      setIsMenuOpen(false); // Close menu after search
     } else {
       alert("Please enter a search term!");
     }
@@ -31,16 +32,24 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
+    setIsMenuOpen(false); // Close menu after logout
     navigate("/");
   };
+
   const handleAccountClick = () => {
+    setIsMenuOpen(false); // Close menu after navigating
     navigate(`/${user.profileUrl}/delete-account`);
+  };
+
+  const handleLinkClick = () => {
+    setIsMenuOpen(false); // Close menu after any link is clicked
   };
 
   return (
     <nav className="navbar">
+      {/* Logo */}
       <div className="navbar-logo">
-        <Link to="/">
+        <Link to="/" onClick={handleLinkClick}>
           <img src={logo} alt="MovieVerse Logo" className="logo-image" />
         </Link>
       </div>
@@ -53,36 +62,21 @@ const Navbar = () => {
       {/* Navbar Links */}
       <div className={`navbar-links ${isMenuOpen ? "open" : ""}`}>
         <div className="navbar-center">
-          <Link to="/" className="nav-link">
+          <Link to="/" className="nav-link" onClick={handleLinkClick}>
             HOME
           </Link>
-          <Link to="/select-movies" className="nav-link">
+          <Link to="/select-movies" className="nav-link" onClick={handleLinkClick}>
             EXPLORE
           </Link>
-          <Link to="/show-time" className="nav-link">
+          <Link to="/show-time" className="nav-link" onClick={handleLinkClick}>
             SHOWTIMES
           </Link>
-          {!user.isAuthenticated && (
-            <>
-              <Link to="/favorites" className="nav-link">
-                FAVOURITE
-              </Link>
-              <Link to="/groups" className="nav-link">
-                GROUPS
-              </Link>
-            </>
-          )}
-
-          {user.isAuthenticated && (
-            <>
-              <Link to={`/${user.profileUrl}/favorites`} className="nav-link">
-                FAVOURITE
-              </Link>
-              <Link to={`/${user.profileUrl}/groups`} className="nav-link">
-                GROUPS
-              </Link>
-            </>
-          )}
+          <Link to="/favorites" className="nav-link" onClick={handleLinkClick}>
+            FAVOURITE
+          </Link>
+          <Link to="/groups" className="nav-link" onClick={handleLinkClick}>
+            GROUPS
+          </Link>
         </div>
 
         {/* Search Bar */}
@@ -100,26 +94,22 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Account Icon and Sign In / Sign Out */}
+        {/* Account Section */}
         <div className="navbar-right">
           <div className="account-icon" onClick={handleAccountClick}>
-            <span className="account-letter">
-              {user.isAuthenticated
-                ? `${user.firstName?.charAt(0).toUpperCase()}${user.lastName
-                    ?.charAt(0)
-                    .toUpperCase()}`
-                : "A"}
-            </span>
+            {isLoggedIn
+              ? `${user.firstName.charAt(0).toUpperCase()}${user.lastName.charAt(0).toUpperCase()}`
+              : "A"}
           </div>
-
-          {isLoggedIn ? (
+          {!isLoggedIn && (
+            <Link to="/authentication" className="signin-link" onClick={handleLinkClick}>
+              Sign In
+            </Link>
+          )}
+          {isLoggedIn && (
             <button className="signout-button" onClick={handleLogout}>
               Sign Out
             </button>
-          ) : (
-            <Link to="/authentication" className="signin-link">
-              Sign In
-            </Link>
           )}
         </div>
       </div>

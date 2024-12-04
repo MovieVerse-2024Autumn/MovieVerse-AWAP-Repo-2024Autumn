@@ -1,88 +1,138 @@
 /* Footer Styles */
 .footer {
-    background: linear-gradient(90deg, #d2cbcb, #111);
-    padding: 20px 0;
-    margin-top: 40px;
-  }
-  
+  background: linear-gradient(90deg, #d2cbcb, #111);
+  padding: 20px 0;
+  margin-top: 40px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: auto;
+  align-items: flex-start; /* Adjusted for better alignment on smaller screens */
+  gap: 20px; /* Added gap for spacing between sections */
+}
+
+/* Footer Logo Section */
+.footer-logo-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-direction: column; /* Stack on smaller screens */
+  text-align: center;
+}
+
+.footer-logo {
+  height: 60px; /* Adjusted for smaller screens */
+  width: auto;
+  margin-bottom: 10px;
+}
+
+/* Social Media Icons Section */
+.social-media-icons {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+  justify-content: center;
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
+}
+
+.social-media-icons a {
+  color: #bbb;
+  font-size: 24px;
+  transition: color 0.3s ease;
+}
+
+.social-media-icons a:hover {
+  color: #e50914;
+}
+
+/* Footer Links Section */
+.footer-columns {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px; /* Added spacing between columns for better responsiveness */
+}
+
+.footer-column {
+  flex: 1;
+  min-width: 150px; /* Ensure columns don't shrink too small */
+  max-width: 300px; /* Limit column width on larger screens */
+}
+
+.footer-column h4 {
+  font-size: 14px;
+  color: #e50914;
+  margin-bottom: 8px;
+}
+
+.footer-link {
+  display: block;
+  color: white;
+  font-size: 13px;
+  text-decoration: none;
+  margin-bottom: 6px;
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #f0f0f0;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+  text-align: center;
+  font-size: 11px;
+  color: white;
+  margin-top: 20px; /* Added more spacing on top */
+  padding-top: 10px;
+  border-top: 1px solid #444;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
   .footer-content {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    max-width: 1200px;
-    margin: auto;
+    flex-direction: column; /* Stack sections vertically on smaller screens */
     align-items: center;
+    text-align: center; /* Center align content */
+    gap: 25px;
   }
-  
-  .footer-logo-section {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
+
   .footer-logo {
-    height: 80px;
-    width: auto;
+    height: 50px; 
   }
-  
-  /* Social Media Icons Section */
-  .social-media-icons {
-    display: flex;
-    gap: 15px;
-    margin-top: 10px;
-    justify-content: center;
-  }
-  
-  .social-media-icons a {
-    color: #bbb;
-    font-size: 24px;
-    transition: color 0.3s ease;
-  }
-  
-  .social-media-icons a:hover {
-    color: #e50914;
-  }
-  
-  /* Footer Links Section */
+
   .footer-columns {
-    display: flex;
-    flex: 1;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 30px;
+    flex-direction: column; /* Stack columns vertically */
+    align-items: center;
+    gap: 20px; /* Reduce gap between columns */
   }
-  
+
   .footer-column {
-    flex: 1;
-    min-width: 150px;
+    min-width: unset; /* Allow full width on small screens */
+    width: 100%; /* Expand columns to full width */
+    text-align: center; /* Center align text for columns */
   }
-  
-  .footer-column h4 {
-    font-size: 14px;
-    color: #e50914;
-    margin-bottom: 8px;
+}
+
+@media (max-width: 480px) {
+  .footer-logo {
+    height: 40px; /* Smaller logo for very small screens */
   }
-  
+
+  .social-media-icons a {
+    font-size: 20px; /* Reduce icon size for very small screens */
+  }
+
   .footer-link {
-    display: block;
-    color: white;
-    font-size: 13px;
-    text-decoration: none;
-    margin-bottom: 6px;
-    transition: color 0.3s ease;
+    font-size: 12px; /* Smaller text size for links */
   }
-  
-  .footer-link:hover {
-    color: #f0f0f0;
-  }
-  
-  /* Footer Bottom */
+
   .footer-bottom {
-    text-align: center;
-    font-size: 11px;
-    color: white;
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid #444;
+    font-size: 10px; /* Smaller footer text */
   }
-  
+}

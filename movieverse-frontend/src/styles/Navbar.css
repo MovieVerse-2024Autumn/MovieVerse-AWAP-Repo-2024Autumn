@@ -1,200 +1,219 @@
-/* Navbar Styles */
+/* General Navbar Styles */
 .navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: linear-gradient(90deg, #d2cbcb, #111);
-    padding: 15px 20px;
-    box-shadow: 0px 4px 6px rgba(213, 13, 13, 0.3);
-    position: relative;
-  }
-  
-  .navbar-logo .logo-image {
-    margin-left: 10px;
-    width: 15vw;
-  }
-  
-  .navbar-links {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-  }
-  
-  .navbar-center, .navbar-right {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding-left: 15px;
-  }
-  
-  .nav-link {
-    color: #f0f0f0;
-    font-weight: bold;
-    text-decoration: none;
-    font-size: 18px;
-    padding: 8px 12px;
-    transition: color 0.3s ease, background-color 0.3s ease;
-  }
-  
-  .nav-link:hover {
-    color: #e50914;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-  }
-  
-  /* Search Bar Styles */
-  .search-container {
-    display: flex;
-    align-items: center;
-    border-radius: 12px;
-    border: 1px solid #444;
-    background-color: #222;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #d2cbcb, #111);
+  padding: 15px 20px;
+  box-shadow: 0px 4px 6px rgba(213, 13, 13, 0.3);
+  position: relative;
+  z-index: 1000;
+}
 
-  .search-container:focus-within {
-    border: 1px solid #e50914;
-    box-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
-  }
-  
-  .search-bar {
-    padding: 10px 15px;
-    width: 200px;
-    border: none;
-    border-radius: 12px 0 0 12px;
-    background-color: #222;
-    color: #f0f0f0;
-    font-size: 16px;
-    outline: none;
-  }
-  
-  .search-bar::placeholder {
-    color: #888;
-  }
-  
-  .search-button {
-    padding: 10px 15px;
-    background-color: #5e5556;
-    color: #f0f0f0;
-    border: none;
-    border-radius: 0 12px 12px 0;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .search-button:hover {
-    background-color: #b20810;
-  }
+.navbar-logo .logo-image {
+  margin-left: 10px;
+  width: 15vw;
+  max-width: 80px;
+  height: auto;
+}
 
-  .search-bar:focus, 
-  .search-button:focus {
-    outline: none;
-  }
+/* Navbar Links */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-grow: 1;
+}
 
-  
-  /* Account Icon */
-  .account-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px;
-    height: 50px;
-    background-color: #444;
-    color: #f0f0f0;
-    font-weight: bold;
-    font-size: 28px;
-    border-radius: 50%;
-  }
-  
-  .account-icon:hover {
-    background-color: #b20810;
-    color: #f0f0f0;
-  }
-  
-/* Sign In and Sign Out Buttons */
-.signin-link{
+.navbar-center {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Nav Links */
+.nav-link,
+.signin-link {
   color: #f0f0f0;
   font-weight: bold;
   text-decoration: none;
-  font-size: 22px;
+  font-size: 18px;
   padding: 8px 12px;
   transition: color 0.3s ease, background-color 0.3s ease;
 }
 
-.signin-link:hover  {
+.nav-link:hover,
+.signin-link:hover {
   color: #e50914;
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
 }
+
+/* Search Bar */
+.search-container {
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  border: 1px solid #444;
+  background-color: #222;
+  max-width: 300px; /* Restrict width in larger screens */
+  margin-left: 1px; /* Adjust spacing */
+  margin-right: 15px; /* Consistent spacing on both sides */
+  width: 100%; /* Ensure it spans full width in smaller screens */
+}
+
+.search-bar {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 12px 0 0 12px;
+  background-color: #222;
+  color: #f0f0f0;
+  font-size: 16px;
+  outline: none;
+}
+
+.search-bar::placeholder {
+  color: #888;
+}
+
+.search-button {
+  padding: 10px 15px;
+  background-color: #5e5556;
+  color: #f0f0f0;
+  border: none;
+  border-radius: 0 12px 12px 0;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #b20810;
+}
+
+/* Account Icon */
+.account-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background-color: #444;
+  color: #f0f0f0;
+  font-weight: bold;
+  font-size: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Hamburger Menu Styles */
+.hamburger-icon {
+  display: none;
+}
+
+@media (max-width: 912px) {
+  .navbar {
+    height: 20px; /* Increased height for mobile view */
+    padding: 20px 20px; /* Adjust padding for better spacing */
+  }
+
+  .hamburger-icon {
+    display: block;
+    font-size: 30px;
+    cursor: pointer;
+    color: #f0f0f0;
+    position: absolute;
+    top: 25px; /* Adjust for larger navbar */
+    right: 20px;
+    z-index: 2000;
+    background: transparent;
+    border: none;
+  }
+
+  .hamburger-icon:hover {
+    color: #e50914;
+    transform: scale(1.1);
+  }
+
+  .navbar-logo {
+    position: absolute;
+    top: 20px; /* Center logo vertically in larger navbar */
+    left: 20px;
+    z-index: 1000;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #111;
+    padding: 20px;
+    gap: 15px;
+    position: absolute;
+    top: 80px; /* Adjust to match increased navbar height */
+    left: 0;
+    right: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    z-index: 1000;
+  }
+
+  .navbar-links.open {
+    max-height: 500px;
+    opacity: 1;
+  }
+
+  .search-container {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .navbar-center {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-right {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .nav-link {
+    text-align: left;
+    width: 100%;
+  }
+
+  .signin-link {
+    text-align: left;
+    width: 100%;
+  }
+}
+
+
+/* Sign Out Button */
 .signout-button {
- background-color: #5e5556;
   color: #f0f0f0;
   font-weight: bold;
   text-decoration: none;
-  font-size: 22px;
+  font-size: 18px;
   padding: 8px 12px;
-  transition: color 0.3s ease,;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease, background-color 0.3s ease;
 }
 
 .signout-button:hover {
   color: #e50914;
   background-color: rgba(255, 255, 255, 0.1);
- 
   border-radius: 4px;
 }
-
-
-
-  /* Hamburger Menu */
-  .hamburger-icon {
-    display: none;
-    font-size: 30px;
-    cursor: pointer;
-    color: #f0f0f0;
-  }
-  
-  /* Responsive Styles */
-  @media (max-width: 912px) {
-    .navbar-links {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background-color: #111;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 20px;
-      gap: 15px;
-      display: none;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
-    }
-  
-    .navbar-links.open {
-      display: flex;
-    }
-  
-    .hamburger-icon {
-      display: block;
-    }
-  
-    .search-container {
-      width: 100%;
-    }
-  
-    .search-bar {
-      width: 100%;
-    }
-  
-    .navbar-center, .navbar-right {
-      flex-direction: column;
-      width: 100%;
-      padding-left: 15px;
-    }
-  
-    .nav-link, Signout-button {
-      width: 100%;
-      text-align: left;
-    }
-  }
-  
