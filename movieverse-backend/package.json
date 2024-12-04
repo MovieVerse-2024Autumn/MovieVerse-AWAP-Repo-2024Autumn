@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha *.test.js",
     "devStart": "nodemon index.js"
   },
   "keywords": [],
@@ -23,7 +23,10 @@
     "react-router-dom": "^6.28.0"
   },
   "devDependencies": {
+    "@types/chai": "^5.0.1",
     "@types/node-fetch": "^2.6.12",
-    "@types/pg": "^8.11.10"
+    "@types/pg": "^8.11.10",
+    "chai": "^5.1.2",
+    "mocha": "^11.0.1"
   }
 }
