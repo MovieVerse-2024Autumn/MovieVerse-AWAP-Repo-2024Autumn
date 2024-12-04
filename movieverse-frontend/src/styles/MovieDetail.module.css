@@ -320,3 +320,22 @@
         font-size: 10px;
     }
 }
+
+
+.star-display {
+    display: flex;
+    margin: 5px 0;
+  }
+  
+  .star-filled {
+    font-size: 20px;
+    color: #e9e748; /* Yellow for filled stars */
+    margin-right: 2px;
+  }
+  
+  .star-empty {
+    font-size: 20px;
+    color: #ccc; /* Gray for empty stars */
+    margin-right: 2px;
+  }
+  
