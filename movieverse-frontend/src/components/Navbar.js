@@ -87,10 +87,18 @@ const Navbar = ({
 
           {user.isAuthenticated && (
             <>
-              <Link to={`/${user.profileUrl}/favorites`} className="nav-link">
+              <Link
+                to={`/${user.profileUrl}/favorites`}
+                className="nav-link"
+                onClick={handleLinkClick}
+              >
                 FAVOURITE
               </Link>
-              <Link to={`/${user.profileUrl}/groups`} className="nav-link">
+              <Link
+                to={`/${user.profileUrl}/groups`}
+                className="nav-link"
+                onClick={handleLinkClick}
+              >
                 GROUPS
               </Link>
             </>
@@ -123,9 +131,14 @@ const Navbar = ({
               joinedGroups={joinedGroups}
               setJoinedGroups={setJoinedGroups}
               hadleLogout={hadleLogout}
+              closeHamburgerMenu={() => setIsMenuOpen(false)}
             />
           ) : (
-            <Link to="/authentication" className="signin-link">
+            <Link
+              to="/authentication"
+              className="signin-link"
+              onClick={handleLinkClick}
+            >
               Sign In
             </Link>
           )}

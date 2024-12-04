@@ -97,21 +97,79 @@
   background-color: #b20810;
 }
 
-/* Account Icon */
+/* Dropdown Menu */
+
+ /* Dropdown Menu */
+.account-dropdown {
+  position: relative;
+}
+
 .account-icon {
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 50px;
   height: 50px;
   background-color: #444;
-  color: #f0f0f0;
-  font-weight: bold;
-  font-size: 28px;
+  color: #fff;
   border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  font-size: 18px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
+
+.account-icon:hover {
+  background-color: #555;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 60px; /* Adjust position below the account icon */
+  right: 0; /* Align with the right side of the account icon */
+  background-color: #111;
+  border: 1px solid #333;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 10px 0;
+  z-index: 1000;
+  min-width: 150px; /* Ensure dropdown doesn't wrap */
+  text-align: left;
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+}
+
+.dropdown-item {
+  padding: 10px 15px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #333;
+}
+
+/* Adjust positioning for smaller screens */
+@media (max-width: 912px) {
+  .dropdown-menu {
+    top: 50px; /* Slightly closer to the account icon */
+    right: 10px; /* Align better with the smaller screen layout */
+  }
+
+  .account-icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+
+
+
 
 /* Hamburger Menu Styles */
 .hamburger-icon {
