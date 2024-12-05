@@ -71,7 +71,6 @@ export const deleteAccount = async (req, res) => {
   const { reason, password } = req.body;
 
   console.log("Delete Account Request - User ID:", userId);
-  console.log("Reason:", reason);
 
   try {
     // Check if the user exists
@@ -79,7 +78,7 @@ export const deleteAccount = async (req, res) => {
       userId,
     ]);
 
-    console.log("User Check Result:", userCheck.rows);
+    //console.log("User Check Result:", userCheck.rows);
 
     if (userCheck.rowCount === 0) {
       return res.status(404).json({ message: "User not found" });

@@ -8,7 +8,8 @@ import movieRouter from "./routers/movieRouter.js";
 import reviewRouter from "./routers/reviewRouter.js";
 import favoriteRouter from "./routers/favoriteRouter.js";
 import selectRouter from "./routers/selectRouter.js";
-import groupRouter from "./routers/groupsRouter.js";
+import groupsRouter from "./routers/groupsRouter.js";
+import groupDetailRouter from "./routers/groupDetailRouter.js";
 import profileRouter from "./routers/profileRouter.js";
 
 const app = express();
@@ -24,7 +25,8 @@ app.use(
   reviewRouter,
   favoriteRouter,
   selectRouter,
-  groupRouter,
+  groupsRouter,
+  groupDetailRouter,
   profileRouter
 );
 

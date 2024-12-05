@@ -42,6 +42,10 @@ const deleteUserAccount = async (accountId) => {
 
     await client.query("DELETE FROM review WHERE account_id = $1", [accountId]);
 
+    await client.query("DELETE FROM GroupPosts WHERE PostedBy = $1", [
+      accountId,
+    ]);
+
     await client.query("DELETE FROM movie_group WHERE admin_id = $1", [
       accountId,
     ]);

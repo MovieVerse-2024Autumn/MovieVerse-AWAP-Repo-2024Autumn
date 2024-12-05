@@ -8,7 +8,6 @@ import {
   deleteUserReviewController,
   updateUserNameController,
 } from "../controllers/localdbControllers/profileController.js";
-import { deleteAccount } from "../controllers/localdbControllers/authController.js";
 
 router.get("/profile/reviews/:id", authenticate, getUserAllReviewsController);
 
@@ -21,7 +20,5 @@ router.delete(
   authenticate,
   deleteUserReviewController
 );
-
-router.delete("/profile/delete/:id", authenticate, deleteAccount);
 
 export default router;
