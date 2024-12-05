@@ -21,6 +21,8 @@ export default function Select() {
   const [selectedGenre, setSelectedGenre] = useState('');
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedSorting, setSelectedSorting] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +40,7 @@ export default function Select() {
         );
         const moviesData = await moviesResponse.json();
         setMovies(moviesData.results || []);
+        setTotalPages(moviesData.total_pages || 1); // Set total pages
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -48,6 +51,10 @@ export default function Select() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    handleSearch();
+  }, [currentPage]);
+
   const handleSearch = async () => {
     setLoading(true);
     try {
@@ -57,23 +64,32 @@ export default function Select() {
         with_genres: selectedGenre,
         with_origin_country: selectedCountry,
         sort_by: selectedSorting || 'popularity.desc',
+        page: currentPage, // Include the current page
       });
-      let searchUrl = `https://api.themoviedb.org/3/discover/movie?${queryParams.toString()}`;
-      if (selectedSorting === 'vote_average.desc') {
-        searchUrl += '&vote_count.gte=100';
-      }
-      if (selectedSorting === 'primary_release_date.desc') {
-        const now = new Date();
-        searchUrl += `&primary_release_date.lte=${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-      }
+
+      const searchUrl = `https://api.themoviedb.org/3/discover/movie?${queryParams.toString()}`;
       const response = await fetch(searchUrl);
       const data = await response.json();
       const filteredMovies = data.results.filter((item) => item.poster_path !== null);
+
       setMovies(filteredMovies || []);
+      setTotalPages(data.total_pages || 1);
     } catch (error) {
       console.error('Error fetching filtered movies:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
     }
   };
 
@@ -130,6 +146,30 @@ export default function Select() {
       </div>
 
       <MovieList movies={movies} />
+
+      <div className={styles.pagination}>
+        <button
+          className={`${styles.pageButton} ${
+            currentPage === 1 ? styles.disabled : ''
+          }`}
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+        >
+          &lt; Previous
+        </button>
+        <span className={styles.pageInfo}>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          className={`${styles.pageButton} ${
+            currentPage === totalPages ? styles.disabled : ''
+          }`}
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+        >
+          Next &gt;
+        </button>
+      </div>
     </div>
   );
 }

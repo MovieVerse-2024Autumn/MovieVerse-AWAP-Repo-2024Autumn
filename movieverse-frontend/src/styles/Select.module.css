@@ -57,3 +57,32 @@
     color: #555;
   }
   
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .pageButton {
+    padding: 10px 20px;
+    margin: 0 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .pageButton:hover {
+    background-color: #0056b3;
+  }
+  
+  .pageButton.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .pageInfo {
+    align-self: center;
+  }

@@ -120,7 +120,7 @@ WHERE
   const query2 = `
     SELECT account_id as userId, concat(a.first_name,' ',a.last_name) as name
     FROM group_member gm join account a on gm.account_id = a.id 
-    where gm.group_id = $1;
+    where gm.group_id = $1 and member_status= 'accepted';
   `;
   const values2 = [groupId];
   const result2 = await pool.query(query2, values2);
