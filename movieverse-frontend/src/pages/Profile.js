@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import ReviewCardForHomePage from "../components/ReviewCardForHomePage";
+import DeleteAccountFlow from "./DeleteAccount";
 import { useFetchData } from "../utils/useFetchData";
 import "../styles/Profile.css";
 const url = "http://localhost:3001/api";
@@ -20,6 +21,7 @@ const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editFirstName, setEditFirstName] = useState("");
   const [editLastName, setEditLastName] = useState("");
+  const [showDeleteFlow, setShowDeleteFlow] = useState(false);
 
   const navigate = useNavigate();
 
@@ -32,6 +34,10 @@ const Profile = () => {
     return null;
   };
   const accountId = getAccountId();
+
+  const handleAccountDeleted = () => {
+    navigate("/login");
+  };
 
   useEffect(() => {
     fetchUserReviews();
@@ -167,8 +173,9 @@ const Profile = () => {
     }
   };
 
-  // Delete account handler
-  const handleDeleteAccount = async () => {};
+  const handleCancelDelete = () => {
+    setShowDeleteFlow(false);
+  };
 
   return isLoading ? (
     <p>Loading your profile...</p>
@@ -176,12 +183,12 @@ const Profile = () => {
     <div className="profile-page">
       <h1>Your Profile</h1>
 
-      <div>
+      <div className="user-details">
         <h3>User Details</h3>
         {isEditing ? (
           <>
             <p>
-              <strong>First Name: </strong>
+              <strong>First Name </strong>
               <input
                 type="text"
                 value={editFirstName}
@@ -189,7 +196,7 @@ const Profile = () => {
               />
             </p>
             <p>
-              <strong>Last Name: </strong>
+              <strong>Last Name </strong>
               <input
                 type="text"
                 value={editLastName}
@@ -212,7 +219,7 @@ const Profile = () => {
         <p>
           <strong>Email</strong>
           {email}
-          <p>(You can not change your email.)</p>
+          <span>(You can not change your email.)</span>
         </p>
         {isEditing ? (
           <button onClick={handleUpdateUserDetails}>Save</button>
@@ -221,7 +228,7 @@ const Profile = () => {
         )}
       </div>
 
-      <div>
+      <div className="profile-details">
         {/* Favorites Section */}
         <h3>Profile Details</h3>
         <p>
@@ -229,15 +236,19 @@ const Profile = () => {
           <a href={favoritesLink} target="_blank" rel="noopener noreferrer">
             {favoritesLink}
           </a>
-          <button onClick={handleShareFavorites}>
+          <button
+            className="profile-details-favorite-icon"
+            onClick={handleShareFavorites}
+          >
             <i>🔗</i>
           </button>
         </p>
-        <div>
+        <div className="profile-groups-section">
           <strong>Groups</strong>
-          <p>
+          <p className="profile-groups-nav">
             Go to{" "}
             <strong
+              className="profile-groups-link"
               onClick={navigateToGroups}
               style={{ cursor: "pointer", textDecoration: "underline" }}
             >
@@ -248,23 +259,31 @@ const Profile = () => {
         </div>
 
         {/* Review Section */}
-        <strong>Reviews</strong>
-        <div>
-          <div>
+        <div className="profile-review-section">
+          <p>
+            <strong>Reviews</strong>
+          </p>
+
+          <div className="profile-review-card">
             {reviews.map((review) => {
               const movie = movies.find(
                 (movie) => movie.id === review.movie_id
               );
               return (
                 <div key={review.id}>
-                  <ReviewCardForHomePage
-                    key={review.id}
-                    review={review}
-                    movie={movie}
-                  />
+                  <div className="profile-review-card-content">
+                    <ReviewCardForHomePage
+                      key={review.id}
+                      review={review}
+                      movie={movie}
+                    />
+                  </div>
                   {/* Delete review icon next to each review */}
                   <div>
-                    <button onClick={() => handleDeleteReview(review.id)}>
+                    <button
+                      className="profile-review-delete-btn"
+                      onClick={() => handleDeleteReview(review.id)}
+                    >
                       🗑️
                     </button>
                   </div>
@@ -274,9 +293,14 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      {/* Delete & Share Account */}
 
-      <button className="delete-account-button">Delete Account</button>
+      {/* Delete Account */}
+      <div className="profile-delete-account-container">
+        <button onClick={() => setShowDeleteFlow(true)}>Delete Account</button>
+        {showDeleteFlow && (
+          <DeleteAccountFlow onAccountDelete={handleCancelDelete} />
+        )}
+      </div>
     </div>
   );
 };

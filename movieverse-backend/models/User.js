@@ -32,15 +32,25 @@ const deleteUserAccount = async (accountId) => {
   try {
     await client.query("BEGIN");
 
-    await client.query("DELETE FROM reviews WHERE account_id = $1", [
+    await client.query("DELETE FROM notification WHERE sender_id = $1", [
       accountId,
     ]);
+
+    await client.query("DELETE FROM notification WHERE receiver_id = $1", [
+      accountId,
+    ]);
+
+    await client.query("DELETE FROM review WHERE account_id = $1", [accountId]);
 
     await client.query("DELETE FROM movie_group WHERE admin_id = $1", [
       accountId,
     ]);
 
     await client.query("DELETE FROM group_member WHERE account_id = $1", [
+      accountId,
+    ]);
+
+    await client.query("DELETE FROM favourite WHERE account_id = $1", [
       accountId,
     ]);
 

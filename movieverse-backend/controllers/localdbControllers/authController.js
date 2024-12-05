@@ -70,11 +70,17 @@ export const deleteAccount = async (req, res) => {
   const userId = req.user.id;
   const { reason, password } = req.body;
 
+  console.log("Delete Account Request - User ID:", userId);
+  console.log("Reason:", reason);
+
   try {
     // Check if the user exists
     const userCheck = await pool.query("SELECT * FROM account WHERE id = $1", [
       userId,
     ]);
+
+    console.log("User Check Result:", userCheck.rows);
+
     if (userCheck.rowCount === 0) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -82,9 +88,13 @@ export const deleteAccount = async (req, res) => {
     // Validate password
     const user = userCheck.rows[0];
     const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log("Password Valid:", isPasswordValid);
+
     if (!isPasswordValid) {
       return res.status(400).json({ message: "Invalid password" });
     }
+
+    console.log(`User ${userId} deleted their account for reason: ${reason}`);
 
     // Delete the user
     await userModel.deleteUserAccount(userId);

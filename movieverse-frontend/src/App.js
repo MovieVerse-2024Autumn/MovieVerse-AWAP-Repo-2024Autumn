@@ -19,7 +19,7 @@ import Footer from "./components/Footer";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import AboutUs from "./pages/AboutUs";
 import Profile from "./pages/Profile";
-import DeleteAccountFlow from "./pages/delete-account";
+import DeleteAccountFlow from "./pages/DeleteAccount";
 
 function App() {
   return (

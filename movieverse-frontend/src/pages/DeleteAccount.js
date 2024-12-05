@@ -1,38 +1,10 @@
 import React, { useState, useEffect } from "react";
-import "../styles/delete-account.css";
+import "../styles/DeleteAccount.css";
 
-const DeleteAccountFlow = () => {
+const DeleteAccountFlow = ({ onAccountDelete }) => {
   const [step, setStep] = useState(0); // 0: Options view, 1: Reason selection, 2: Password confirmation
   const [reason, setReason] = useState("");
   const [password, setPassword] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // Check if the user is authenticated on component mount
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        const decoded = JSON.parse(atob(token.split(".")[1])); // Decode the JWT token payload
-        if (decoded.id) {
-          setIsAuthenticated(true); // User is authenticated
-        } else {
-          setIsAuthenticated(false); // Invalid token
-        }
-      } catch (error) {
-        setIsAuthenticated(false); // Malformed token
-      }
-    } else {
-      setIsAuthenticated(false); // No token
-    }
-  }, []);
-
-  // Retrieve user ID from JWT token
-  const getUserIdFromToken = () => {
-    const token = localStorage.getItem("token");
-    if (!token) return null;
-    const decoded = JSON.parse(atob(token.split(".")[1])); // Decode the JWT token payload
-    return decoded.id; // Assuming the token contains user ID as 'id'
-  };
 
   const handleReasonChange = (e) => {
     setReason(e.target.value);
@@ -47,6 +19,9 @@ const DeleteAccountFlow = () => {
   };
 
   const handleDelete = async () => {
+    console.log("Reason:", reason);
+    console.log("Password:", password);
+
     if (!password) {
       alert("Please enter your password.");
       return;
@@ -76,38 +51,17 @@ const DeleteAccountFlow = () => {
     }
   };
 
-  const handleOptionSelect = (option) => {
-    if (option === "profile") {
-      alert("This would show the user's profile.");
-    } else if (option === "deleteAccount") {
-      if (!isAuthenticated) {
-        alert("You must be signed in to delete your account.");
-        return;
-      }
-      setStep(1); // Move to reason selection step for account deletion
-    }
-  };
-
-  if (!isAuthenticated) {
-    return <p>Please sign in to access account.</p>; // Redirect or block access if not signed in
-  }
-
   return (
     <div className="delete-account-container">
-      <h2>Account Settings</h2>
+      <h2>Are You Going to Delete Your Account?</h2>
 
       {/* Step 0: Account Options (Profile or Delete Account) */}
       {step === 0 && (
-        <div>
-          <h3>Select an option</h3>
-          <div className="delete-account-options">
-            <button onClick={() => handleOptionSelect("profile")}>
-              Profile
-            </button>
-            <button onClick={() => handleOptionSelect("deleteAccount")}>
-              Delete Account
-            </button>
-          </div>
+        <div className="delete-account-options">
+          <button onClick={() => setStep(1)}>
+            Yes, I want to delete my account.
+          </button>
+          <button onClick={onAccountDelete}>No, let me think about it.</button>
         </div>
       )}
 
@@ -118,7 +72,7 @@ const DeleteAccountFlow = () => {
           <select
             value={reason}
             onChange={handleReasonChange}
-            className="select"
+            className="delete-reason-select"
           >
             <option value="">Select a reason</option>
             <option value="I don't find it useful">
