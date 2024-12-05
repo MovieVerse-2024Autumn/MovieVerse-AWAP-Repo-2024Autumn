@@ -12,9 +12,10 @@
 
 .navbar-logo .logo-image {
   margin-left: 10px;
-  width: 15vw;
-  max-width: 80px;
+  width: 25vw;
+  max-width: 150px;
   height: auto;
+  margin-right: 10px;
 }
 
 /* Navbar Links */

@@ -92,7 +92,7 @@ const Navbar = ({
                 className="nav-link"
                 onClick={handleLinkClick}
               >
-                FAVOURITE
+                FAVOURITES
               </Link>
               <Link
                 to={`/${user.profileUrl}/groups`}
