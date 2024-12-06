@@ -31,18 +31,45 @@ const requestJoinGroup = async (groupId, userId) => {
 
     const { admin_id: adminId, group_name: groupName } = groupResult.rows[0];
 
-    const memberQuery = `
-    INSERT INTO group_member (group_id, account_id, member_status, admin_id)
-    VALUES ($1, $2, 'pending', $3) 
-    RETURNING *;
-  `;
-    const memberResult = await client.query(memberQuery, [
+    const existingMemberQuery = `SELECT * FROM group_member 
+      WHERE group_id = $1 AND account_id = $2`;
+
+    const existingMemberResult = await client.query(existingMemberQuery, [
       groupId,
       userId,
-      adminId,
     ]);
 
-    // Get user name
+    if (existingMemberResult.rowCount > 0) {
+      const existingStatus = existingMemberResult.rows[0].member_status;
+
+      if (existingStatus === "accepted") {
+        throw new Error("You are already a member of this group.");
+      }
+
+      if (existingStatus === "pending") {
+        throw new Error("Your join request is already pending.");
+      }
+
+      //update member_status to pending
+      const updateMemberQuery = `
+          UPDATE group_member 
+          SET member_status = 'pending'
+          WHERE group_id = $1 AND account_id = $2
+          RETURNING *;
+        `;
+      await client.query(updateMemberQuery, [groupId, userId]);
+    } else {
+      const insertQuery = ` INSERT INTO group_member (group_id, account_id, member_status, admin_id)VALUES ($1, $2, 'pending', $3) RETURNING *;`;
+      await client.query(insertQuery, [groupId, userId, adminId]);
+    }
+
+    // const memberResult = await client.query(memberStatusQuery, [
+    //   groupId,
+    //   userId,
+    //   adminId,
+    // ]);
+
+    // insert notification, get user name
     const userQuery = `SELECT CONCAT(first_name, ' ', last_name) AS user_name FROM account WHERE id = $1`;
     const userResult = await client.query(userQuery, [userId]);
 
@@ -64,7 +91,7 @@ const requestJoinGroup = async (groupId, userId) => {
     ]);
 
     await client.query("COMMIT");
-    return memberResult.rows[0];
+    return { message: "Join request sent successfully." };
   } catch (err) {
     await client.query("ROLLBACK");
     throw err;

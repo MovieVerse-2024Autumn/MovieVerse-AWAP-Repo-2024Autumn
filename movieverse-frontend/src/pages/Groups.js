@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import GroupCard from "../components/GroupCard";
 import Notification from "./Notification";
@@ -284,6 +284,8 @@ export default function Group() {
               key={group.id}
               group={group}
               onClick={() => navigate(`/group/${group.id}`)}
+              showDeleteButton={true}
+              onDelete={handleDeleteGroup}
             />
           ))}
           <button className="create-group-btn" onClick={handleCreateNewGroup}>
@@ -331,10 +333,10 @@ export default function Group() {
         <div className="group-list">
           {joinedGroups.map((group) => (
             <GroupCard
-            key={group.id}
-            group={group}
-            onClick={() => navigate(`/group/${group.id}`)}
-          />
+              key={group.id}
+              group={group}
+              onClick={() => navigate(`/group/${group.id}`)}
+            />
           ))}
         </div>
       </div>
