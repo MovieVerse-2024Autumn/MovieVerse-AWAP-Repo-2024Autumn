@@ -12,33 +12,39 @@ const { sign } = jwt;
 
 const __dirname = import.meta.dirname;
 
-const getToken = (email) => {
+const getToken = (userId, email) => {
   const secretKey = process.env.JWT_SECRET;
-  console.log("JWT_SECRET_KEY:", process.env.JWT_SECRET, "in test.js");
+  //console.log("JWT_SECRET_KEY:", process.env.JWT_SECRET, "in test.js");
 
   if (!secretKey) {
     throw new Error("JWT_SECRET_KEY is not defined");
   }
-  return sign({ user: email }, secretKey);
+  return sign({ id: userId, email: email }, secretKey);
 };
 
-const initializeTestDb = () => {
+const initializeTestDb = async () => {
   const sql = fs.readFileSync(
-    path.resolve(__dirname, "../movieverse.sql"),
+    path.resolve(__dirname, "../testMovieverse.sql"),
     "utf8"
   );
-  pool.query(sql);
+  await pool.query(sql);
 };
 
-const insertTestUser = (email, password, firstName, lastName, uniqueUrl) => {
-  hash(password, 10, (error, hashedPassword) => {
-    pool.query(
-      `
+const insertTestUser = async (
+  email,
+  password,
+  firstName,
+  lastName,
+  uniqueUrl
+) => {
+  const hashedPassword = await hash(password, 10);
+  const result = await pool.query(
+    `
         INSERT INTO account (email, password, first_name, last_name, is_active, link, unique_profile_url)
-        VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
-      [email, hashedPassword, firstName, lastName, true, "", uniqueUrl]
-    );
-  });
+        VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id;`,
+    [email, hashedPassword, firstName, lastName, true, "", uniqueUrl]
+  );
+  return result.rows[0].id;
 };
 
 export { initializeTestDb, insertTestUser, getToken };
