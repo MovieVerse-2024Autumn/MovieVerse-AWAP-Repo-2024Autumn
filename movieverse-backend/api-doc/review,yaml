@@ -1,0 +1,183 @@
+
+tags:
+- description: API for managing movie reviews
+  name: Reviews
+
+components:
+  schemas:
+    Error:
+      properties:
+        error:
+          example: An error occurred.
+          type: string
+      type: object
+    Review:
+      properties:
+        account_id:
+          example: 1
+          type: integer
+        description:
+          example: This movie was fantastic! Great plot and acting.
+          type: string
+        id:
+          example: 1
+          type: integer
+        like_count:
+          example: 10
+          type: integer
+        movie_id:
+          example: 101
+          type: integer
+        movie_poster_path:
+          example: /path/to/poster.jpg
+          type: string
+        rating:
+          example: 4.5
+          format: float
+          type: number
+        review_date:
+          example: '2024-06-01T12:00:00Z'
+          format: date-time
+          type: string
+        title:
+          example: Amazing Movie
+          type: string
+      type: object
+info:
+  description: API for managing movie reviews.
+  title: Review API
+  version: 1.0.0
+openapi: 3.0.0
+paths:
+  /movies/{id}/reviews:
+    post:
+      description: Add a new review for a specific movie.
+      parameters:
+      - description: ID of the movie
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                account_id:
+                  example: 1
+                  type: integer
+                description:
+                  example: This movie was fantastic! Great plot and acting.
+                  type: string
+                movie_id:
+                  example: 101
+                  type: integer
+                movie_poster_path:
+                  example: /path/to/poster.jpg
+                  type: string
+                rating:
+                  example: 4.5
+                  format: float
+                  type: number
+                title:
+                  example: Amazing Movie
+                  type: string
+              required:
+              - movie_id
+              - movie_poster_path
+              - account_id
+              - title
+              - description
+              - rating
+              type: object
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: Review added successfully.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid input data
+      summary: Add a Review for a Movie
+      tags:
+      - Reviews
+  /reviews:
+    get:
+      description: Retrieve a list of all reviews.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Review'
+                type: array
+          description: List of reviews retrieved successfully.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Server error
+      summary: Get All Reviews
+      tags:
+      - Reviews
+  /reviews/{id}:
+    get:
+      description: Retrieve a single review by its ID.
+      parameters:
+      - description: ID of the review
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: Review retrieved successfully.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Review not found
+      summary: Get One Review
+      tags:
+      - Reviews
+  /reviews/{id}/like:
+    post:
+      description: Increment the like count for a specific review.
+      parameters:
+      - description: ID of the review
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                like_count: 11
+          description: Like count updated successfully.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Review not found
+      summary: Like a Review
+      tags:
+      - Reviews

@@ -1,0 +1,135 @@
+
+tags:
+- description: API for managing user favorites
+  name: Favorites
+
+components:
+  schemas:
+    Error:
+      properties:
+        error:
+          example: An error occurred.
+          type: string
+      type: object
+    Favorite:
+      properties:
+        account_id:
+          example: 1
+          type: integer
+        movie_id:
+          example: 101
+          type: integer
+      type: object
+info:
+  description: API for managing user favorite movies.
+  title: Favorites API
+  version: 1.0.0
+openapi: 3.0.0
+paths:
+  /favorites:
+    delete:
+      description: Remove a movie from the user's favorites.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Favorite'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                message: Movie removed from favorites
+          description: Movie removed from favorites successfully.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid input data
+      summary: Remove from Favorites
+      tags:
+      - Favorites
+    post:
+      description: Add a movie to the user's favorites.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Favorite'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                message: Movie added to favorites
+          description: Movie added to favorites successfully.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid input data
+      summary: Add to Favorites
+      tags:
+      - Favorites
+  /favorites/shared/{account_id}:
+    get:
+      description: Retrieve a list of shared favorite movies for a specific user.
+      parameters:
+      - description: ID of the user account
+        in: path
+        name: account_id
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - movie_id: 103
+                title: The Dark Knight
+              - movie_id: 104
+                title: Interstellar
+          description: List of shared favorite movies retrieved successfully.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Shared favorites not found
+      summary: Get Shared Favorites
+      tags:
+      - Favorites
+  /favorites/{account_id}:
+    get:
+      description: Retrieve a list of favorite movies for a specific user.
+      parameters:
+      - description: ID of the user account
+        in: path
+        name: account_id
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - movie_id: 101
+                title: Inception
+              - movie_id: 102
+                title: The Matrix
+          description: List of favorite movies retrieved successfully.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Favorites not found
+      summary: Get User Favorites
+      tags:
+      - Favorites
