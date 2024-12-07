@@ -1,0 +1,301 @@
+tags:
+  - name: Groups
+    description: API for managing user groups page
+  - name: Notifications
+    description: API for managing notifications
+
+components:
+  schemas:
+    Group:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Group Name"
+        description:
+          type: string
+          example: "This is a group for movie enthusiasts."
+    Notification:
+      type: object
+      properties:
+        notificationId:
+          type: integer
+          example: 5
+        groupId:
+          type: integer
+          example: 1
+        userId:
+          type: integer
+          example: 2
+        action:
+          type: string
+          enum: [accept, decline]
+          example: "accept"
+
+paths:
+  /groups/create:
+    post:
+      tags:
+        - Groups
+      summary: Create a new group
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Group Name"
+                description:
+                  type: string
+                  example: "This is a group for movie enthusiasts."
+      responses:
+        "201":
+          description: Group created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+
+  /groups/my-groups:
+    get:
+      tags:
+        - Groups
+      summary: Get groups created by the user
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: List of groups created by the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Group"
+        "401":
+          description: Unauthorized
+
+  /groups/available-groups:
+    get:
+      tags:
+        - Groups
+      summary: Get available groups for joining
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: List of available groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Group"
+        "401":
+          description: Unauthorized
+
+  /groups/join-request:
+    post:
+      tags:
+        - Groups
+      summary: Request to join a group
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                groupId:
+                  type: integer
+                  example: 1
+      responses:
+        "201":
+          description: Join request sent successfully
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+
+  /groups/joined-groups':
+    get:
+      summary: Get groups joined by the user
+      tags:
+        - Groups
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: Successfully retrieved joined groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Group"
+        "401":
+          description: Unauthorized
+
+  /groups/delete/{id}':
+    delete:
+      summary: Delete a group
+      tags:
+        - Groups
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          required: true,
+          schema:
+            type: integer
+            description: ID of the group to delete
+      responses:
+        "204":
+          description: Group deleted successfully
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+  /groups/notifications/request:
+    get:
+      tags:
+        - Notifications
+      summary: Get join requests sent to the admin
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: List of join requests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+        "401":
+          description: Unauthorized
+
+  /groups/notifications/handle-request:
+    patch:
+      tags:
+        - Notifications
+      summary: Handle a join request
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notificationId:
+                  type: integer
+                  example: 5
+                groupId:
+                  type: integer
+                  example: 1
+                userId:
+                  type: integer
+                  example: 2
+                action:
+                  type: string
+                  enum: [accept, decline]
+                  example: "accept"
+      responses:
+        "200":
+          description: Join request handled successfully
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+
+  /groups/notifications/unread-count:
+    get:
+      tags:
+        - Notifications
+      summary: Get the count of unread notifications
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: Unread notification count
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 3
+        "401":
+          description: Unauthorized
+
+  /groups/notifications/response':
+    get:
+      summary: Get join request response notifications
+      tags:
+        - Notifications
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: Successfully retrieved response notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+        "401":
+          description: Unauthorized
+
+  /groups/notifications/mark-as-read':
+    patch:
+      summary: Mark a notification as read
+      tags:
+        - Notifications
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notificationId:
+                  type: integer
+              required: notificationId
+      responses:
+        "200":
+          description: Notification marked as read successfully
+          content:
+            application/json':
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  updatedNotification:
+                    $ref: "#/components/schemas/Notification"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized

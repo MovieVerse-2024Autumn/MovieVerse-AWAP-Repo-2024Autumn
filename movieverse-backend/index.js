@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import swaggerDocs from "./swagger.js";
 dotenv.config();
 
 import authRouter from "./routers/authRouter.js";
@@ -14,6 +15,8 @@ import profileRouter from "./routers/profileRouter.js";
 
 const app = express();
 const port = process.env.PORT || 3001;
+
+swaggerDocs(app);
 
 app.use(cors());
 app.use(express.json());
@@ -37,5 +40,8 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(port, () => {
+  console.log(
+    `API documentation is available at http://localhost:${port}/api-doc`
+  );
   console.log(`Server is running at http://localhost:${port}`);
 });

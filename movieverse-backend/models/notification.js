@@ -63,12 +63,6 @@ const requestJoinGroup = async (groupId, userId) => {
       await client.query(insertQuery, [groupId, userId, adminId]);
     }
 
-    // const memberResult = await client.query(memberStatusQuery, [
-    //   groupId,
-    //   userId,
-    //   adminId,
-    // ]);
-
     // insert notification, get user name
     const userQuery = `SELECT CONCAT(first_name, ' ', last_name) AS user_name FROM account WHERE id = $1`;
     const userResult = await client.query(userQuery, [userId]);
