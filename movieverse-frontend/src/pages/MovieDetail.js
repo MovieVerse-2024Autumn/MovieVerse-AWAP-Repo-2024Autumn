@@ -213,7 +213,7 @@ const MovieDetail = () => {
 
       {trailer && (
         <div className={styles["trailer-section"]}>
-          <h2>Official Trailer</h2>
+          <h2 style={{ color: 'black' }}>Official Trailer</h2>
           <iframe
             width="100%"
             height="500px"
@@ -226,7 +226,7 @@ const MovieDetail = () => {
       )}
 
       <div className={styles["cast-section"]}>
-  <h2>Featured Cast</h2>
+  <h2 style={{ color: 'black' }}>Featured Cast</h2>
   <div className={`${styles["cast-grid"]} ${isExpanded ? styles["expanded"] : ""}`}>
     {cast.slice(0, isExpanded ? cast.length : 6).map((member) => (
       <div key={member.id} className={styles["cast-card"]}>
