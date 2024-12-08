@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../utils/UserProvider";
-import AccountDisplay from "../pages/AccountDisplay";
 import "../styles/Navbar.css";
 import logo from "../logo.png";
 
@@ -14,21 +13,22 @@ const Navbar = ({
   hadleLogout,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // New state for dropdown
   const [query, setQuery] = useState("");
   const { user } = useUser();
   const navigate = useNavigate();
-  const url = "http://localhost:3001/api/groups";
 
   const handleSearch = () => {
     if (query.trim()) {
       navigate(`/search-results?query=${encodeURIComponent(query)}`);
-      setIsMenuOpen(false); // Close menu after search
+      setIsMenuOpen(false);
     } else {
       alert("Please enter a search term!");
     }
   };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen); // Toggle dropdown
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -37,7 +37,8 @@ const Navbar = ({
   };
 
   const handleLinkClick = () => {
-    setIsMenuOpen(false); // Close menu after any link is clicked
+    setIsMenuOpen(false);
+    setIsDropdownOpen(false);
   };
 
   return (
@@ -60,45 +61,27 @@ const Navbar = ({
           <Link to="/" className="nav-link" onClick={handleLinkClick}>
             HOME
           </Link>
-          <Link
-            to="/select-movies"
-            className="nav-link"
-            onClick={handleLinkClick}
-          >
+          <Link to="/select-movies" className="nav-link" onClick={handleLinkClick}>
             EXPLORE
           </Link>
           <Link to="/show-time" className="nav-link" onClick={handleLinkClick}>
             SHOWTIMES
           </Link>
-          {!user.isAuthenticated && (
+          {!user.isAuthenticated ? (
             <>
-              <Link
-                to="/favorites"
-                className="nav-link"
-                onClick={handleLinkClick}
-              >
+              <Link to="/favorites" className="nav-link" onClick={handleLinkClick}>
                 FAVOURITE
               </Link>
               <Link to="/groups" className="nav-link" onClick={handleLinkClick}>
                 GROUPS
               </Link>
             </>
-          )}
-
-          {user.isAuthenticated && (
+          ) : (
             <>
-              <Link
-                to={`/${user.profileUrl}/favorites`}
-                className="nav-link"
-                onClick={handleLinkClick}
-              >
+              <Link to={`/${user.profileUrl}/favorites`} className="nav-link" onClick={handleLinkClick}>
                 FAVOURITES
               </Link>
-              <Link
-                to={`/${user.profileUrl}/groups`}
-                className="nav-link"
-                onClick={handleLinkClick}
-              >
+              <Link to={`/${user.profileUrl}/groups`} className="nav-link" onClick={handleLinkClick}>
                 GROUPS
               </Link>
             </>
@@ -123,22 +106,23 @@ const Navbar = ({
         {/* Account Icon and Dropdown */}
         <div className="navbar-right">
           {user.isAuthenticated ? (
-            <AccountDisplay
-              handleAction={handleAction}
-              url={url}
-              availableGroups={availableGroups}
-              setAvailableGroups={setAvailableGroups}
-              joinedGroups={joinedGroups}
-              setJoinedGroups={setJoinedGroups}
-              hadleLogout={hadleLogout}
-              closeHamburgerMenu={() => setIsMenuOpen(false)}
-            />
+            <div className="account-dropdown">
+              <div className="account-icon" onClick={toggleDropdown}>
+                {user.initials || "KT"}
+              </div>
+              {isDropdownOpen && (
+                <div className="dropdown-menu">
+                  <Link to="/profile" className="dropdown-item" onClick={handleLinkClick}>
+                    My Profile
+                  </Link>
+                  <button className="dropdown-item signout-button" onClick={hadleLogout}>
+                    Sign Out
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
-            <Link
-              to="/authentication"
-              className="signin-link"
-              onClick={handleLinkClick}
-            >
+            <Link to="/authentication" className="signin-link" onClick={handleLinkClick}>
               Sign In
             </Link>
           )}

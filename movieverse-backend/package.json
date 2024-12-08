@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "testStart": "NODE_ENV=test node index.js",
-    "devStart": "NODE_ENV=development nodemon index.js",
+    "devStart":  "cross-env NODE_ENV=development nodemon index.js",
     "test": "mocha *.test.js"
   },
   "keywords": [],
@@ -30,6 +30,7 @@
     "@types/node-fetch": "^2.6.12",
     "@types/pg": "^8.11.10",
     "chai": "^5.1.2",
+    "cross-env": "^7.0.3",
     "mocha": "^11.0.1"
   }
 }
