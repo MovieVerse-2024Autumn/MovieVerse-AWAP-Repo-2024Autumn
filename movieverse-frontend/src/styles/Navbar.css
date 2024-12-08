@@ -149,12 +149,19 @@
   color: #f0f0f0;
   text-decoration: none;
   font-size: 14px;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
   cursor: pointer;
+  background-color: #222; 
+}
+
+/* Ensure button text is visible */
+.dropdown-item:disabled {
+  color: #888;
 }
 
 .dropdown-item:hover {
   background-color: #333;
+  color: #fff; 
 }
 
 /* Sign Out Button */
@@ -166,11 +173,12 @@
   width: 100%;
   padding: 8px 12px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .signout-button:hover {
   background-color: #333;
+  color: #fff;
 }
 
 /* Hamburger Menu Styles */

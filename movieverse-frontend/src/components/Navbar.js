@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../utils/UserProvider";
+import AccountDisplay from "../pages/AccountDisplay";
 import "../styles/Navbar.css";
 import logo from "../logo.png";
 
@@ -13,10 +14,10 @@ const Navbar = ({
   hadleLogout,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // New state for dropdown
   const [query, setQuery] = useState("");
   const { user } = useUser();
   const navigate = useNavigate();
+  const url = "http://localhost:3001/api/groups";
 
   const handleSearch = () => {
     if (query.trim()) {
@@ -28,7 +29,6 @@ const Navbar = ({
   };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen); // Toggle dropdown
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -38,7 +38,6 @@ const Navbar = ({
 
   const handleLinkClick = () => {
     setIsMenuOpen(false);
-    setIsDropdownOpen(false);
   };
 
   return (
@@ -106,21 +105,16 @@ const Navbar = ({
         {/* Account Icon and Dropdown */}
         <div className="navbar-right">
           {user.isAuthenticated ? (
-            <div className="account-dropdown">
-              <div className="account-icon" onClick={toggleDropdown}>
-                {user.initials || "KT"}
-              </div>
-              {isDropdownOpen && (
-                <div className="dropdown-menu">
-                  <Link to="/profile" className="dropdown-item" onClick={handleLinkClick}>
-                    My Profile
-                  </Link>
-                  <button className="dropdown-item signout-button" onClick={hadleLogout}>
-                    Sign Out
-                  </button>
-                </div>
-              )}
-            </div>
+            <AccountDisplay
+              handleAction={handleAction}
+              url={url}
+              availableGroups={availableGroups}
+              setAvailableGroups={setAvailableGroups}
+              joinedGroups={joinedGroups}
+              setJoinedGroups={setJoinedGroups}
+              hadleLogout={hadleLogout}
+              closeHamburgerMenu={() => setIsMenuOpen(false)}
+            />
           ) : (
             <Link to="/authentication" className="signin-link" onClick={handleLinkClick}>
               Sign In
