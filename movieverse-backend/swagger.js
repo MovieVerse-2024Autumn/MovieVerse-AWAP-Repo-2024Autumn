@@ -30,12 +30,17 @@ const options = {
     ],
     servers: [
       {
-        url: "http://localhost:3001",
+        url: "http://localhost:3001/api",
         description: "MovieVerse REST API",
       },
     ],
   },
-  apis: ["./api-doc/groups.yaml", "./api-doc/profile.yaml"], // Path to your routes files
+  apis: ["./api-doc/movie.yaml",
+        "./api-doc/select.yaml",
+        "./api-doc/groups.yaml", 
+        "./api-doc/profile.yaml",
+        "./api-doc/favourite.yaml",
+        "./api-doc/review.yaml"], // Path to your routes files
 };
 
 const swaggerSpec = swaggerJsdoc(options);

@@ -1,0 +1,88 @@
+tags:
+  - name: Select
+    description: API for retrieving country and genre lists.
+
+components:
+  schemas:
+    Country:
+      type: object
+      properties:
+        iso_3166_1:
+          type: string
+        english_name:
+          type: string
+        native_name:
+          type: string
+    Genre:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+
+paths:
+  /country-list:
+    get:
+      summary: Get list of available countries
+      description: Retrieve a list of all available countries.
+      tags:
+        - Select
+      responses:
+        '200':
+          description: Successfully retrieved country list
+          content:
+            application/json:
+              example:
+                countries:
+                  - iso_3166_1: "AD"
+                    english_name: "Andorra"
+                    native_name: "Andorra"
+                  - iso_3166_1: "AE"
+                    english_name: "United Arab Emirates"
+                    native_name: "United Arab Emirates"
+                  - iso_3166_1: "AF"
+                    english_name: "Afghanistan"
+                    native_name: "Afghanistan"
+        '500':
+          description: Failed to fetch country list
+          content:
+            application/json:
+              example:
+                error: "Failed to fetch countries"
+        '404':
+          description: No countries found
+          content:
+            application/json:
+              example:
+                error: "No countries found"
+
+  /genre-list:
+    get:
+      summary: Get list of available genres
+      description: Retrieve a list of all available movie genres.
+      tags:
+        - Select
+      responses:
+        '200':
+          description: Successfully retrieved genre list
+          content:
+            application/json:
+              example:
+                genres:
+                  - id: 28
+                    name: "Action"
+                  - id: 35
+                    name: "Comedy"
+        '500':
+          description: Failed to fetch genre list
+          content:
+            application/json:
+              example:
+                error: "Failed to fetch genres"
+        '404':
+          description: No genres found
+          content:
+            application/json:
+              example:
+                error: "No genres found"

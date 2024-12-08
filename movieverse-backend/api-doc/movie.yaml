@@ -1,0 +1,385 @@
+tags:
+  - name: Movie
+    description: API for managing movies, details, search, and trailers.
+
+components:
+  schemas:
+    Movie:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        original_title:
+          type: string
+        overview:
+          type: string
+        release_date:
+          type: string
+          format: date
+        popularity:
+          type: number
+          format: float
+        vote_average:
+          type: number
+          format: float
+        vote_count:
+          type: integer
+        adult:
+          type: boolean
+        backdrop_path:
+          type: string
+        poster_path:
+          type: string
+        genres:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+        budget:
+          type: integer
+        revenue:
+          type: integer
+        runtime:
+          type: integer
+        production_companies:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              origin_country:
+                type: string
+        production_countries:
+          type: array
+          items:
+            type: object
+            properties:
+              iso_3166_1:
+                type: string
+              name:
+                type: string
+        spoken_languages:
+          type: array
+          items:
+            type: object
+            properties:
+              iso_639_1:
+                type: string
+              english_name:
+                type: string
+              name:
+                type: string
+        status:
+          type: string
+        tagline:
+          type: string
+        imdb_id:
+          type: string
+        homepage:
+          type: string
+    CastMember:
+      type: object
+      properties:
+        name:
+          type: string
+        character:
+          type: string
+    SearchResult:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+
+paths:
+  /movies-homepage:
+    get:
+      summary: Get home movies
+      description: Fetch a list of movies for the homepage.
+      tags:
+        - Movie
+      responses:
+        '200':
+          description: Successfully retrieved homepage movies
+          content:
+            application/json:
+              example:
+                results:
+                  - id: 1252309
+                    title: "Pídeme lo que quieras"
+                    original_title: "Pídeme lo que quieras"
+                    overview: "After his father's death, Eric Zimmerman travels to Spain to oversee his company's branches. In Madrid, he falls for Judith and engage in an intense, erotic relationship full of exploration. However, Eric fears his secret may end their affair."
+                    release_date: "2024-11-29"
+                    popularity: 577.087
+                    vote_average: 8.4
+                    vote_count: 4
+                    adult: false
+                    backdrop_path: null
+                    poster_path: "/76qnVxU2rPdVvipBN3DPQH6fVYB.jpg"
+                    genre_ids: [10749, 18]
+                    video: false
+        '500':
+          description: Failed to fetch movies
+          content:
+            application/json:
+              example:
+                error: "Failed to fetch movies"
+
+  /movies-moviedetail/{id}:
+    get:
+      summary: Get movie details by ID
+      description: Fetch detailed information about a specific movie by its ID.
+      tags:
+        - Movie
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the movie to fetch details for.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully retrieved movie details
+          content:
+            application/json:
+              example:
+                adult: false
+                backdrop_path: "/x9McE1WFKnAHludiY7xfd7modDC.jpg"
+                belongs_to_collection: null
+                budget: 4000000
+                genres:
+                  - id: 12
+                    name: "Adventure"
+                  - id: 16
+                    name: "Animation"
+                  - id: 14
+                    name: "Fantasy"
+                homepage: ""
+                id: 123
+                imdb_id: "tt0077869"
+                origin_country:
+                  - "GB"
+                  - "US"
+                original_language: "en"
+                original_title: "The Lord of the Rings"
+                overview: "The Fellowship of the Ring embark on a journey to destroy the One Ring and end Sauron's reign over Middle-earth."
+                popularity: 41.784
+                poster_path: "/liW0mjvTyLs7UCumaHhx3PpU4VT.jpg"
+                production_companies:
+                  - id: 286
+                    logo_path: null
+                    name: "Fantasy Films"
+                    origin_country: ""
+                  - id: 4921
+                    logo_path: null
+                    name: "Bakshi Productions"
+                    origin_country: ""
+                  - id: 141322
+                    logo_path: null
+                    name: "Saul Zaentz Film Productions"
+                    origin_country: ""
+                  - id: 60
+                    logo_path: "/4YldLvCWQL9VIAHQ2Fu3Ffkh9Si.png"
+                    name: "United Artists"
+                    origin_country: "US"
+                production_countries:
+                  - iso_3166_1: "GB"
+                    name: "United Kingdom"
+                  - iso_3166_1: "US"
+                    name: "United States of America"
+                release_date: "1978-11-15"
+                revenue: 30500000
+                runtime: 132
+                spoken_languages:
+                  - english_name: "English"
+                    iso_639_1: "en"
+                    name: "English"
+                status: "Released"
+                tagline: "Fantasy...beyond your imagination"
+                title: "The Lord of the Rings"
+                video: false
+                vote_average: 6.581
+                vote_count: 908
+        '404':
+          description: Movie not found
+        '500':
+          description: Failed to fetch movie details
+          content:
+            application/json:
+              example:
+                error: "Failed to fetch movie details"
+
+  /movies-search:
+    get:
+      summary: Search for movies
+      description: Search for movies based on a query.
+      tags:
+        - Movie
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: The search query for finding movies.
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: The page number for paginated results.
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: Successfully retrieved search results
+          content:
+            application/json:
+              example:
+                movies:
+                  - id: 555879
+                    title: "Matrix"
+                    original_title: "Matrix"
+                    overview: "The film is composed of receding planes in a landscape: a back garden and the houses beyond. The wooden lattice fence, visible in the image, marks the border between enclosed and open, private and public space, and forms both a fulcrum for the work and a formal grid by which the shots are framed and organised."
+                    release_date: "1998-12-31"
+                    popularity: 3.906
+                    vote_average: 6.8
+                    vote_count: 35
+                    poster_path: "/AfFD10ZqEx2vkxM2yvRZkybsGB7.jpg"
+                    backdrop_path: null
+                    genre_ids: []
+                    video: false
+                    adult: false
+                  - id: 775293
+                    title: "Matrix"
+                    original_title: "Matrix"
+                    overview: "\"MATRIX is a flicker film which utilizes 81 still photographs of my wife's head. It is a film dependent upon variation of intense light changes by calculated combinations of black and white frame alternations with exposure changes. Throughout, the light intensity rises and falls as the head rotates in varying directions within a 360 degree frontal area.\" — James Cagle"
+                    release_date: "1973-01-01"
+                    popularity: 1.166
+                    vote_average: 6.5
+                    vote_count: 21
+                    poster_path: "/frDqG8rmqKUg4HzQ604LZo8VLHB.jpg"
+                    backdrop_path: null
+                    genre_ids: []
+                    video: false
+                    adult: false
+                  - id: 373223
+                    title: "Matrix"
+                    original_title: "Matrix"
+                    overview: "Abstract art film made for gallery exhibition."
+                    release_date: "1973-09-06"
+                    popularity: 1.736
+                    vote_average: 5.9
+                    vote_count: 18
+                    poster_path: "/wx2s9xYeC6uP2auuuVg99yl4RpU.jpg"
+                    backdrop_path: null
+                    genre_ids: []
+                    video: false
+                    adult: false
+                totalPages: 1
+        '400':
+          description: Invalid search query
+          content:
+            application/json:
+              example:
+                error: "Invalid search query"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                error: "Failed to search movies"
+
+
+  /movies/{id}/cast:
+    get:
+      summary: Get movie cast by ID
+      description: Retrieve a list of cast members for a specific movie by its ID.
+      tags:
+        - Movie
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the movie to fetch cast information for.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully retrieved movie cast
+          content:
+            application/json:
+              example:
+                - id: 1
+                  name: "Leonardo DiCaprio"
+                  character: "Dom Cobb"
+                  profile_path: "/9XWQni6jchF2a6VY3VgUGXM6P2O.jpg"
+                - id: 2
+                  name: "Joseph Gordon-Levitt"
+                  character: "Arthur"
+                  profile_path: "/yo4qljphdh1fp6ZlFk1bozW56xQ.jpg"
+        '404':
+          description: Movie not found or no cast information available
+          content:
+            application/json:
+              example:
+                error: "Movie not found or no cast information available"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                error: "Failed to fetch movie cast details"
+
+  /movies/{id}/trailer:
+    get:
+      summary: Get movie trailer by ID
+      description: Fetch the trailer URL for a specific movie by its ID.
+      tags:
+        - Movie
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the movie to fetch the trailer for.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully retrieved movie trailer
+          content:
+            application/json:
+              example:
+                - iso_639_1: "en"
+                  iso_3166_1: "US"
+                  name: "The Lord of the Rings (animated 1978)"
+                  key: "wPe6BNPUmI0"
+                  site: "YouTube"
+                  size: 360
+                  type: "Trailer"
+                  official: true
+                  published_at: "2014-07-08T22:08:04.000Z"
+                  id: "640cd15401432500e39b3055"
+        '404':
+          description: Movie not found or no trailers available
+          content:
+            application/json:
+              example:
+                error: "No trailers found for this movie"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                error: "Failed to fetch trailer data"
+
