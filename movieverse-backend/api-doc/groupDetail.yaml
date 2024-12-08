@@ -1,0 +1,141 @@
+tags:
+  - name: GroupDetail
+    description: Operations related to group details
+
+paths:
+  /groups/getdetails:
+    post:
+      summary: Get group details
+      tags:
+        - GroupDetail
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                groupId:
+                  type: integer
+                  example: 1
+      responses:
+        "200":
+          description: Group details retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  groupDetails:
+                    $ref: "#/components/schemas/GroupDetails"
+                  groupMembers:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/GroupMember"
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Group not found
+
+  /groups/createpost:
+    post:
+      summary: Create a post in a group
+      tags:
+        - GroupDetail
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                groupid:
+                  type: integer
+                  example: 1
+                content:
+                  type: string
+                  example: "This is a new post about the movie!"
+                movieid:
+                  type: integer
+                  example: 101
+                movietitle:
+                  type: string
+                  example: "Inception"
+                movieposter:
+                  type: string
+                  example: "/images/movies/inception.jpg"
+      responses:
+        "201":
+          description: Post created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+
+  /groups/getgrouppost/{id}:
+    get:
+      summary: Get all posts for a group
+      tags:
+        - GroupDetail
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Group ID
+      responses:
+        "200":
+          description: List of posts for the group
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+        "401":
+          description: Unauthorized
+        "404":
+          description: Group not found
+
+  /groups/removegroupmember:
+    delete:
+      summary: Remove a member from a group
+      tags:
+        - GroupDetail
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accountId:
+                  type: integer
+                  example: 5
+                groupId:
+                  type: integer
+                  example: 1
+      responses:
+        "200":
+          description: Member removed successfully
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+        "404":
+          description: Member or group not found
