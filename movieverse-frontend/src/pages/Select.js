@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import MovieList from '../components/MovieList';
+import ReactPaginate from 'react-paginate';
 import styles from '../styles/Select.module.css';
 
 const API_KEY = "159c3b0b72b70b61f703169a3153283a"; // TMDB API key
@@ -40,7 +41,7 @@ export default function Select() {
         );
         const moviesData = await moviesResponse.json();
         setMovies(moviesData.results || []);
-        setTotalPages(moviesData.total_pages || 1); // Set total pages
+        setTotalPages(Math.min(moviesData.total_pages, 999) || 1);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -64,7 +65,7 @@ export default function Select() {
         with_genres: selectedGenre,
         with_origin_country: selectedCountry,
         sort_by: selectedSorting || 'popularity.desc',
-        page: currentPage, // Include the current page
+        page: currentPage,
       });
 
       const searchUrl = `https://api.themoviedb.org/3/discover/movie?${queryParams.toString()}`;
@@ -73,7 +74,7 @@ export default function Select() {
       const filteredMovies = data.results.filter((item) => item.poster_path !== null);
 
       setMovies(filteredMovies || []);
-      setTotalPages(data.total_pages || 1);
+      setTotalPages(Math.min(data.total_pages, 999) || 1);
     } catch (error) {
       console.error('Error fetching filtered movies:', error);
     } finally {
@@ -81,16 +82,8 @@ export default function Select() {
     }
   };
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
-    }
-  };
-
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
-    }
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected + 1);
   };
 
   if (loading) {
@@ -147,29 +140,18 @@ export default function Select() {
 
       <MovieList movies={movies} />
 
-      <div className={styles.pagination}>
-        <button
-          className={`${styles.pageButton} ${
-            currentPage === 1 ? styles.disabled : ''
-          }`}
-          onClick={handlePreviousPage}
-          disabled={currentPage === 1}
-        >
-          &lt; Previous
-        </button>
-        <span className={styles.pageInfo}>
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          className={`${styles.pageButton} ${
-            currentPage === totalPages ? styles.disabled : ''
-          }`}
-          onClick={handleNextPage}
-          disabled={currentPage === totalPages}
-        >
-          Next &gt;
-        </button>
-      </div>
+      <ReactPaginate
+        breakLabel="..."
+        nextLabel=">"
+        onPageChange={handlePageChange}
+        pageRangeDisplayed={5}
+        pageCount={totalPages}
+        previousLabel="<"
+        renderOnZeroPageCount={null}
+        className="pagination"
+        activeClassName="active"
+        forcePage={currentPage - 1}
+      />
     </div>
   );
 }

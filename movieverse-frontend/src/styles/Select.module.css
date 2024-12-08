@@ -60,27 +60,31 @@
   .pagination {
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin-top: 20px;
+    margin-top: 50px;
+    font-size: 14px;
+    gap: 8px;
   }
   
-  .pageButton {
-    padding: 10px 20px;
-    margin: 0 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
+  .pagination li {
+    list-style-type: none;
+  }
+  
+  .pagination li a {
+    padding: 8px 120px;
+    text-decoration: none;
+    transition: all 0.3s ease;
     cursor: pointer;
   }
   
-  .pageButton:hover {
-    background-color: #0056b3;
+  .pagination li a:hover {
+    background-color: #f5f5f5;
+    color: #000;
   }
   
-  .pageButton.disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+  .pagination .active a {
+    background-color: #444;
+    color: white;
+    border-color: #444;
   }
   
   .pageInfo {
