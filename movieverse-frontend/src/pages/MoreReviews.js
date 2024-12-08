@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
 import { useFetchData } from "../utils/useFetchData";
-import ReviewCardForHomePage from "../components/ReviewCardForHomePage";
+import ReviewCard from "../components/ReviewCard";
 import styles from "../styles/Home.module.css";
 
 const url = "http://localhost:3001/api";
@@ -67,13 +67,7 @@ export default function MoreReviews() {
         {currentReviews.map((review) => {
           const movie = movies.find((movie) => movie.id === review.movie_id);
 
-          return (
-            <ReviewCardForHomePage
-              key={review.id}
-              review={review}
-              movie={movie}
-            />
-          );
+          return <ReviewCard key={review.id} review={review} movie={movie} />;
         })}
       </div>
       <ReactPaginate

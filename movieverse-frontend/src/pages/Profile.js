@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import ReviewCardForHomePage from "../components/ReviewCardForHomePage";
+import ReviewCard from "../components/ReviewCard";
 import DeleteAccountFlow from "./DeleteAccount";
 import { useFetchData } from "../utils/useFetchData";
 import "../styles/Profile.css";
@@ -35,17 +35,8 @@ const Profile = () => {
   };
   const accountId = getAccountId();
 
-  const handleAccountDeleted = () => {
-    navigate("/login");
-  };
-
-  useEffect(() => {
-    fetchUserReviews();
-    fetchUserDetails();
-  }, []);
-
   // Handle fetching user's reviews
-  const fetchUserReviews = async () => {
+  const fetchUserReviews = useCallback(async () => {
     try {
       const response = await fetch(`${url}/profile/reviews/${accountId}`, {
         headers: {
@@ -63,9 +54,9 @@ const Profile = () => {
     } catch (error) {
       console.error("Error fetching user reviews:", error.message);
     }
-  };
+  }, [accountId]);
   // get user's first name, last name, email
-  const fetchUserDetails = async () => {
+  const fetchUserDetails = useCallback(async () => {
     try {
       const response = await fetch(`${url}/profile/${accountId}`, {
         headers: {
@@ -90,7 +81,12 @@ const Profile = () => {
       console.error("Error fetching user details:", error.message);
       setIsLoading(false);
     }
-  };
+  }, [accountId]);
+
+  useEffect(() => {
+    fetchUserReviews();
+    fetchUserDetails();
+  }, [fetchUserReviews, fetchUserDetails]);
 
   // handle editing user's first name and last name
   const handleEditUserDetails = () => {
@@ -272,11 +268,7 @@ const Profile = () => {
               return (
                 <div key={review.id}>
                   <div className="profile-review-card-content">
-                    <ReviewCardForHomePage
-                      key={review.id}
-                      review={review}
-                      movie={movie}
-                    />
+                    <ReviewCard key={review.id} review={review} movie={movie} />
                   </div>
                   {/* Delete review icon next to each review */}
                   <div>

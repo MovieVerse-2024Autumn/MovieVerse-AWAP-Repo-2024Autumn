@@ -1,5 +1,5 @@
 import React from "react";
-import ReviewCardForHomePage from "./ReviewCardForHomePage";
+import ReviewCard from "./ReviewCard";
 import styles from "../styles/Home.module.css";
 
 export default function ReviewList({ reviews, movies }) {
@@ -10,13 +10,7 @@ export default function ReviewList({ reviews, movies }) {
         //console.log("Review:", review.movie_id);
         //console.log("Movies:", movie.id);
 
-        return (
-          <ReviewCardForHomePage
-            key={review.id}
-            review={review}
-            movie={movie}
-          />
-        );
+        return <ReviewCard key={review.id} review={review} movie={movie} />;
       })}
     </div>
   );

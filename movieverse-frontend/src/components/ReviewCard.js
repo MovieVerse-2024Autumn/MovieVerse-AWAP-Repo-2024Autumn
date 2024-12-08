@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 import { FiThumbsUp } from "react-icons/fi";
 //import { TbShare3 } from "react-icons/tb";
 import styles from "../styles/Home.module.css";
 const API_IMG = "https://image.tmdb.org/t/p/w500";
 
-export default function ReviewCardForHomePage({ review }) {
+export default function ReviewCard({ review }) {
   const {
     movie_id,
     movie_poster_path,
@@ -19,6 +20,8 @@ export default function ReviewCardForHomePage({ review }) {
   const movie_link = `/movies/${movie_id}`;
   const review_link = `/reviews/${review.id}`;
   const poster_path = movie_poster_path;
+
+  const navigate = useNavigate();
 
   // Helper function to render stars
   const renderStars = (rating) => {
@@ -36,7 +39,8 @@ export default function ReviewCardForHomePage({ review }) {
   // Like functionality
   const [likeCount, setLikeCount] = useState(like_count);
 
-  const handleLike = async () => {
+  const handleLike = async (event) => {
+    event.stopPropagation();
     try {
       // Optional: Update like count in backend
       const response = await fetch(
@@ -55,8 +59,17 @@ export default function ReviewCardForHomePage({ review }) {
     }
   };
 
+  const handleCardClick = (event) => {
+    // Prevent navigation on button click
+    if (event.target.closest("button")) {
+      event.preventDefault();
+      return;
+    }
+    navigate(review_link);
+  };
+
   return (
-    <div className={styles.reviewCard}>
+    <div className={styles.reviewCard} onClick={handleCardClick}>
       <Link to={movie_link}>
         <div className={styles.reviewImageContainer}>
           <img

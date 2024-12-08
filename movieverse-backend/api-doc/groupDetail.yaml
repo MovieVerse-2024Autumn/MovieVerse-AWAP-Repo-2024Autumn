@@ -1,6 +1,6 @@
 tags:
   - name: GroupDetail
-    description: Operations related to group details
+    description: API for managing group detail
 
 paths:
   /groups/getdetails:

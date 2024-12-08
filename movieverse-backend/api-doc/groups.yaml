@@ -131,7 +131,7 @@ paths:
         "401":
           description: Unauthorized
 
-  /groups/joined-groups':
+  /groups/joined-groups:
     get:
       summary: Get groups joined by the user
       tags:
@@ -150,7 +150,7 @@ paths:
         "401":
           description: Unauthorized
 
-  /groups/delete/{id}':
+  /groups/delete/{id}:
     delete:
       summary: Delete a group
       tags:
@@ -247,7 +247,7 @@ paths:
         "401":
           description: Unauthorized
 
-  /groups/notifications/response':
+  /groups/notifications/response:
     get:
       summary: Get join request response notifications
       tags:
@@ -266,7 +266,7 @@ paths:
         "401":
           description: Unauthorized
 
-  /groups/notifications/mark-as-read':
+  /groups/notifications/mark-as-read:
     patch:
       summary: Mark a notification as read
       tags:
