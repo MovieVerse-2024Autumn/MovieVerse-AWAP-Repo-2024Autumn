@@ -11,7 +11,7 @@ const Authentication = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   //const [token, setToken] = useState(localStorage.getItem("token") || "");
-  const { user, login, logout } = useUser();
+  const { user, login } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,11 +24,6 @@ const Authentication = () => {
     setIsSignIn(!isSignIn);
     setErrorMessage("");
     setSuccessMessage("");
-  };
-
-  const handleSignOut = () => {
-    logout();
-    navigate("/auth");
   };
 
   // Handle Registration

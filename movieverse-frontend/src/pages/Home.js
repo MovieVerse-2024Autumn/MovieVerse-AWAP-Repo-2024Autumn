@@ -18,8 +18,8 @@ export default function Home() {
   // Update the moviesPerPage whenever window is resized
   useEffect(() => {
     const updateMoviesPerPage = () => {
-      const movieCardWidth = 180; 
-      const movieRowCount = 2;  
+      const movieCardWidth = 180;
+      const movieRowCount = 2;
       const newMoviesPerPage =
         Math.floor(window.innerWidth / movieCardWidth) * movieRowCount;
       setMoviesPerPage(newMoviesPerPage || 1);
@@ -51,12 +51,15 @@ export default function Home() {
 
   return (
     <div>
-
       {/* Poster Section */}
       <div className={styles.posterWrapper}>
-        <img src={PosterImage} alt="Featured Movie" className={styles.posterImage} />
+        <img
+          src={PosterImage}
+          alt="Featured Movie"
+          className={styles.posterImage}
+        />
         <div className={styles.posterOverlay}>
-          <h1 className={styles.posterText}></h1>
+          <h1 className={styles.posterText}>Welcome</h1>
         </div>
       </div>
 
