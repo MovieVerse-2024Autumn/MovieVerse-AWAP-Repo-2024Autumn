@@ -34,11 +34,6 @@ export default function GroupDetails() {
   };
   const accountId = getAccountId();
 
-  useEffect(() => {
-    fetchGroupDetails();
-    fetchGroupPosts();
-  }, [fetchGroupDetails, fetchGroupPosts]);
-
   const fetchGroupDetails = async () => {
     try {
       const response = await fetch(`${url}/getdetails`, {
@@ -75,6 +70,11 @@ export default function GroupDetails() {
       console.error("Error fetching group posts:", error);
     }
   };
+
+  useEffect(() => {
+    fetchGroupDetails();
+    fetchGroupPosts();
+  }, [fetchGroupDetails, fetchGroupPosts]);
 
   const handleLeaveGroup = async (userid) => {
     const confirmation = window.confirm(
