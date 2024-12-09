@@ -1,0 +1,43 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "askForPassword": true,
+      "driver": "PostgreSQL",
+      "name": "movieverse",
+      "username": "postgres",
+      "database": "movieVerse_awap_2024autumn"
+    },
+    {
+      "pgOptions": {
+        "ssl": {
+          "rejectUnauthorized": true
+        }
+      },
+      "previewLimit": 50,
+      "server": "movieverse-database.postgres.database.azure.com",
+      "port": 5432,
+      "askForPassword": true,
+      "driver": "PostgreSQL",
+      "name": "movieverse azure",
+      "username": "MovieVerseAWAP",
+      "database": "postgres"
+    },
+    {
+      "pgOptions": {
+        "ssl": {
+          "rejectUnauthorized": true
+        }
+      },
+      "previewLimit": 50,
+      "server": "movieverse-database.postgres.database.azure.com",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "movieverse azure",
+      "database": "movieverse_awap_2024a_azure",
+      "username": "MovieVerseAWAP"
+    }
+  ]
+}
