@@ -11,52 +11,42 @@ const url = "http://localhost:3001/api";
 
 export default function Home() {
   const { data: movies = [] } = useFetchData(`${url}/movies-homepage`);
-  const { data: reviews = [] } = useFetchData(`${url}/reviews`); // Default to empty array
+  const { data: reviews = [] } = useFetchData(`${url}/reviews`);
   const [currentPage, setCurrentPage] = useState(0);
-  const [moviesPerPage, setMoviesPerPage] = useState(1);
+  const [moviesPerPage, setMoviesPerPage] = useState(10);
 
-  // Update the moviesPerPage whenever window is resized
   useEffect(() => {
     const updateMoviesPerPage = () => {
-      const movieCardWidth = 180; 
-      const movieRowCount = 2;  
-      const newMoviesPerPage =
-        Math.floor(window.innerWidth / movieCardWidth) * movieRowCount;
-      setMoviesPerPage(newMoviesPerPage || 1);
+      const movieListElement = document.querySelector(`.${styles.movieList}`);
+      if (movieListElement) {
+        const computedStyle = window.getComputedStyle(movieListElement);
+        const columnCount = parseInt(
+          computedStyle.getPropertyValue("grid-template-columns").split(" ").length,
+          10
+        );
+        const movieRowCount = 2;
+        setMoviesPerPage(columnCount * movieRowCount);
+      }
     };
 
-    // Initial call to set the correct moviesPerPage
     updateMoviesPerPage();
-
-    // Add event listener to handle resizing
     window.addEventListener("resize", updateMoviesPerPage);
-
-    // Clean up the event listener on component unmount
     return () => window.removeEventListener("resize", updateMoviesPerPage);
   }, []);
 
-  // Check if movies and reviews are arrays
   const startIndex = currentPage * moviesPerPage;
-  const currentMovies = Array.isArray(movies)
-    ? movies.slice(startIndex, startIndex + moviesPerPage)
-    : [];
+  const currentMovies = movies.slice(startIndex, startIndex + moviesPerPage);
 
-  const sortedReviews = Array.isArray(reviews)
-    ? [...reviews].sort(
-        (a, b) => new Date(b.review_date) - new Date(a.review_date)
-      )
-    : [];
-
+  const sortedReviews = reviews.sort(
+    (a, b) => new Date(b.review_date) - new Date(a.review_date)
+  );
   const homepageReviews = sortedReviews.slice(0, 5);
 
   return (
     <div>
-
-      {/* Poster Section */}
       <div className={styles.posterWrapper}>
         <img src={PosterImage} alt="Featured Movie" className={styles.posterImage} />
         <div className={styles.posterOverlay}>
-          <h1 className={styles.posterText}></h1>
         </div>
       </div>
 
@@ -64,8 +54,6 @@ export default function Home() {
         <div className={styles.section}>
           <SectionTitle title="MOVIES" linkPath="/select-movies" />
           <MovieList movies={currentMovies} />
-
-          {/* Pagination controls */}
           <ReactPaginate
             breakLabel="..."
             previousLabel="<"
@@ -77,6 +65,7 @@ export default function Home() {
             activeClassName={styles.active}
           />
         </div>
+
         <div className={styles.section}>
           <SectionTitle title="REVIEWS" linkPath="/more-reviews" />
           <ReviewList reviews={homepageReviews} movies={movies} />
