@@ -11,24 +11,19 @@ const Authentication = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   //const [token, setToken] = useState(localStorage.getItem("token") || "");
-  const { user, login, logout } = useUser();
+  const { user, login } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (user.isAuthenticated) {
       navigate(`/${user.profileUrl}`);
     }
-  }, [user.isAuthenticated, navigate]);
+  }, [user.isAuthenticated, user.profileUrl, navigate]);
 
   const handleToggle = () => {
     setIsSignIn(!isSignIn);
     setErrorMessage("");
     setSuccessMessage("");
-  };
-
-  const handleSignOut = () => {
-    logout();
-    navigate("/auth");
   };
 
   // Handle Registration

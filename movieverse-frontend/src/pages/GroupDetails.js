@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import '../styles/GroupDetails.css';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
-import PostCreate from '../components/CreatePost';
-import { useUser } from '../utils/UserProvider';
+import React, { useState, useEffect } from "react";
+import "../styles/GroupDetails.css";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import PostCreate from "../components/CreatePost";
+import { useUser } from "../utils/UserProvider";
 
-const url = 'http://localhost:3001/api/groups';
+const url = "http://localhost:3001/api/groups";
 
 export default function GroupDetails() {
   const { id } = useParams();
@@ -14,7 +14,7 @@ export default function GroupDetails() {
   const [groupDetails, setGroupDetails] = useState({});
   const [groupMembers, setGroupMembers] = useState([]);
 
-  const [currentUser, setCurrentUser] = useState('Ram'); // Example user
+  //const [currentUser, setCurrentUser] = useState('Ram'); // Example user
   const [isAdmin, setIsAdmin] = useState(false); // Toggle for admin privileges
 
   const [posts, setPosts] = useState([]);
@@ -25,7 +25,7 @@ export default function GroupDetails() {
   };
 
   const getAccountId = () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       const decoded = jwtDecode(token);
       return decoded.id; // Assuming `id` is part of the decoded JWT payload
@@ -34,19 +34,14 @@ export default function GroupDetails() {
   };
   const accountId = getAccountId();
 
-  useEffect(() => {
-    fetchGroupDetails();
-    fetchGroupPosts();
-  }, []);
-
   const fetchGroupDetails = async () => {
     try {
       const response = await fetch(`${url}/getdetails`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
         },
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
           groupId: id,
         }),
@@ -55,10 +50,10 @@ export default function GroupDetails() {
       if (data !== null) {
         setGroupDetails(data.groupDetails);
         setGroupMembers(data.groupMembers);
-        setIsAdmin(data.groupDetails?.admin_id == accountId);
+        setIsAdmin(data.groupDetails?.admin_id === accountId);
       }
     } catch (error) {
-      console.error('Error fetching group info:', error);
+      console.error("Error fetching group info:", error);
     }
   };
 
@@ -66,31 +61,36 @@ export default function GroupDetails() {
     try {
       const response = await fetch(`${url}/getgrouppost/${id}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
       const data = await response.json();
       setPosts(data);
     } catch (error) {
-      console.error('Error fetching group posts:', error);
+      console.error("Error fetching group posts:", error);
     }
   };
 
+  useEffect(() => {
+    fetchGroupDetails();
+    fetchGroupPosts();
+  }, [fetchGroupDetails, fetchGroupPosts]);
+
   const handleLeaveGroup = async (userid) => {
     const confirmation = window.confirm(
-      'Are you sure you want to leave from the group?'
+      "Are you sure you want to leave from the group?"
     );
     if (confirmation) {
       if (!userid) {
-        console.error('User ID is undefined or null!');
+        console.error("User ID is undefined or null!");
         return;
       }
       try {
         const response = await fetch(`${url}/removegroupmember`, {
-          method: 'DELETE',
+          method: "DELETE",
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           body: JSON.stringify({
             accountId: userid, // Ensure accountId is correct
@@ -102,36 +102,36 @@ export default function GroupDetails() {
           setGroupMembers((prevFavorites) =>
             prevFavorites.filter((user) => user.userid !== userid)
           );
-          navigate('/groups');
+          navigate("/groups");
         } else {
           const errorData = await response.json();
           console.error(
-            'Failed to leave the group:',
-            errorData.error || 'Unknown error'
+            "Failed to leave the group:",
+            errorData.error || "Unknown error"
           );
         }
       } catch (error) {
-        console.error('Error leaving the group:', error);
+        console.error("Error leaving the group:", error);
       }
     }
   };
 
   const handleRemoveUser = async (userid, name) => {
     const confirmationRemove = window.confirm(
-      'Are you sure you want to remove ' + name + ' from the group?'
+      "Are you sure you want to remove " + name + " from the group?"
     );
     if (confirmationRemove) {
       if (isAdmin) {
         if (!userid) {
-          console.error('User ID is undefined or null!');
+          console.error("User ID is undefined or null!");
           return;
         }
         try {
           const response = await fetch(`${url}/removegroupmember`, {
-            method: 'DELETE',
+            method: "DELETE",
             headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
             body: JSON.stringify({
               accountId: userid, // Ensure accountId is correct
@@ -143,19 +143,19 @@ export default function GroupDetails() {
             setGroupMembers((prevFavorites) =>
               prevFavorites.filter((user) => user.userid !== userid)
             );
-            alert('Removed a user from the group.');
+            alert("Removed a user from the group.");
           } else {
             const errorData = await response.json();
             console.error(
-              'Failed to remove user:',
-              errorData.error || 'Unknown error'
+              "Failed to remove user:",
+              errorData.error || "Unknown error"
             );
           }
         } catch (error) {
-          console.error('Error removing user:', error);
+          console.error("Error removing user:", error);
         }
       } else {
-        alert('Only the admin can remove members.');
+        alert("Only the admin can remove members.");
       }
     }
   };
@@ -183,7 +183,7 @@ export default function GroupDetails() {
             {groupMembers.map((gm) => (
               <li key={gm.userid} className="member-item">
                 <span>
-                  {gm.name} {groupDetails.admin_id == gm.userid && '(Admin)'}{' '}
+                  {gm.name} {groupDetails.admin_id === gm.userid && "(Admin)"}{" "}
                 </span>
                 {isAdmin && gm.userid !== accountId && (
                   <button
@@ -200,7 +200,7 @@ export default function GroupDetails() {
             <button
               className="leave-group-btn"
               onClick={() => handleLeaveGroup(accountId)}
-              style={{ marginTop: '20px' }}
+              style={{ marginTop: "20px" }}
             >
               Leave Group
             </button>
@@ -220,7 +220,7 @@ export default function GroupDetails() {
                   {user.firstName} {user.lastName}
                 </h4>
               </div>
-              
+
               <div className="post-text">
                 <p>{post.content}</p>
               </div>

@@ -35,13 +35,16 @@ const options = {
       },
     ],
   },
-  apis: ["./api-doc/movie.yaml",
-        "./api-doc/select.yaml",
-        "./api-doc/groups.yaml", 
-        "./api-doc/profile.yaml",
-        "./api-doc/favourite.yaml",
-        "./api-doc/review.yaml",
-        "./api-doc/groupDetail.yaml"], // Path to your routes files
+  apis: [
+    "./api-doc/movie.yaml",
+    "./api-doc/select.yaml",
+    "./api-doc/groups.yaml",
+    "./api-doc/profile.yaml",
+    "./api-doc/favourite.yaml",
+    "./api-doc/review.yaml",
+    "./api-doc/groupDetail.yaml",
+    "./api-doc/auth.yaml",
+  ], // Path to your routes files
 };
 
 const swaggerSpec = swaggerJsdoc(options);

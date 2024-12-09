@@ -7,7 +7,7 @@ import ReviewList from "../components/ReviewList";
 import styles from "../styles/Home.module.css";
 import PosterImage from "../assest/Redone.jpg";
 
-const url = "http://localhost:3001/api";
+const url = `${process.env.REAC_APP_API}/api`;
 
 export default function Home() {
   const { data: movies = [] } = useFetchData(`${url}/movies-homepage`);
@@ -44,9 +44,15 @@ export default function Home() {
 
   return (
     <div>
+      {/* Poster Section */}
       <div className={styles.posterWrapper}>
-        <img src={PosterImage} alt="Featured Movie" className={styles.posterImage} />
+        <img
+          src={PosterImage}
+          alt="Featured Movie"
+          className={styles.posterImage}
+        />
         <div className={styles.posterOverlay}>
+       
         </div>
       </div>
 
