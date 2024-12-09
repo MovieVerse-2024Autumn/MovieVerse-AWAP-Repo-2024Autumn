@@ -44,7 +44,7 @@ export default function ReviewCard({ review }) {
     try {
       // Optional: Update like count in backend
       const response = await fetch(
-        `http://localhost:3001/api/reviews/${review.id}/like`,
+        `${process.env.REACT_APP_API}api/reviews/${review.id}/like`,
         {
           method: "POST",
         }

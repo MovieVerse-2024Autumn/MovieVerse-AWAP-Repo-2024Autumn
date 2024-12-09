@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Notification.css";
 
-const url = "http://localhost:3001/api/groups";
+const url = `${process.env.REACT_APP_API}api/groups`;
 
 export default function Notification({ setUnreadCount, handleAction }) {
   const [notifications, setNotifications] = useState([]);

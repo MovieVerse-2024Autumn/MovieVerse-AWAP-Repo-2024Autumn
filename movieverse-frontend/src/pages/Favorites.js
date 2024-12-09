@@ -25,7 +25,7 @@ const Favorites = () => {
   const fetchFavorites = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/favorites/${accountId}`
+        `${process.env.REACT_APP_API}api/favorites/${accountId}`
       );
       const data = await response.json();
       console.log("Fetched favorites data structure:", data); // Log data here

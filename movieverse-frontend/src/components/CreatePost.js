@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/GroupDetails.css';
 
-const url = 'http://localhost:3001/api/groups';
+const url = `${process.env.REACT_APP_API}api/groups`;
 const PostCreationSection = ({ onAddPost, groupId  }) => {
   const [postContent, setPostContent] = useState('');
   const [movieSearch, setMovieSearch] = useState('');

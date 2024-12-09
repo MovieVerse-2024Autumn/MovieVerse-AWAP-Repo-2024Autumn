@@ -17,7 +17,7 @@ const Navbar = ({
   const [query, setQuery] = useState("");
   const { user } = useUser();
   const navigate = useNavigate();
-  const url = "http://localhost:3001/api/groups";
+  const url = `${process.env.REACT_APP_API}api/groups`;
 
   const handleSearch = () => {
     if (query.trim()) {

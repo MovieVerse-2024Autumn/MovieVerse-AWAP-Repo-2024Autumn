@@ -5,7 +5,7 @@ import { TbShare3 } from "react-icons/tb";
 import styles from "../styles/Home.module.css";
 const API_IMG = "https://image.tmdb.org/t/p/w500";
 
-const url = "http://localhost:3001/api"; // Ensure this matches your API base URL
+const url = `${process.env.REACT_APP_API}api`;
 
 export default function ReviewDetail() {
   const { reviewId } = useParams(); // Get reviewId from URL params

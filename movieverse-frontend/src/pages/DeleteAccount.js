@@ -28,7 +28,7 @@ const DeleteAccountFlow = ({ onAccountDelete }) => {
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/api/auth/delete`, {
+      const response = await fetch(`${process.env.REACT_APP_API}api/auth/delete`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

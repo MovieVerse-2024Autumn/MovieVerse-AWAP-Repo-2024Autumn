@@ -4,7 +4,7 @@ import { useFetchData } from "../utils/useFetchData";
 import ReviewCard from "../components/ReviewCard";
 import styles from "../styles/Home.module.css";
 
-const url = "http://localhost:3001/api";
+const url = `${process.env.REACT_APP_API}api`;
 
 const ITEMS_PER_PAGE = 5;
 

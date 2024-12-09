@@ -5,7 +5,7 @@ import styles from "../styles/Select.module.css";
 
 const API_KEY = "159c3b0b72b70b61f703169a3153283a"; // TMDB API key
 
-const url = "http://localhost:3001/api";
+const url = `${process.env.REACT_APP_API}api`;
 const sortings = [
   { sortBy: "Popularity", sortValue: "popularity.desc" },
   { sortBy: "Rating", sortValue: "vote_average.desc" },

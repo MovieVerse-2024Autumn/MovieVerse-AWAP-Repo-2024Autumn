@@ -7,7 +7,7 @@ import ReviewList from "../components/ReviewList";
 import styles from "../styles/Home.module.css";
 import PosterImage from "../assest/Redone.jpg";
 
-const url = `${process.env.REAC_APP_API}/api`;
+const url = `${process.env.REACT_APP_API}api`;
 
 export default function Home() {
   const { data: movies = [] } = useFetchData(`${url}/movies-homepage`);

@@ -4,7 +4,7 @@ import ReactPaginate from "react-paginate";
 import MovieList from "../components/MovieList";
 import "../styles/Search.css";
 
-const url = "http://localhost:3001/api";
+const url = `${process.env.REACT_APP_API}api`;
 
 export default function SearchResults() {
   const [movies, setMovies] = useState([]);

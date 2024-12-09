@@ -9,7 +9,7 @@ const SharedFavorites = () => {
   useEffect(() => {
     const fetchSharedFavorites = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/favorites/shared/${account_id}`);
+        const response = await fetch(`${process.env.REACT_APP_API}api/favorites/shared/${account_id}`);
         const data = await response.json();
         setFavorites(data); // Update state with shared favorites
       } catch (error) {

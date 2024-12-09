@@ -5,7 +5,8 @@ import ReviewCard from "../components/ReviewCard";
 import DeleteAccountFlow from "./DeleteAccount";
 import { useFetchData } from "../utils/useFetchData";
 import "../styles/Profile.css";
-const url = "http://localhost:3001/api";
+
+const url = `${process.env.REACT_APP_API}api`;
 
 const Profile = () => {
   const { data: movies } = useFetchData(`${url}/movies-homepage`);
