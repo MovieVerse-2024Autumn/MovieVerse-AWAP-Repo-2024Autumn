@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import MovieList from '../components/MovieList';
-import ReactPaginate from 'react-paginate';
-import styles from '../styles/Select.module.css';
+import React, { useEffect, useState } from "react";
+import MovieList from "../components/MovieList";
+import ReactPaginate from "react-paginate";
+import styles from "../styles/Select.module.css";
 
 const API_KEY = "159c3b0b72b70b61f703169a3153283a"; // TMDB API key
 
-const url = 'http://localhost:3001/api';
+const url = "http://localhost:3001/api";
 const sortings = [
-  { sortBy: 'Popularity', sortValue: 'popularity.desc' },
-  { sortBy: 'Rating', sortValue: 'vote_average.desc' },
-  { sortBy: 'Latest', sortValue: 'primary_release_date.desc' },
-  { sortBy: 'Movie Title', sortValue: 'title.asc' },
+  { sortBy: "Popularity", sortValue: "popularity.desc" },
+  { sortBy: "Rating", sortValue: "vote_average.desc" },
+  { sortBy: "Latest", sortValue: "primary_release_date.desc" },
+  { sortBy: "Movie Title", sortValue: "title.asc" },
 ];
 
 export default function Select() {
@@ -19,9 +19,9 @@ export default function Select() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [selectedGenre, setSelectedGenre] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState('');
-  const [selectedSorting, setSelectedSorting] = useState('');
+  const [selectedGenre, setSelectedGenre] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedSorting, setSelectedSorting] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -43,7 +43,7 @@ export default function Select() {
         setMovies(moviesData.results || []);
         setTotalPages(Math.min(moviesData.total_pages, 999) || 1);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
@@ -54,29 +54,31 @@ export default function Select() {
 
   useEffect(() => {
     handleSearch();
-  }, [currentPage]);
+  }, [currentPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSearch = async () => {
     setLoading(true);
     try {
       const queryParams = new URLSearchParams({
         api_key: API_KEY,
-        language: 'en-US',
+        language: "en-US",
         with_genres: selectedGenre,
         with_origin_country: selectedCountry,
-        sort_by: selectedSorting || 'popularity.desc',
+        sort_by: selectedSorting || "popularity.desc",
         page: currentPage,
       });
 
       const searchUrl = `https://api.themoviedb.org/3/discover/movie?${queryParams.toString()}`;
       const response = await fetch(searchUrl);
       const data = await response.json();
-      const filteredMovies = data.results.filter((item) => item.poster_path !== null);
+      const filteredMovies = data.results.filter(
+        (item) => item.poster_path !== null
+      );
 
       setMovies(filteredMovies || []);
       setTotalPages(Math.min(data.total_pages, 999) || 1);
     } catch (error) {
-      console.error('Error fetching filtered movies:', error);
+      console.error("Error fetching filtered movies:", error);
     } finally {
       setLoading(false);
     }

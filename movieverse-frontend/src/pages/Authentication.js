@@ -18,7 +18,7 @@ const Authentication = () => {
     if (user.isAuthenticated) {
       navigate(`/${user.profileUrl}`);
     }
-  }, [user.isAuthenticated, navigate]);
+  }, [user.isAuthenticated, navigate]); ///eslint-disable-next-line react-hooks/exhaustive-deps
 
   const handleToggle = () => {
     setIsSignIn(!isSignIn);

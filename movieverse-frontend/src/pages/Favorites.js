@@ -27,7 +27,7 @@ const Favorites = () => {
     } else {
       console.error("User is not logged in.");
     }
-  }, [accountId]);
+  }, [accountId]); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   // Fetch favorites from the backend
   const fetchFavorites = async () => {
