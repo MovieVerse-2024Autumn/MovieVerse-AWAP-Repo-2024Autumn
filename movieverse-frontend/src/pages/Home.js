@@ -59,7 +59,7 @@ export default function Home() {
           className={styles.posterImage}
         />
         <div className={styles.posterOverlay}>
-          <h1 className={styles.posterText}>Welcome</h1>
+       
         </div>
       </div>
 
