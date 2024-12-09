@@ -37,7 +37,7 @@ export default function GroupDetails() {
   useEffect(() => {
     fetchGroupDetails();
     fetchGroupPosts();
-  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchGroupDetails, fetchGroupPosts]);
 
   const fetchGroupDetails = async () => {
     try {

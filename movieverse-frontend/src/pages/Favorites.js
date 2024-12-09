@@ -21,14 +21,6 @@ const Favorites = () => {
 
   const accountId = getAccountId();
 
-  useEffect(() => {
-    if (accountId) {
-      fetchFavorites();
-    } else {
-      console.error("User is not logged in.");
-    }
-  }, [accountId]); // eslint-disable-next-line react-hooks/exhaustive-deps
-
   // Fetch favorites from the backend
   const fetchFavorites = async () => {
     try {
@@ -42,6 +34,13 @@ const Favorites = () => {
       console.error("Error fetching favorites:", error);
     }
   };
+  useEffect(() => {
+    if (accountId) {
+      fetchFavorites();
+    } else {
+      console.error("User is not logged in.");
+    }
+  }, [accountId, fetchFavorites]);
 
   const removeFavorite = async (movieId) => {
     console.log("Attempting to remove Movie ID:", movieId); // Debugging step
