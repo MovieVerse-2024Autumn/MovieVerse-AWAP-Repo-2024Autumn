@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
-import { useFetchData } from "../utils/useFetchData";
 import SectionTitle from "../components/SectionTitle";
 import MovieList from "../components/MovieList";
 import ReviewList from "../components/ReviewList";
@@ -10,10 +9,46 @@ import PosterImage from "../assest/Redone.jpg";
 const url = `${process.env.REACT_APP_API}api`;
 
 export default function Home() {
-  const { data: movies = [] } = useFetchData(`${url}/movies-homepage`);
-  const { data: reviews = [] } = useFetchData(`${url}/reviews`); // Default to empty array
+  const [movies, setMovies] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [moviesPerPage, setMoviesPerPage] = useState(1);
+
+  // Fetch movies data
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const response = await fetch(`${url}/movies-homepage`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch movies");
+        }
+        const data = await response.json();
+        setMovies(data);
+      } catch (error) {
+        console.error("Error fetching movies:", error.message);
+      }
+    };
+
+    fetchMovies();
+  }, []);
+
+  // Fetch reviews data
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await fetch(`${url}/reviews`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch reviews");
+        }
+        const data = await response.json();
+        setReviews(data);
+      } catch (error) {
+        console.error("Error fetching reviews:", error.message);
+      }
+    };
+
+    fetchReviews();
+  }, []);
 
   // Update the moviesPerPage whenever window is resized
   useEffect(() => {
@@ -58,9 +93,7 @@ export default function Home() {
           alt="Featured Movie"
           className={styles.posterImage}
         />
-        <div className={styles.posterOverlay}>
-          <h1 className={styles.posterText}>Welcome</h1>
-        </div>
+        <div className={styles.posterOverlay}></div>
       </div>
 
       <div className={styles.contentWrapper}>
