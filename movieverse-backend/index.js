@@ -20,7 +20,10 @@ swaggerDocs(app);
 
 app.use(
   cors({
-    origin: "*",
+    origin: [
+      "http://localhost:3000",
+      "https://mango-moss-05ef74d10.4.azurestaticapps.net",
+    ],
     methods: "GET,POST,PUT,PATCH,DELETE",
     credentials: true,
   })
