@@ -6,7 +6,7 @@ import ReviewList from "../components/ReviewList";
 import styles from "../styles/Home.module.css";
 import PosterImage from "../assest/Redone.jpg";
 
-const url = `${process.env.REACT_APP_API}api`;
+const url = process.env.REACT_APP_API;
 
 export default function Home() {
   const [movies, setMovies] = useState([]);
@@ -18,7 +18,7 @@ export default function Home() {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetch(`${url}/movies-homepage`);
+        const response = await fetch(`${url}api/movies-homepage`);
         if (!response.ok) {
           throw new Error("Failed to fetch movies");
         }
@@ -36,7 +36,7 @@ export default function Home() {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await fetch(`${url}/reviews`);
+        const response = await fetch(`${url}api/reviews`);
         if (!response.ok) {
           throw new Error("Failed to fetch reviews");
         }
