@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import SectionTitle from "../components/SectionTitle";
-import MovieList from "../components/MovieList";
+import HomeMovieList from "../components/HomeMovieList";
 import ReviewList from "../components/ReviewList";
 import styles from "../styles/Home.module.css";
 import PosterImage from "../assest/Redone.jpg";
@@ -99,7 +99,7 @@ export default function Home() {
       <div className={styles.contentWrapper}>
         <div className={styles.section}>
           <SectionTitle title="MOVIES" linkPath="/select-movies" />
-          <MovieList movies={currentMovies} />
+          <HomeMovieList movies={currentMovies} />
 
           {/* Pagination controls */}
           <ReactPaginate

@@ -74,6 +74,17 @@
 }
 
 /* Movie Section */
+
+.homePageMovieList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 .movieList {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
