@@ -1,6 +1,6 @@
 tags:
   - name: Authentication
-    description: Endpoints for user registration, login, and account deletion.
+    description: Endpoints for user registration, login, logout and account deletion.
 
 paths:
   /auth/register:
@@ -82,6 +82,46 @@ paths:
                   error:
                     type: string
                     example: "Invalid email or password"
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: User logout
+      description: Logs out the currently authenticated user by invalidating their JWT token.
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Logout successful"
+        "400":
+          description: No token provided or invalid token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No token provided"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
 
   /auth/delete:
     delete:
