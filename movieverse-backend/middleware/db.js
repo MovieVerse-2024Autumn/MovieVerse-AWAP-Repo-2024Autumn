@@ -16,7 +16,9 @@ const openDb = () => {
         : process.env.TEST_DB_NAME,
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT,
-    ssl: process.env.DB_SSL === "true",
+    ssl: {
+      rejectUnauthorized: false, // Allows self-signed certificates
+    },
   });
   return pool;
 };

@@ -44,7 +44,6 @@ const addReview = async (req, res, next) => {
     title,
     description,
     rating,
-    like_count,
   } = req.body;
 
   if (
@@ -59,24 +58,38 @@ const addReview = async (req, res, next) => {
   }
 
   try {
-    const query = `
+    // First query to insert the review
+    const insertQuery = `
       INSERT INTO review (movie_id, movie_poster_path, account_id, title, description, rating, like_count, review_date)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
+      VALUES ($1, $2, $3, $4, $5, $6, 0, NOW())
       RETURNING *;
     `;
 
-    const values = [
+    const insertValues = [
       movie_id,
       movie_poster_path,
       account_id,
       title,
       description,
       rating,
-      0,
     ];
 
-    const result = await pool.query(query, values);
-    res.status(201).json(result.rows[0]); // Return the newly created review
+    const insertResult = await pool.query(insertQuery, insertValues);
+
+    // Second query to get the review with the author's name
+    const reviewId = insertResult.rows[0].id;
+    const selectQuery = `
+      SELECT r.id, r.movie_id, r.movie_poster_path, r.title, r.description,
+             r.rating, r.review_date, r.like_count,
+             CONCAT(a.first_name, ' ', a.last_name) AS author
+      FROM review r
+      JOIN account a ON r.account_id = a.id
+      WHERE r.id = $1;
+    `;
+
+    const selectResult = await pool.query(selectQuery, [reviewId]);
+
+    res.status(201).json(selectResult.rows[0]); // Return the newly created review with author's name
   } catch (error) {
     console.error("Error adding review:", error);
     return next(error);
