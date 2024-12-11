@@ -4,7 +4,7 @@ import {
   selectAllReviews,
   selectOneReview,
   insertReviewLikeCount,
-} from "../../models/review.js";
+} from "../../models/Review.js";
 
 const getReviews = async (req, res, next) => {
   try {
