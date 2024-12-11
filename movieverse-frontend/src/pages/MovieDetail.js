@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import styles from "../styles/MovieDetail.module.css";
 
+const url = `${process.env.REACT_APP_BACKEND_API}api`;
+
 const MovieDetail = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
@@ -17,7 +19,6 @@ const MovieDetail = () => {
   });
   const [isExpanded, setIsExpanded] = useState(false);
   const [trailer, setTrailer] = useState(null);
-
 
   const getAccountId = () => {
     const token = localStorage.getItem("token");
@@ -35,16 +36,14 @@ const MovieDetail = () => {
       setLoading(true);
       try {
         // Fetch movie details
-        const movieResponse = await fetch(
-          `http://localhost:3001/api/movies-moviedetail/${id}`
-        );
+        const movieResponse = await fetch(`${url}/movies-moviedetail/${id}`);
         if (!movieResponse.ok) throw new Error("Failed to fetch movie details");
         const movieData = await movieResponse.json();
         setMovie(movieData);
 
         // Fetch cast details
         const castResponse = await fetch(
-          `http://localhost:3001/api/movies/${id}/cast` // Ensure this endpoint returns cast data
+          `${url}/movies/${id}/cast` // Ensure this endpoint returns cast data
         );
         if (castResponse.ok) {
           const castData = await castResponse.json();
@@ -52,9 +51,7 @@ const MovieDetail = () => {
         }
 
         // Fetch trailer details
-        const trailerResponse = await fetch(
-          `http://localhost:3001/api/movies/${id}/trailer`
-        );
+        const trailerResponse = await fetch(`${url}/api/movies/${id}/trailer`);
         if (trailerResponse.ok) {
           const trailerData = await trailerResponse.json();
           const youtubeTrailer = trailerData.find(
@@ -66,9 +63,7 @@ const MovieDetail = () => {
         }
 
         // Fetch reviews
-        const reviewsResponse = await fetch(
-          `http://localhost:3001/api/movies/${id}/reviews`
-        );
+        const reviewsResponse = await fetch(`${url}/movies/${id}/reviews`);
         if (!reviewsResponse.ok) throw new Error("Failed to fetch reviews");
         const reviewsData = await reviewsResponse.json();
         setReviews(reviewsData || []);
@@ -76,7 +71,7 @@ const MovieDetail = () => {
         // Check favorite status
         if (accountId) {
           const favoritesResponse = await fetch(
-            `http://localhost:3001/api/favorites/${accountId}`
+            `${url}/favorites/${accountId}`
           );
           const favoritesData = await favoritesResponse.json();
           const isFav = favoritesData.some(
@@ -103,7 +98,7 @@ const MovieDetail = () => {
 
     try {
       const method = isFavorite ? "DELETE" : "POST";
-      await fetch(`http://localhost:3001/api/favorites`, {
+      await fetch(`${url}/favorites`, {
         method,
         headers: {
           "Content-Type": "application/json",
@@ -141,23 +136,20 @@ const MovieDetail = () => {
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:3001/api/movies/${id}/reviews`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            account_id: accountId,
-            movie_id: id,
-            movie_poster_path: movie.poster_path,
-            title: newReview.title,
-            rating: Number(newReview.rating),
-            description: newReview.text,
-          }),
-        }
-      );
+      const response = await fetch(`${url}/movies/${id}/reviews`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          account_id: accountId,
+          movie_id: id,
+          movie_poster_path: movie.poster_path,
+          title: newReview.title,
+          rating: Number(newReview.rating),
+          description: newReview.text,
+        }),
+      });
 
       if (!response.ok) throw new Error("Failed to submit review");
 
@@ -193,7 +185,7 @@ const MovieDetail = () => {
             <p className={styles["rating-number"]}>
               {movie.vote_average.toFixed(1)}/10
             </p>
-            
+
             <button
               className={`${styles["favorite-button"]} ${
                 isFavorite ? styles["favorite-active"] : ""
@@ -205,7 +197,6 @@ const MovieDetail = () => {
               </span>{" "}
               {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
             </button>
-
           </div>
           <p className={styles["movie-overview"]}>{movie.overview}</p>
         </div>
@@ -213,7 +204,7 @@ const MovieDetail = () => {
 
       {trailer && (
         <div className={styles["trailer-section"]}>
-          <h2 style={{ color: 'black' }}>Official Trailer</h2>
+          <h2 style={{ color: "black" }}>Official Trailer</h2>
           <iframe
             width="100%"
             height="500px"
@@ -226,37 +217,41 @@ const MovieDetail = () => {
       )}
 
       <div className={styles["cast-section"]}>
-  <h2 style={{ color: 'black' }}>Featured Cast</h2>
-  <div className={`${styles["cast-grid"]} ${isExpanded ? styles["expanded"] : ""}`}>
-    {cast.slice(0, isExpanded ? cast.length : 6).map((member) => (
-      <div key={member.id} className={styles["cast-card"]}>
-        <img
-          src={
-            member.profile_path
-              ? `https://image.tmdb.org/t/p/w500${member.profile_path}`
-              : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-          }
-          alt={member.name}
-          className={styles["cast-image"]}
-        />
-        <div className={styles["cast-name"]}>{member.name}</div>
-        <div className={styles["cast-character"]}>as {member.character}</div>
+        <h2 style={{ color: "black" }}>Featured Cast</h2>
+        <div
+          className={`${styles["cast-grid"]} ${
+            isExpanded ? styles["expanded"] : ""
+          }`}
+        >
+          {cast.slice(0, isExpanded ? cast.length : 6).map((member) => (
+            <div key={member.id} className={styles["cast-card"]}>
+              <img
+                src={
+                  member.profile_path
+                    ? `https://image.tmdb.org/t/p/w500${member.profile_path}`
+                    : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                }
+                alt={member.name}
+                className={styles["cast-image"]}
+              />
+              <div className={styles["cast-name"]}>{member.name}</div>
+              <div className={styles["cast-character"]}>
+                as {member.character}
+              </div>
+            </div>
+          ))}
+        </div>
+        {cast.length > 5 && (
+          <button
+            className={styles["show-more-button"]}
+            onClick={() => setIsExpanded(!isExpanded)}
+          >
+            {isExpanded ? "Show Less ▲" : "Show More ▼"}
+          </button>
+        )}
       </div>
-    ))}
-  </div>
-  {cast.length > 5 && (
-    <button
-      className={styles["show-more-button"]}
-      onClick={() => setIsExpanded(!isExpanded)}
-    >
-      {isExpanded ? "Show Less ▲" : "Show More ▼"}
-    </button>
-  )}
-</div>
 
-
-
-      <div className={styles["add-review"]}>  
+      <div className={styles["add-review"]}>
         <h2>Add Your Review</h2>
         <form onSubmit={handleSubmitReview}>
           <label>
@@ -307,40 +302,37 @@ const MovieDetail = () => {
 
       <h2>User Reviews</h2>
       <div className={styles["movie-reviews"]}>
-  {reviews.length > 0 ? (
-    reviews.map((review) => (
-      <div key={review.id} className={styles["review"]}>
-        <p>
-          {review.author || "Anonymous"} {" "}
-          {new Date(review.review_date).toLocaleDateString()}
-        </p>
-        <div className={styles["star-display"]}>
-          {[...Array(5)].map((_, index) => (
-            <span
-              key={index}
-              className={
-                index < review.rating
-                  ? styles["star-filled"]
-                  : styles["star-empty"]
-              }
-            >
-              ★
-            </span>
-          ))}
-        </div>
-        <p>
-          <strong>{review.title}</strong> 
-        </p>
-        <p>{review.description}</p>
+        {reviews.length > 0 ? (
+          reviews.map((review) => (
+            <div key={review.id} className={styles["review"]}>
+              <p>
+                {review.author || "Anonymous"}{" "}
+                {new Date(review.review_date).toLocaleDateString()}
+              </p>
+              <div className={styles["star-display"]}>
+                {[...Array(5)].map((_, index) => (
+                  <span
+                    key={index}
+                    className={
+                      index < review.rating
+                        ? styles["star-filled"]
+                        : styles["star-empty"]
+                    }
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
+              <p>
+                <strong>{review.title}</strong>
+              </p>
+              <p>{review.description}</p>
+            </div>
+          ))
+        ) : (
+          <p>No reviews yet. Be the first to review!</p>
+        )}
       </div>
-    ))
-  ) : (
-    <p>No reviews yet. Be the first to review!</p>
-  )}
-</div>
-
-
-      
     </div>
   );
 };

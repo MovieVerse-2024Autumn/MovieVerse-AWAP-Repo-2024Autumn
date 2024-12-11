@@ -4,8 +4,8 @@ import ReactPaginate from "react-paginate";
 import styles from "../styles/Select.module.css";
 
 const API_KEY = "159c3b0b72b70b61f703169a3153283a"; // TMDB API key
+const url = `${process.env.REACT_APP_BACKEND_API}api`;
 
-const url = `${process.env.REACT_APP_API}api`;
 const sortings = [
   { sortBy: "Popularity", sortValue: "popularity.desc" },
   { sortBy: "Rating", sortValue: "vote_average.desc" },

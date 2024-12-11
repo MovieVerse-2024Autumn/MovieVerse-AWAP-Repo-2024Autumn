@@ -6,7 +6,7 @@ import DeleteAccountFlow from "./DeleteAccount";
 import { useFetchData } from "../utils/useFetchData";
 import "../styles/Profile.css";
 
-const url = `${process.env.REACT_APP_API}api`;
+const url = `${process.env.REACT_APP_BACKEND_API}api`;
 
 const Profile = () => {
   const { data: movies } = useFetchData(`${url}/movies-homepage`);

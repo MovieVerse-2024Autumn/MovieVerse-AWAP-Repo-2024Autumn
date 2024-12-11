@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
+const url = `${process.env.REACT_APP_BACKEND_API}api/favorites`;
+
 const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
   const [shareUrl, setShareUrl] = useState(null);
@@ -24,9 +26,7 @@ const Favorites = () => {
   // Fetch favorites from the backend
   const fetchFavorites = async () => {
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API}api/favorites/${accountId}`
-      );
+      const response = await fetch(`${url}/${accountId}`);
       const data = await response.json();
       console.log("Fetched favorites data structure:", data); // Log data here
       setFavorites(data);
@@ -50,7 +50,7 @@ const Favorites = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/api/favorites`, {
+      const response = await fetch(url, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -82,7 +82,7 @@ const Favorites = () => {
   const shareFavorites = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/favorites/share`,
+        `${process.env.REACT_APP_BACKEND_API}api/favorites/share`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

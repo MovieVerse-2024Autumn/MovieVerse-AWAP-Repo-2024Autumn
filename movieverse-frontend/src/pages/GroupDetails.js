@@ -5,7 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import PostCreate from "../components/CreatePost";
 import { useUser } from "../utils/UserProvider";
 
-const url = `${process.env.REACT_APP_API}api/groups`;
+const url = `${process.env.REACT_APP_BACKEND_API}api/groups`;
 
 export default function GroupDetails() {
   const { id } = useParams();

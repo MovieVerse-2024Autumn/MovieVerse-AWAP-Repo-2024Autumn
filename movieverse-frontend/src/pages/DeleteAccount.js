@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "../styles/DeleteAccount.css";
 
+const url = `${process.env.REACT_APP_BACKEND_API}api/auth`;
+
 const DeleteAccountFlow = ({ onAccountDelete }) => {
   const [step, setStep] = useState(0); // 0: Options view, 1: Reason selection, 2: Password confirmation
   const [reason, setReason] = useState("");
@@ -28,7 +30,7 @@ const DeleteAccountFlow = ({ onAccountDelete }) => {
     }
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API}api/auth/delete`, {
+      const response = await fetch(`${url}/delete`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

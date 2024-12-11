@@ -6,7 +6,7 @@ import Notification from "./Notification";
 import "../styles/Groups.css";
 import "../styles/Notification.css";
 
-const url = `${process.env.REACT_APP_API}api/groups`;
+const url = `${process.env.REACT_APP_BACKEND_API}api/groups`;
 
 export default function Group() {
   const [yourGroups, setYourGroups] = useState([]);
