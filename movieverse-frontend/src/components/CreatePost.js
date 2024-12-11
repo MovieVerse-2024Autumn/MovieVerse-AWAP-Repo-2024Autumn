@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import '../styles/GroupDetails.css';
+import React, { useState } from "react";
+import "../styles/GroupDetails.css";
 
-const url = `${process.env.REACT_APP_API}api/groups`;
-const PostCreationSection = ({ onAddPost, groupId  }) => {
-  const [postContent, setPostContent] = useState('');
-  const [movieSearch, setMovieSearch] = useState('');
+const url = `${process.env.REACT_APP_BACKEND_API}api`;
+
+const PostCreationSection = ({ onAddPost, groupId }) => {
+  const [postContent, setPostContent] = useState("");
+  const [movieSearch, setMovieSearch] = useState("");
   const [movies, setMovies] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedMovieId, setSelectedMovieId] = useState('');
+  const [selectedMovieId, setSelectedMovieId] = useState("");
   const [selectedMovie, setSelectedMovie] = useState(null);
 
   const handlePostChange = (e) => {
@@ -29,14 +30,12 @@ const PostCreationSection = ({ onAddPost, groupId  }) => {
   const fetchMovies = async (query) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/movies-search?query=${encodeURIComponent(
-          query
-        )}&page=1`
+        `${url}/movies-search?query=${encodeURIComponent(query)}&page=1`
       );
       const data = await response.json();
       setMovies((data.movies || []).slice(0, 20));
     } catch (error) {
-      console.error('Error fetching movies:', error);
+      console.error("Error fetching movies:", error);
     }
   };
 
@@ -46,9 +45,9 @@ const PostCreationSection = ({ onAddPost, groupId  }) => {
       (movie) => movie.id === parseInt(movieId)
     );
     setSelectedMovie(selectedMovie);
-    console.log('Selected Movie:', selectedMovie);
+    console.log("Selected Movie:", selectedMovie);
     // You can now use `selectedMovie` for your logic
-    setMovieSearch('');
+    setMovieSearch("");
     setShowDropdown(false);
   };
 
@@ -62,15 +61,15 @@ const PostCreationSection = ({ onAddPost, groupId  }) => {
     }
 
     const createPost = {
-        groupid: groupId,
-        content: postContent,
-        movieid: selectedMovie?.id || null,
-        movietitle: selectedMovie?.title || null,
-        movieposter: selectedMovie?.poster_path || null,
+      groupid: groupId,
+      content: postContent,
+      movieid: selectedMovie?.id || null,
+      movietitle: selectedMovie?.title || null,
+      movieposter: selectedMovie?.poster_path || null,
     };
 
     try {
-      const response = await fetch(`${url}/createpost`, {
+      const response = await fetch(`${url}/groups/createpost`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -94,7 +93,6 @@ const PostCreationSection = ({ onAddPost, groupId  }) => {
       alert("Failed to create post. Please try again.");
     }
   };
-
 
   return (
     <div className="post-creation-section">

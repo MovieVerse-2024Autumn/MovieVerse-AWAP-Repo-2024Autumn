@@ -6,6 +6,8 @@ import { FiThumbsUp } from "react-icons/fi";
 import styles from "../styles/Home.module.css";
 const API_IMG = "https://image.tmdb.org/t/p/w500";
 
+const url = `${process.env.REACT_APP_BACKEND_API}api`;
+
 export default function ReviewCard({ review }) {
   const {
     movie_id,
@@ -43,12 +45,9 @@ export default function ReviewCard({ review }) {
     event.stopPropagation();
     try {
       // Optional: Update like count in backend
-      const response = await fetch(
-        `${process.env.REACT_APP_API}api/reviews/${review.id}/like`,
-        {
-          method: "POST",
-        }
-      );
+      const response = await fetch(`${url}/reviews/${review.id}/like`, {
+        method: "POST",
+      });
       if (!response.ok) {
         throw new Error("Failed to update like count");
       }

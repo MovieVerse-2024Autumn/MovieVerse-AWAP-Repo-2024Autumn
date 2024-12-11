@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import styles from "../styles/SharedFavorites.module.css"; 
+import styles from "../styles/SharedFavorites.module.css";
 
 const SharedFavorites = () => {
   const { account_id } = useParams(); // Fetch account ID from URL
@@ -9,7 +9,9 @@ const SharedFavorites = () => {
   useEffect(() => {
     const fetchSharedFavorites = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API}api/favorites/shared/${account_id}`);
+        const response = await fetch(
+          `${process.env.REACT_APP_BACKEND_API}api/favorites/shared/${account_id}`
+        );
         const data = await response.json();
         setFavorites(data); // Update state with shared favorites
       } catch (error) {
