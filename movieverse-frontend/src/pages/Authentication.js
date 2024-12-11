@@ -10,8 +10,7 @@ const Authentication = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  //const [token, setToken] = useState(localStorage.getItem("token") || "");
-  const { user, login } = useUser();
+  const { user, login, logout } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -89,15 +88,36 @@ const Authentication = () => {
     }
   };
 
+  // Handle Logout
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.post("/logout", {}, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      logout();
+      navigate("/login");
+    } catch (error) {
+      setErrorMessage(error.response?.data?.message || "Logout failed.");
+    }
+  };
+
   return (
     <>
-      {/* <Navbar token={token} handleSignOut={handleSignOut} /> */}
       <div className="auth-container">
         <div className="auth-box">
           {/* Logo */}
           <div className="logo-container">
             <img src={logo} alt="Logo" className="logo-image" />
           </div>
+
+          {/* Logout Button if Authenticated */}
+          {user.isAuthenticated && (
+            <button onClick={handleLogout} className="logout-button">
+              Logout
+            </button>
+          )}
 
           {/* Sign In Form */}
           {isSignIn ? (

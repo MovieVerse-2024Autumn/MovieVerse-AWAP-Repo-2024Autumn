@@ -66,6 +66,22 @@ const login = async (req, res, next) => {
   }
 };
 
+const logout = async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ error: "No token provided" });
+    }
+    console.log(`Logout: Received token for invalidation: ${token}`);
+
+    res.status(200).json({ success: true, message: "Logout successful" });
+  } catch (error) {
+    console.error("Logout error:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
 export const deleteAccount = async (req, res) => {
   const userId = req.user.id;
   const { reason, password } = req.body;
@@ -105,4 +121,4 @@ export const deleteAccount = async (req, res) => {
   }
 };
 
-export default { register, login, deleteAccount };
+export default { register, login, logout, deleteAccount };
