@@ -26,7 +26,8 @@ CREATE TABLE review (
     account_id  INTEGER,
     movie_id    INTEGER,
     movie_poster_path VARCHAR(255),
-    like_count INT DEFAULT 0
+    like_count INT DEFAULT 0,
+    CONSTRAINT review_account_fk FOREIGN KEY (account_id) REFERENCES account(id)
 );
 
 CREATE TABLE favourite (
