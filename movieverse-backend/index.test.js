@@ -5,7 +5,11 @@ import {
   insertTestUser,
 } from "./middleware/test.js";
 
-const base_url = "http://localhost:3001";
+const base_url = "http://localhost:10000";
+
+before(async () => {
+  await initializeTestDb();
+});
 
 describe("POST login", () => {
   const email = "login2@foo.com";
@@ -52,7 +56,13 @@ describe("POST logout", () => {
   let token;
 
   before(async () => {
-    const userId = await insertTestUser(email, password, first_name, last_name, unique_url);
+    const userId = await insertTestUser(
+      email,
+      password,
+      first_name,
+      last_name,
+      unique_url
+    );
     token = getToken(userId, email);
   });
 
@@ -61,7 +71,7 @@ describe("POST logout", () => {
       method: "post",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -72,41 +82,42 @@ describe("POST logout", () => {
   });
 });
 
-describe('POST register', () => {
-  let email = 'register@foo.com';
+describe("POST register", () => {
+  let email = "register@foo.com";
 
-  it('should register with valid email and password', async() => {
-      const password = 'register123';
-      const first_name = 'RegisterName';
-      const last_name = 'RegisterLastName';
+  it("should register with valid email and password", async () => {
+    const password = "register123";
+    const first_name = "RegisterName";
+    const last_name = "RegisterLastName";
 
-      const response = await fetch(base_url + '/api/auth/register',{
-          method: 'post',
-          headers: {
-              'Content-Type':'application/json'
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-            firstName: first_name,
-            lastName: last_name,
-          }),
-      })
-      const data = await response.json()
-      expect(response.status).to.equal(201, data.error)
-      expect(data).to.be.an('object')
-      expect(data).to.have.property('message', "User registered successfully")
-      expect(data.user).to.include.all.keys(
-        "email",
-        "first_name",
-        "id",
-        "is_active",
-        "last_name",
-        "link",
-        "password",
-        "profileUrl",
-        "unique_profile_url")
-  })
+    const response = await fetch(base_url + "/api/auth/register", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        firstName: first_name,
+        lastName: last_name,
+      }),
+    });
+    const data = await response.json();
+    expect(response.status).to.equal(201, data.error);
+    expect(data).to.be.an("object");
+    expect(data).to.have.property("message", "User registered successfully");
+    expect(data.user).to.include.all.keys(
+      "email",
+      "first_name",
+      "id",
+      "is_active",
+      "last_name",
+      "link",
+      "password",
+      "profileUrl",
+      "unique_profile_url"
+    );
+  });
 });
 
 describe("DELETE account", () => {
@@ -140,10 +151,6 @@ describe("DELETE account", () => {
 });
 
 describe("GET reviews", () => {
-  before(async () => {
-    await initializeTestDb();
-  });
-
   it("should get all reviews", async () => {
     const response = await fetch(base_url + "/api/reviews");
     const data = await response.json();
