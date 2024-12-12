@@ -51,7 +51,7 @@ const MovieDetail = () => {
         }
 
         // Fetch trailer details
-        const trailerResponse = await fetch(`${url}/api/movies/${id}/trailer`);
+        const trailerResponse = await fetch(`${url}/movies/${id}/trailer`);
         if (trailerResponse.ok) {
           const trailerData = await trailerResponse.json();
           const youtubeTrailer = trailerData.find(
