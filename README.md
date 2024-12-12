@@ -1,5 +1,5 @@
 
-![Homepage Screenshot](movieverse-frontend/src/asset/coverphot.jpg)
+![Homepage Screenshot](movieverse-frontend/src/assest/CoverR.jpg)
 
 
 
@@ -14,6 +14,7 @@
 6. Interface Description
 7. Getting Started
 8. Website Link
+9. 
 
 ---
 
@@ -53,10 +54,10 @@ Check movie showtimes in cinemas in Finland.
 
 ## 👥 Project Team Members
 
-- **Congying Zhao**: Homepage, showtimes page, group management
+- **Congying Zhao**: Homepage, showtimes page, group management, reviews
 - **Anna Kasprzak**: Database structure, search functionality
 - **Sandip Bade**: Explore page, group feature
-- **Manjula Karunanayaka**: Favorites, reviews, movie details page
+- **Manjula Karunanayaka**: Favorites, add reviews, movie details page, website Responsiveness, static pages.
 - **Shankar Jaiswal**: Website template, account management
 
 ---
@@ -81,6 +82,21 @@ Check movie showtimes in cinemas in Finland.
 - **User Profile**: Manage account settings.
 - **Groups Page**: View, manage, and create groups.
 - **Review Section**: Browse, sort, like, and share reviews.
+  
+- **Responsiveness**:
+
+Desktop View
+
+![Desktopview](movieverse-frontend/src/assest/Desktopvwe.jpeg)
+
+Mobile View
+
+<div style="display: flex; justify-content: center; gap: 10px;">
+  <img src="movieverse-frontend/src/assest/MObview2.jpeg" alt="Mobile View 1" width="200px">
+  <img src="movieverse-frontend/src/assest/MObvire1.jpeg" alt="Mobile View 2" width="200px">
+</div>
+
+
 
 ---
 
