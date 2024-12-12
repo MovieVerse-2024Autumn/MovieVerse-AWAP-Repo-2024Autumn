@@ -7,19 +7,39 @@ dotenv.config();
 const { Pool } = pkg;
 
 const openDb = () => {
-  const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database:
-      process.env.NODE_ENV === "development"
-        ? process.env.DB_NAME
-        : process.env.TEST_DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
-    ssl: {
-      rejectUnauthorized: false, // Allows self-signed certificates
-    },
-  });
+  let poolConfig;
+
+  if (process.env.NODE_ENV === "test") {
+    poolConfig = {
+      user: process.env.TEST_DB_USER,
+      host: process.env.TEST_DB_HOST,
+      database: process.env.TEST_DB_NAME,
+      password: process.env.TEST_DB_PASSWORD,
+      port: process.env.TEST_DB_PORT,
+      ssl: false,
+    };
+  } else if (process.env.NODE_ENV === "development") {
+    poolConfig = {
+      user: process.env.DB_USER,
+      host: process.env.DB_HOST,
+      database: process.env.DB_NAME,
+      password: process.env.DB_PASSWORD,
+      port: process.env.DB_PORT,
+      ssl: false,
+    };
+  } else {
+    poolConfig = {
+      user: process.env.DB_USER,
+      host: process.env.DB_HOST,
+      database: process.env.DB_NAME,
+      password: process.env.DB_PASSWORD,
+      port: process.env.DB_PORT,
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    };
+  }
+  const pool = new Pool(poolConfig);
   return pool;
 };
 
