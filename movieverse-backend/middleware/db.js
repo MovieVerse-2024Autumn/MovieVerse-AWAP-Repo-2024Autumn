@@ -1,13 +1,19 @@
 import pkg from "pg";
 import dotenv from "dotenv";
 
-dotenv.config();
+if (process.env.NODE_ENV === "test") {
+  dotenv.config({ path: ".env.test" });
+} else {
+  dotenv.config({ path: ".env.development" });
+}
 //console.log("DB Password:", process.env.DB_PASSWORD);
 
 const { Pool } = pkg;
 
 const openDb = () => {
   let poolConfig;
+
+  console.log("Current Environment:", process.env.NODE_ENV);
 
   if (process.env.NODE_ENV === "test") {
     poolConfig = {
@@ -39,6 +45,8 @@ const openDb = () => {
       },
     };
   }
+  console.log("Database Config:", poolConfig);
+
   const pool = new Pool(poolConfig);
   return pool;
 };

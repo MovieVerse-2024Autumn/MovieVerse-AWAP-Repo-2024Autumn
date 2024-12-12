@@ -1,4 +1,5 @@
-movieverse-backend/.env
+movieverse-backend/.env.development
+movieverse-backend/.env.test
 /movieverse-backend/node_modules
 /movieverse-frontend/node_modules
 node_modules

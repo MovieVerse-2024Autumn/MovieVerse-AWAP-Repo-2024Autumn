@@ -1,7 +1,9 @@
+console.log("Test Environment: ", process.env.NODE_ENV);
+
 process.env.NODE_ENV = "test";
 
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "./.env.test" });
 
 import fs from "fs";
 import path from "path";
@@ -9,10 +11,6 @@ import { pool } from "./db.js";
 import { hash } from "bcrypt";
 import jwt from "jsonwebtoken";
 const { sign } = jwt;
-
-//console.log("Loaded ENV Variables:", process.env);
-
-const __dirname = import.meta.dirname;
 
 const getToken = (userId, email) => {
   const secretKey = process.env.JWT_SECRET;
@@ -25,11 +23,15 @@ const getToken = (userId, email) => {
 };
 
 const initializeTestDb = async () => {
-  const sql = fs.readFileSync(
-    path.resolve(__dirname, "../testMovieverse.sql"),
-    "utf8"
-  );
-  await pool.query(sql);
+  if (process.env.NODE_ENV !== "test") {
+    throw new Error(
+      "initializeTestDb should only be run in the test environment. Current environment: " +
+        process.env.NODE_ENV
+    );
+  }
+  console.log("Cleaning up existing test data...");
+  await pool.query("TRUNCATE TABLE account RESTART IDENTITY CASCADE");
+  console.log("Test database initialized.");
 };
 
 const insertTestUser = async (
