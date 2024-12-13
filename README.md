@@ -61,7 +61,7 @@ Check movie showtimes in cinemas in Finland.
 
 ## 👥 Project Team Members
 
-- **Congying Zhao**: Homepage, showtimes page, groups management, review functionalities, user profile management, deployment
+- **Congying Zhao**: Homepage, showtimes page, groups management, review functionalities, user profile management, application deployment
 - **Anna Kasprzak**: Database structure, search functionality
 - **Sandip Bade**: Explore page, group feature
 - **Manjula Karunanayaka**: Favorites, add reviews, movie details page, website responsiveness, static pages.
