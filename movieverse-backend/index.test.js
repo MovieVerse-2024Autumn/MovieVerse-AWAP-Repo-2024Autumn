@@ -3,6 +3,7 @@ import {
   initializeTestDb,
   getToken,
   insertTestUser,
+  insertTestReview,
 } from "./middleware/test.js";
 
 const base_url = "http://localhost:10000";
@@ -45,6 +46,22 @@ describe("POST login", () => {
       "lastName"
     );
   });
+
+  it("should not login with invalid credentials", async () => {
+    const response = await fetch(base_url + "/api/auth/login", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: "wrong@foo.com",
+        password: "wrongpassword",
+      }),
+    });
+    expect(response.status).to.equal(500);
+    const data = await response.json();
+    expect(data).to.have.property("error", "Invalid email or password");
+  });
 });
 
 describe("POST logout", () => {
@@ -79,6 +96,18 @@ describe("POST logout", () => {
     const data = await response.json();
     expect(data).to.be.an("object");
     expect(data).to.include({ success: true });
+  });
+
+  it("should not logout without a token", async () => {
+    const response = await fetch(base_url + "/api/auth/logout", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    expect(response.status).to.equal(401);
+    const data = await response.json();
+    expect(data).to.have.property("message", "Access token required");
   });
 });
 
@@ -148,10 +177,27 @@ describe("DELETE account", () => {
     expect(data).to.be.an("object");
     expect(data).to.have.property("message", "Account deleted successfully");
   });
+
+  it("should not delete the account with invalid password", async () => {
+    const response = await fetch(base_url + "/api/auth/delete", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        password: "wrongpassword",
+      }),
+    });
+    expect(response.status).to.equal(404);
+    const data = await response.json();
+    expect(data).to.have.property("message", "User not found");
+  });
 });
 
 describe("GET reviews", () => {
   it("should get all reviews", async () => {
+    await insertTestReview();
     const response = await fetch(base_url + "/api/reviews");
     const data = await response.json();
     expect(response.status).to.equal(200, data.error);
@@ -168,5 +214,13 @@ describe("GET reviews", () => {
       "like_count",
       "author"
     );
+  });
+
+  it("should hanld no reviews", async () => {
+    await initializeTestDb(); // Reset DB to ensure no reviews
+    const response = await fetch(base_url + "/api/reviews");
+    const data = await response.json();
+    expect(response.status).to.equal(200);
+    expect(data).to.be.an("array").that.is.empty;
   });
 });
