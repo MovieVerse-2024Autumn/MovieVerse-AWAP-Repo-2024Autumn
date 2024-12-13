@@ -32,13 +32,20 @@ Browse a wide catalog of movies, each with:
 - **Trailer**
 - **Cast Details**
 - **User Reviews**
+  
+Search and select movies with different criteria.
 
 Check movie showtimes in cinemas in Finland.
 
 ### User Profiles
-- **Rate and review** movies.
 - **Create favorites lists** and share them.
-- **Join groups** of movie enthusiasts with similar interests.
+- **Customizing groups** of movie enthusiasts with similar interests.
+- **User account management** of signing up/in and removing user account.
+
+### Optional features
+- **Like reviews** and sort reviews by date and likes.
+- **Edit user information** to keep updated.
+- **Notifications** of user sending request to join groups and receiving reponse from group admins.
 
 ---
 
@@ -48,15 +55,16 @@ Check movie showtimes in cinemas in Finland.
 - **Backend:** Node.js, Express
 - **Database:** PostgreSQL
 - **APIs:** TMDB, Finnkino
+- **DEPLOYMENT:** Azure, AWS, Render 
 
 ---
 
 ## 👥 Project Team Members
 
-- **Congying Zhao**: Homepage, showtimes page, group management, reviews
+- **Congying Zhao**: Homepage, showtimes page, groups management, review functionalities, user profile management, deployment
 - **Anna Kasprzak**: Database structure, search functionality
 - **Sandip Bade**: Explore page, group feature
-- **Manjula Karunanayaka**: Favorites, add reviews, movie details page, website Responsiveness, static pages.
+- **Manjula Karunanayaka**: Favorites, add reviews, movie details page, website responsiveness, static pages.
 - **Shankar Jaiswal**: Website template, account management
 
 ---
@@ -69,7 +77,7 @@ Check movie showtimes in cinemas in Finland.
 - **Group Member**: Manages group memberships.
 - **Movie Group**: Stores information about user-created groups.
 - **Group Post**: Holds posts within groups.
-- **Notification**: Manages notifications for group join requests.
+- **Notification**: Manages notifications for group join requests and responses.
 
 ---
 
@@ -78,9 +86,11 @@ Check movie showtimes in cinemas in Finland.
 - **Homepage**: Displays trending movies, search bar, quick links, and user reviews.
 - **Search Results**: Lists search results with thumbnails, ratings, and more details.
 - **Movie Details Page**: Shows full details, trailer, cast, and user reviews.
-- **User Profile**: Manage account settings.
-- **Groups Page**: View, manage, and create groups.
 - **Review Section**: Browse, sort, like, and share reviews.
+- **User Profile**: Manage account settings.
+- **Groups Page**: View, manage, create groups, and send join request.
+- **Group detail Page**: Post, user leaves groups, and group admin removes member(s).
+
   
 - **Responsiveness**:
 
