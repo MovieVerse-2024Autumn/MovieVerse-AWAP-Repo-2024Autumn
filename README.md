@@ -55,7 +55,7 @@ Check movie showtimes in cinemas in Finland.
 - **Backend:** Node.js, Express
 - **Database:** PostgreSQL
 - **APIs:** TMDB, Finnkino
-- **DEPLOYMENT:** Azure, AWS, Render 
+- **Deployment:** Azure, AWS, Render 
 
 ---
 
